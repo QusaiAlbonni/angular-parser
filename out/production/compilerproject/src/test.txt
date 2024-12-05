@@ -1,0 +1,16 @@
+try{
+let z=5;
+}catch(e){
+let ammis="3mk";
+}finally{
+let fs="as";
+}
+let x=5;
+switch(x){
+case x=1:let z=5
+case x=2:let ammis="3mk"
+break;
+continue;
+let aa=1;
+throw x=aa;
+}
