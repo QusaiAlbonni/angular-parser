@@ -27,8 +27,8 @@ statement
     | throwStatement;
 
 variableDeclaration
-    : (LET | CONST) ID ASSIGN expression SEMICOLON?
-    | (LET | CONST) ID SEMICOLON?;
+    : (LET | CONST) ID ASSIGN expression
+    | (LET | CONST) ID;
 
 functionDeclaration
     : FUNCTION ID LPAREN parameterList? RPAREN blockStatement;
@@ -54,14 +54,24 @@ classDeclaration
     : CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE classBody RBRACE;
 
 classBody
-    : classMember*;
+    : (classMember SEMICOLON?)*;
 
 classMember
-    : PUBLIC? PRIVATE? PROTECTED? STATIC? ID COLON typeAnnotation SEMICOLON
+    : PUBLIC? PRIVATE? PROTECTED? STATIC? ID COLON typeAnnotation
     | constructorDeclaration
     | variableDeclaration
+    | expressionStatement
     | methodDeclaration
-    | enumDeclaration;// إضافة تعريف المُنشئات;
+    | enumDeclaration
+    ;
+
+objectBody
+    : ( objectMember (COMMA objectMember)* COMMA? )?
+    ;
+
+objectMember
+    : ID COLON expression
+    ;
 
 constructorDeclaration
     : CONSTRUCTOR LPAREN parameterList? RPAREN blockStatement;
@@ -124,13 +134,15 @@ primaryExpression
     | NULL
     | UNDEFINED
     | LPAREN expression RPAREN
+    | '{' objectBody '}'
+    | LBRACKET argumentList RBRACKET
     | primaryExpression LPAREN argumentList? RPAREN
     | primaryExpression DOT ID
     | NEW ID LPAREN argumentList? RPAREN;  // Handles 'new Greeter("John")'
 
 
 argumentList
-    : (expression (COMMA expression)*)?
+    : (expression (COMMA expression)* COMMA?)?
     ;
 
 

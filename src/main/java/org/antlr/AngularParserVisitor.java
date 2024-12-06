@@ -71,6 +71,18 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClassMember(AngularParser.ClassMemberContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AngularParser#objectBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectBody(AngularParser.ObjectBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#objectMember}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectMember(AngularParser.ObjectMemberContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AngularParser#constructorDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

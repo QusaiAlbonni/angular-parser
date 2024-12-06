@@ -108,6 +108,26 @@ public interface AngularParserListener extends ParseTreeListener {
 	 */
 	void exitClassMember(AngularParser.ClassMemberContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AngularParser#objectBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectBody(AngularParser.ObjectBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#objectBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectBody(AngularParser.ObjectBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AngularParser#objectMember}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectMember(AngularParser.ObjectMemberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#objectMember}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectMember(AngularParser.ObjectMemberContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AngularParser#constructorDeclaration}.
 	 * @param ctx the parse tree
 	 */

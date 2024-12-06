@@ -137,6 +137,30 @@ public class AngularParserBaseListener implements AngularParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterObjectBody(AngularParser.ObjectBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitObjectBody(AngularParser.ObjectBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterObjectMember(AngularParser.ObjectMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitObjectMember(AngularParser.ObjectMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConstructorDeclaration(AngularParser.ConstructorDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}

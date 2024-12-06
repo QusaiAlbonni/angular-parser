@@ -154,7 +154,7 @@ export class AppComponent {
       image: 'https://media.istockphoto.com/id/1894107670/nl/foto/electricity.jpg?s=612x612&w=0&k=20&c=R_9ENN2UEe8bqUgAiHfgynoAhO1jBEk9Kgc9J_WKwhQ=',
       details: 'Theme: Electricity/PowerVisualsDepicts a glowing light bulb surrounded by electric currents or sparks of energy.The background is dark, enhancing the vibrant blue and white electric arcs.Symbolizes innovation, energy, or the concept of power and electricity.',
     },
-  ];
+  ]
 
   // Initialize selectedProduct with the first product
   selectedProduct = this.products[0];
