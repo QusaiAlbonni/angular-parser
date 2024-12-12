@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
+import org.classes.Program;
 import org.visitors.AngularBaseVisitor;
 
 import java.io.IOException;
@@ -27,10 +28,10 @@ public class Main {
             AngularLexer angularLexer = new AngularLexer(input);
             CommonTokenStream tokenStream = new CommonTokenStream(angularLexer);
             AngularParser angularParser = new AngularParser(tokenStream);
+            AngularBaseVisitor visitor = new AngularBaseVisitor();
+            Object program = visitor.visitProgram(angularParser.program());
+            System.out.println(program);
 
-            ParseTree parseTree = angularParser.program();
-
-            System.out.println(parseTree.toStringTree());
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());
         }

@@ -11,6 +11,7 @@ import java.util.List;
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
+
         Program program=new Program();
         for (int i = 0; i <ctx.statement().size(); i++) {
             if(ctx.statement(i)!=null){
