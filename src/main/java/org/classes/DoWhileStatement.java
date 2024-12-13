@@ -1,9 +1,9 @@
-package org.classes;
+package org.Classes;
 
 public class DoWhileStatement extends Statement{
     Statement body;
     Expression condition;
-
+    public DoWhileStatement(){}
     public DoWhileStatement(Statement body, Expression condition) {
         this.body = body;
         this.condition = condition;

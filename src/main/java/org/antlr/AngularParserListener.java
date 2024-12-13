@@ -1,4 +1,4 @@
-// Generated from C:/Users/Lenovo/OneDrive/Desktop/proojactos/antlr/angular-project/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/esd67/Desktop/antlr_projects/angular-parser/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
 package org.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -267,6 +267,26 @@ public interface AngularParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinaryExpression(AngularParser.BinaryExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AngularParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayDeclaration(AngularParser.ArrayDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayDeclaration(AngularParser.ArrayDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AngularParser#objectDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectDeclaration(AngularParser.ObjectDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#objectDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectDeclaration(AngularParser.ObjectDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AngularParser#primaryExpression}.
 	 * @param ctx the parse tree

@@ -124,7 +124,10 @@ logicalExpression
 binaryExpression
     : primaryExpression ( (PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | POWER | ASSIGN|NOT_EQUAL|LESS|GREATER|LESS_EQUAL|GREATER_EQUAL|STRICT_NOT_EQUAL|STRICT_EQUAL|EQUAL|INCRES|DECRES) primaryExpression )*
     ;
-
+arrayDeclaration:
+LBRACKET argumentList RBRACKET;
+objectDeclaration:
+'{' objectBody '}';
 primaryExpression
     : ID
     | STRING
@@ -134,8 +137,8 @@ primaryExpression
     | NULL
     | UNDEFINED
     | LPAREN expression RPAREN
-    | '{' objectBody '}'
-    | LBRACKET argumentList RBRACKET
+    | objectDeclaration
+    | arrayDeclaration
     | primaryExpression LPAREN argumentList? RPAREN
     | primaryExpression DOT ID
     | NEW ID LPAREN argumentList? RPAREN;  // Handles 'new Greeter("John")'

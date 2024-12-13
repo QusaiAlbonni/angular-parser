@@ -1,10 +1,10 @@
-package org.classes;
+package org.Classes;
 
 public class WhileStatement extends Statement{
     Expression condition;
     Statement body;
 
-
+    public WhileStatement(){}
     public WhileStatement(Expression condition, Statement body) {
         this.condition = condition;
         this.body = body;

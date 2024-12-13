@@ -1,15 +1,20 @@
 package org.Classes;
 
-public class ReturnStatement extends Statement{
-    Expression expression;
+public class ObjectMember {
+Expression expression;
+String ID;
 
-    public ReturnStatement() {
+    public String getID() {
+        return ID;
     }
 
-    public ReturnStatement(Expression expression) {
-        this.expression = expression;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
+    public ObjectMember(){
+
+    }
     public Expression getExpression() {
         return expression;
     }
@@ -20,8 +25,9 @@ public class ReturnStatement extends Statement{
 
     @Override
     public String toString() {
-        return "\nReturnStatement{" +
+        return "\nObjectMember{" +
                 "\nexpression=" + expression +
+                "\nID="+ ID+
                 '}';
     }
 }

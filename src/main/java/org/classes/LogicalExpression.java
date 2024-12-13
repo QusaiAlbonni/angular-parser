@@ -1,11 +1,11 @@
-package org.classes;
+package org.Classes;
 
 // LogicalExpression.java
 public class LogicalExpression extends Expression {
     private Expression left;
     private String operator; // e.g., "&&", "||"
     private Expression right;
-
+    public  LogicalExpression(){}
     public LogicalExpression(Expression left, String operator, Expression right) {
         this.left = left;
         this.operator = operator;
@@ -40,10 +40,22 @@ public class LogicalExpression extends Expression {
 
     @Override
     public String toString() {
+        if(left!=null&&right!=null){
         return "\nLogicalExpression{" +
                 "\nleft=" + left +
                 "\noperator='" + operator + '\'' +
                 "\nright=" + right +
                 '}';
+
+        }if(left==null){
+        return "\nLogicalExpression{" +
+                "\nright=" + right +
+                '}';
+
+        }
+        return "\nLogicalExpression{" +
+                "\nleft=" + left +
+                '}';
+
     }
 }

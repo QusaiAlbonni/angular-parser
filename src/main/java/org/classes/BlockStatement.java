@@ -1,5 +1,6 @@
-package org.classes;
+package org.Classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockStatement extends Statement{
@@ -9,6 +10,7 @@ public class BlockStatement extends Statement{
     }
 
     public BlockStatement() {
+        statements=new ArrayList<>();
     }
 
     public List<Statement> getStatements() {

@@ -1,4 +1,4 @@
-// Generated from C:/Users/Lenovo/OneDrive/Desktop/proojactos/antlr/angular-project/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/esd67/Desktop/antlr_projects/angular-parser/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
 package org.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -166,6 +166,18 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinaryExpression(AngularParser.BinaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDeclaration(AngularParser.ArrayDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#objectDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectDeclaration(AngularParser.ObjectDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AngularParser#primaryExpression}.
 	 * @param ctx the parse tree

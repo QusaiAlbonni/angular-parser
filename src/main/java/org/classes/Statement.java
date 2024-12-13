@@ -1,3 +1,3 @@
-package org.classes;
+package org.Classes;
 public class Statement {
 }

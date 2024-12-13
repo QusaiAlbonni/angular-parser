@@ -1,5 +1,6 @@
-package org.classes;
+package org.Classes;
 
+import org.antlr.AngularParser;
 
 public class ClassMember {
     private String visibility; // public, private, protected
@@ -9,11 +10,13 @@ public class ClassMember {
     private boolean isProperty;
     private boolean isMethod;
     private boolean isEnum;
+    private boolean isExpression;
     private MethodDeclaration method;
     private VariableDeclaration variable;
     private ConstructorDeclaration constructorDeclaration;
     private TypeAnnotation typeAnnotation;
     private EnumDeclaration enumDeclaration;
+    private Statement expressionStatement;
 
     public ConstructorDeclaration getConstructorDeclaration() {
         return constructorDeclaration;
@@ -99,18 +102,25 @@ public class ClassMember {
     }
     public void setIsEnum(boolean isEnum){
         this.isEnum=isEnum;
+    }public void setIsExpression(boolean isExpression){
+        this.isExpression=isExpression;
     }
 
+    public Statement getExpressionStatement() {
+        return expressionStatement;
+    }
+
+    public void setExpressionStatement(Statement expressionStatement) {
+        this.expressionStatement = expressionStatement;
+    }
 
     @Override
     public String toString() {
         if (isConstructor) {
             return "\nClassMember{" +
+                    "\nconstructoDeclaration=" + constructorDeclaration +
                     "\nvisibility='" + visibility + '\'' +
                     "\nisStatic=" + isStatic +
-                    "\nname='" + name + '\'' +
-                    "\nisConstructor=" + isConstructor +
-                    "\nconstructoDeclaration=" + constructorDeclaration +
                     '}';
         } else if (isProperty) {
             return "\nClassMember{" +
@@ -126,6 +136,10 @@ public class ClassMember {
         }else if (isEnum) {
             return "\nClassMember{" +
                     enumDeclaration+
+                    '}';
+        }else if (isExpression) {
+            return "\nClassMember{" +
+                    expressionStatement+
                     '}';
         }
         else {

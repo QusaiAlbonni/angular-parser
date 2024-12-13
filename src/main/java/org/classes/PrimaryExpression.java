@@ -1,12 +1,15 @@
-package org.classes;
+package org.Classes;
+
+import java.util.Objects;
+
 // PrimaryExpression.java
 public class PrimaryExpression extends Expression {
     private String id; // Variable name
     private String stringValue; // String literal
-    private Number numberValue; // Numeric literal
-    private Boolean booleanValue; // Boolean literal
-    private Object nullValue; // Null literal
-    private Object undefinedValue; // Undefined literal
+    private String numberValue; // Numeric literal
+    private String booleanValue; // Boolean literal
+    private String nullValue; // Null literal
+    private String undefinedValue; // Undefined literal
 
     public String getId() {
         return id;
@@ -24,19 +27,19 @@ public class PrimaryExpression extends Expression {
         this.stringValue = stringValue;
     }
 
-    public Number getNumberValue() {
+    public String getNumberValue() {
         return numberValue;
     }
 
-    public void setNumberValue(Number numberValue) {
+    public void setNumberValue(String numberValue) {
         this.numberValue = numberValue;
     }
 
-    public Boolean getBooleanValue() {
+    public String getBooleanValue() {
         return booleanValue;
     }
 
-    public void setBooleanValue(Boolean booleanValue) {
+    public void setBooleanValue(String booleanValue) {
         this.booleanValue = booleanValue;
     }
 
@@ -44,7 +47,7 @@ public class PrimaryExpression extends Expression {
         return nullValue;
     }
 
-    public void setNullValue(Object nullValue) {
+    public void setNullValue(String nullValue) {
         this.nullValue = nullValue;
     }
 
@@ -52,19 +55,47 @@ public class PrimaryExpression extends Expression {
         return undefinedValue;
     }
 
-    public void setUndefinedValue(Object undefinedValue) {
+    public void setUndefinedValue(String undefinedValue) {
         this.undefinedValue = undefinedValue;
     }
 
     @Override
     public String toString() {
+        if(!Objects.equals(stringValue, null)){
         return "\nPrimaryExpression{" +
                 "\nid='" + id + '\'' +
                 "\nstringValue='" + stringValue + '\'' +
-                "\nnumberValue=" + numberValue +
-                "\nbooleanValue=" + booleanValue +
-                "\nnullValue=" + nullValue +
-                "\nundefinedValue=" + undefinedValue +
                 '}';
+    }
+        if(!Objects.equals(numberValue, null)){
+        return "\nPrimaryExpression{" +
+                "\nnumberValue='" + numberValue + '\'' +
+                '}';
+    }
+        if(!Objects.equals(booleanValue, null)){
+        return "\nPrimaryExpression{" +
+                "\nid='" + id + '\'' +
+                "\nbooleanValue='" + booleanValue + '\'' +
+                '}';
+    }
+        if(!Objects.equals(nullValue, null)){
+        return "\nPrimaryExpression{" +
+                "\nid='" + id + '\'' +
+                "\nnullValue='" + nullValue + '\'' +
+                '}';
+    }
+        if(!Objects.equals(undefinedValue, null)){
+        return "\nPrimaryExpression{" +
+                "\nid='" + id + '\'' +
+                "\nundefinedValue='" + undefinedValue + '\'' +
+                '}';
+    }
+        if(!Objects.equals(id,null)){
+            return "\nPrimaryExpression{" +
+                    "\nid='" + id + '\'' +
+                    '}';
+        }
+       return "error in primary expression";
+
     }
 }

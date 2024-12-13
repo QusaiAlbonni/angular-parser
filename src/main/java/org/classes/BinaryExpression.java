@@ -1,4 +1,4 @@
-package org.classes;
+package org.Classes;
 
 public class BinaryExpression extends Expression {
     private Expression left;
@@ -42,10 +42,24 @@ public class BinaryExpression extends Expression {
 
     @Override
     public String toString() {
+        if(left!=null&&right!=null){
         return "\nBinaryExpression{" +
                 "\nleft=" + left +
                 "\noperator='" + operator + '\'' +
                 "\nright=" + right +
                 '}';
+
+        }if(left!=null){
+        return "\nBinaryExpression{" +
+                "\nleft=" + left +
+                '}';
+
+        }if(right!=null){
+        return "\nBinaryExpression{" +
+                "\nright=" + right +
+                '}';
+
+        }
+        return  "ERROR IN BINARY EXPRESSION WHEN CALL TO STRING ";
     }
 }

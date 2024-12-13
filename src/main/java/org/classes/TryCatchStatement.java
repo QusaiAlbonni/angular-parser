@@ -1,10 +1,13 @@
-package org.classes;
+package org.Classes;
 
 public class TryCatchStatement extends Statement{
     BlockStatement tryBlock;
     String catchVariable;
     BlockStatement catchBlock;
     BlockStatement finallyBlock;
+
+    public TryCatchStatement() {
+    }
 
     public TryCatchStatement(BlockStatement tryBlock, String catchVariable, BlockStatement catchBlock, BlockStatement finallyBlock) {
         this.tryBlock = tryBlock;

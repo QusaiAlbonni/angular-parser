@@ -1,4 +1,4 @@
-package org.classes;
+package org.Classes;
 
 public class ForStatement extends Statement{
 

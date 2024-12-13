@@ -1,7 +1,10 @@
-package org.classes;
+package org.Classes;
 
 public class ThrowStatement extends Statement{
     Expression expression;
+
+    public ThrowStatement() {
+    }
 
     public ThrowStatement(Expression expression) {
         this.expression = expression;

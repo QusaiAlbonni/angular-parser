@@ -1,4 +1,4 @@
-package org.classes;
+package org.Classes;
 
 public class IfStatement extends Statement{
     Expression condition;
@@ -10,6 +10,7 @@ public class IfStatement extends Statement{
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
     }
+    public  IfStatement(){}
 
     public Expression getCondition() {
         return condition;

@@ -1,9 +1,11 @@
-package org.classes;
+package org.Classes;
 
 public class ExportStatement extends Statement{
     String id ;
     String exportType;
+    public  ExportStatement(){
 
+    }
     public ExportStatement(String exportType, String id) {
         this.exportType = exportType;
         this.id = id;

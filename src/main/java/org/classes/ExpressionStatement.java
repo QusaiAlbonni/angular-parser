@@ -1,8 +1,8 @@
-package org.classes;
+package org.Classes;
 
 public class ExpressionStatement extends Statement{
     Expression expression;
-
+    public ExpressionStatement(){}
     public ExpressionStatement(Expression expression) {
         this.expression = expression;
     }

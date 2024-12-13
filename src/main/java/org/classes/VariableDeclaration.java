@@ -1,4 +1,4 @@
-package org.classes;
+package org.Classes;
 
 public class VariableDeclaration extends Statement{
     String type; //let ot const
