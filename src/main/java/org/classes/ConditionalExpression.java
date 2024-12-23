@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 // ConditionalExpression.java
 public class ConditionalExpression extends Expression {

@@ -7,7 +7,7 @@
           <option name="fileName" value="$PROJECT_DIR$/src/main/java/org/antlr/AngularParser.g4" />
           <option name="autoGen" value="true" />
           <option name="outputDir" value="./src/main/java/" />
-          <option name="libDir" value="" />
+          <option name="libDir" value="C:\Users\Lenovo\OneDrive\Desktop\proojactos\antlr\angular-project\src\main\java\org\antlr" />
           <option name="encoding" value="" />
           <option name="pkg" value="" />
           <option name="language" value="" />

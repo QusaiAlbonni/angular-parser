@@ -1,4 +1,4 @@
-// Generated from C:/Users/esd67/Desktop/antlr_projects/angular-parser/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Lenovo/OneDrive/Desktop/proojactos/antlr/angular-project/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
 package org.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -82,6 +82,90 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitObjectMember(AngularParser.ObjectMemberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#template}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplate(AngularParser.TemplateContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlElements}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlElements(AngularParser.HtmlElementsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlElement(AngularParser.HtmlElementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#angularAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAngularAttribute(AngularParser.AngularAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#bindingAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBindingAttribute(AngularParser.BindingAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#eventBindingAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEventBindingAttribute(AngularParser.EventBindingAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#forAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForAttribute(AngularParser.ForAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#ifAttribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfAttribute(AngularParser.IfAttributeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlContent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlContent(AngularParser.HtmlContentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlMisc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlMisc(AngularParser.HtmlMiscContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlComment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlComment(AngularParser.HtmlCommentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#htmlChardata}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlChardata(AngularParser.HtmlChardataContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#angularCharData}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAngularCharData(AngularParser.AngularCharDataContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AngularParser#constructorDeclaration}.
 	 * @param ctx the parse tree
@@ -215,6 +299,12 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForStatement(AngularParser.ForStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AngularParser#forOf}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForOf(AngularParser.ForOfContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AngularParser#incrementExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -280,4 +370,10 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReadError(AngularParser.ReadErrorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AngularParser#decoratorApplication}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx);
 }

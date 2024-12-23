@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 // LogicalExpression.java
 public class LogicalExpression extends Expression {

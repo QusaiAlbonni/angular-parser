@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 //TODO
 //todo
 public class TypeAnnotation {

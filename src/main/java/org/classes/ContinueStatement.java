@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 //TODO
 public class ContinueStatement extends Statement{
     @Override

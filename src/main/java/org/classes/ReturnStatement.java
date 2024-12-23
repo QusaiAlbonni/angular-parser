@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 public class ReturnStatement extends Statement{
     Expression expression;

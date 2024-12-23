@@ -1,7 +1,8 @@
-package org.Classes;
+package org.classes;
 
 public class ForStatement extends Statement{
 
+    ForOf forOf;
     VariableDeclaration variableDeclaration;
     Expression condition;
     Expression increment;
@@ -49,12 +50,21 @@ public class ForStatement extends Statement{
         this.body = body;
     }
 
+    public ForOf getForOf() {
+        return forOf;
+    }
+
+    public void setForOf(ForOf forOf) {
+        this.forOf = forOf;
+    }
+
     @Override
     public String toString() {
         return "\nForStatement{" +
                 "\nvariableDeclaration=" + variableDeclaration +
                 "\ncondition=" + condition +
                 "\nincrement=" + increment +
+                "\nforOf" + forOf +
                 "\nbody=" + body +
                 '}';
     }

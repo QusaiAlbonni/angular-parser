@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 public class ThrowStatement extends Statement{
     Expression expression;

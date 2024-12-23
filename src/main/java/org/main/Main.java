@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
-import org.Classes.Program;
+import org.classes.Program;
 import org.visitors.AngularBaseVisitor;
 
 import java.io.IOException;

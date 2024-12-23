@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.Classes.*;
+import org.classes.*;
 import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
 import org.antlr.AngularParserVisitor;
@@ -121,6 +121,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Parameter visitParameter(AngularParser.ParameterContext ctx) {
         Parameter parameter=new Parameter();
+        if (ctx.expressionStatement() != null){
+            parameter.setExpressionStatement(visitExpressionStatement(ctx.expressionStatement()));
+            return parameter;
+        }
         parameter.setName(ctx.ID().getText());
         if(ctx.typeAnnotation()!=null){
             parameter.setType(visitTypeAnnotation(ctx.typeAnnotation()));
@@ -354,7 +358,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Statement visitExpressionStatement(AngularParser.ExpressionStatementContext ctx) {
+    public ExpressionStatement visitExpressionStatement(AngularParser.ExpressionStatementContext ctx) {
         ExpressionStatement expressionStatement=new ExpressionStatement();
         if(ctx.incrementExpression()!=null){
             expressionStatement.setExpression(visitIncrementExpression(ctx.incrementExpression()));

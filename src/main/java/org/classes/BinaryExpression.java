@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 public class BinaryExpression extends Expression {
     private Expression left;

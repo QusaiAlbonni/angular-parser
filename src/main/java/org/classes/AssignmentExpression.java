@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 // AssignmentExpression.java
 public class AssignmentExpression extends Expression {

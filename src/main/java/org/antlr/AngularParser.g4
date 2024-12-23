@@ -24,7 +24,8 @@ statement
     | returnStatement
     | breakStatement
     | continueStatement
-    | throwStatement;
+    | throwStatement
+    | decoratorApplication;
 
 variableDeclaration
     : (LET | CONST) ID ASSIGN expression
@@ -37,7 +38,7 @@ parameterList
     : parameter (COMMA parameter)*;
 
 parameter
-    : ID
+    : expressionStatement
     | ID COLON typeAnnotation;
 
 typeAnnotation
@@ -70,7 +71,81 @@ objectBody
     ;
 
 objectMember
-    : ID COLON expression
+    : template
+    | ID COLON expression
+    ;
+
+template
+    : TEMPLATE SEA_WS* htmlElements* SEA_WS* ESCAPE
+    ;
+
+htmlElements:
+    htmlMisc* htmlElement htmlMisc*
+    ;
+
+htmlElement
+    :
+    TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
+            ((TAG_CLOSE (htmlContent TAG_OPEN TAG_SLASH TAG_NAME TAG_CLOSE)) | TAG_SLASH_CLOSE)
+    ;
+
+htmlAttribute
+    : ( TAG_NAME) (TAG_EQUALS ATTVALUE_VALUE)?
+    ;
+
+angularAttribute
+    :
+    bindingAttribute
+    | eventBindingAttribute
+    | forAttribute
+    | ifAttribute
+    ;
+
+bindingAttribute
+    :
+    TAG_LBRACKET TAG_NAME TAG_RBRACKET (TAG_EQUALS ATTVALUE_VALUE)?
+    ;
+
+eventBindingAttribute
+    :
+    TAG_LPAREN TAG_NAME TAG_RPAREN (TAG_EQUALS ATTVALUE_VALUE)?
+    ;
+
+forAttribute
+    :
+    ANG_FOR (TAG_EQUALS ATTVALUE_VALUE)?
+    ;
+
+ifAttribute
+    :
+    ANG_IF (TAG_EQUALS ATTVALUE_VALUE)?
+    ;
+
+
+htmlContent
+    : htmlChardata? ((htmlElement | CDATA | htmlComment) htmlChardata?)*
+    ;
+
+htmlMisc
+    : htmlComment
+    | SEA_WS
+    ;
+
+htmlComment
+    : HTML_COMMENT
+    | HTML_CONDITIONAL_COMMENT
+    ;
+
+htmlChardata
+    :
+    angularCharData
+    | HTML_TEXT
+    | SEA_WS
+    ;
+
+angularCharData
+    :
+    HTML_TEXT? SEA_WS? HANDLEBAR_OPEN expressionStatement? HANDLEBAR_CLOSE SEA_WS? HTML_TEXT?
     ;
 
 constructorDeclaration
@@ -120,14 +195,16 @@ logicalExpression
     : binaryExpression ( (AND | OR | BITWISE_AND | BITWISE_OR | BITWISE_XOR | BITWISE_NOT) binaryExpression )*
     ;
 
-
 binaryExpression
     : primaryExpression ( (PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | POWER | ASSIGN|NOT_EQUAL|LESS|GREATER|LESS_EQUAL|GREATER_EQUAL|STRICT_NOT_EQUAL|STRICT_EQUAL|EQUAL|INCRES|DECRES) primaryExpression )*
     ;
+
 arrayDeclaration:
 LBRACKET argumentList RBRACKET;
+
 objectDeclaration:
 '{' objectBody '}';
+
 primaryExpression
     : ID
     | STRING
@@ -140,15 +217,12 @@ primaryExpression
     | objectDeclaration
     | arrayDeclaration
     | primaryExpression LPAREN argumentList? RPAREN
-    | primaryExpression DOT ID
+    | primaryExpression DOT primaryExpression
     | NEW ID LPAREN argumentList? RPAREN;  // Handles 'new Greeter("John")'
-
 
 argumentList
     : (expression (COMMA expression)* COMMA?)?
     ;
-
-
 
 assignmentExpression
     : ID ASSIGN expression
@@ -162,13 +236,20 @@ ifStatement
 
 forStatement
     : FOR LPAREN
-        (variableDeclaration | assignmentExpression | expression)?
+        (forOf
+        | ((variableDeclaration | assignmentExpression | expression)?
         SEMICOLON
         expression?
         SEMICOLON
-        (incrementExpression | assignmentExpression | expression)?  // Handling the increment (i++)
+        (incrementExpression | assignmentExpression | expression)?))  // Handling the increment (i++)
       RPAREN
-      statement;
+      (blockStatement
+      | expressionStatement)
+      ;
+forOf
+    :
+    variableDeclaration OF expression
+    ;
 
 incrementExpression
     : ID (INCRES | DECRES);  // Handles i++ or i--
@@ -205,3 +286,6 @@ throwStatement
 readError
     : ID ASSIGN expression SEMICOLON
     | ID SEMICOLON;
+
+decoratorApplication:
+    DECORATOR ID (LPAREN parameterList? RPAREN)?;

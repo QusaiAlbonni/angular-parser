@@ -1,4 +1,4 @@
-package org.Classes;
+package org.classes;
 
 public class TryCatchStatement extends Statement{
     BlockStatement tryBlock;
