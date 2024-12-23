@@ -12,6 +12,7 @@ public class PrimaryExpression extends Expression {
     private String undefinedValue; // Undefined literal
     private FunctionCall functionCall;
     private DotNotation dotNotation;
+    private ObjectInstantiation objectInstantiation;
 
     public String getId() {
         return id;
@@ -77,8 +78,23 @@ public class PrimaryExpression extends Expression {
         this.dotNotation = dotNotation;
     }
 
+    public ObjectInstantiation getObjectInstantiation() {
+        return objectInstantiation;
+    }
+
+    public void setObjectInstantiation(ObjectInstantiation objectInstantiation) {
+        this.objectInstantiation = objectInstantiation;
+    }
+
     @Override
     public String toString() {
+        if(functionCall!=null){
+            return functionCall.toString();
+        }if(dotNotation!=null){
+            return dotNotation.toString();
+        }if(objectInstantiation!=null){
+            return objectInstantiation.toString();
+        }
         if(!Objects.equals(stringValue, null)){
         return "\nPrimaryExpression{" +
                 "\nid='" + id + '\'' +
@@ -113,11 +129,7 @@ public class PrimaryExpression extends Expression {
                     "\nid='" + id + '\'' +
                     '}';
         }
-        if(functionCall!=null){
-            return functionCall.toString();
-        }if(dotNotation!=null){
-            return dotNotation.toString();
-        }
+
        return "error in primary expression";
 
     }

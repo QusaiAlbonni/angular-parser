@@ -11,6 +11,7 @@ import org.antlr.AngularParserVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
@@ -569,7 +570,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         return objectDeclaration;
     }
 
-    //todo fix last 3 rules
     @Override
     public Expression visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) {
         PrimaryExpression primaryExpression=new PrimaryExpression();
@@ -613,6 +613,13 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             dotNotation.setRight(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
             primaryExpressionTempCount++;
             primaryExpression.setDotNotation(dotNotation);
+        }
+        //handle object instantiation
+        if(ctx.NEW()!=null){
+            ObjectInstantiation objectInstantiation=new ObjectInstantiation();
+            objectInstantiation.setId(ctx.ID().getText());
+            objectInstantiation.setArgumentList(visitArgumentList(ctx.argumentList()));
+            primaryExpression.setObjectInstantiation(objectInstantiation);
         }
 
 

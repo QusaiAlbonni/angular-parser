@@ -1,4 +1,3 @@
-ammis.name
-test()
-ammis.name
-test()
+ammis=new Hero("best","a7","Bom")
+dot.name
+ammis()
