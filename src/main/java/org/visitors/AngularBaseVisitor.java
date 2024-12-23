@@ -261,22 +261,35 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Object visitTemplate(AngularParser.TemplateContext ctx) {
-        return null;
+        Template template=new Template();
+        if(ctx.htmlElements()!=null){
+            for (int i = 0; i < ctx.htmlElements().size(); i++) {
+                template.getHtmlElements().add(visitHtmlElements(ctx.htmlElements(i)));
+            }
+        }
+        return  template;
     }
 
     @Override
-    public Object visitHtmlElements(AngularParser.HtmlElementsContext ctx) {
-        return null;
+    public HtmlElement visitHtmlElements(AngularParser.HtmlElementsContext ctx) {
+        return visitHtmlElement(ctx.htmlElement());
+    }
+    @Override
+    public HtmlElement visitHtmlElement(AngularParser.HtmlElementContext ctx) {
+        HtmlElement htmlElement=new HtmlElement();
+        if(ctx.htmlAttribute()!=null){
+            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
+                htmlElement.getHtmlAttributes().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
+            }
+        }
+        return htmlElement;
     }
 
     @Override
-    public Object visitHtmlElement(AngularParser.HtmlElementContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Object visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
-        return null;
+    public HtmlAttribute visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
+        HtmlAttribute htmlAttribute=new HtmlAttribute();
+        htmlAttribute.setValue(ctx.TAG_EQUALS().getText()+" "+ctx.TAG_NAME().getText()+" "+ctx.ATTVALUE_VALUE().getText());
+        return htmlAttribute;
     }
 
     @Override
@@ -560,6 +573,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Expression visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) {
         PrimaryExpression primaryExpression=new PrimaryExpression();
+        int primaryExpressionTempCount=0;
         if(ctx.ID()!=null){
             primaryExpression.setId(ctx.ID().getText());
         }
@@ -574,9 +588,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }if(ctx.UNDEFINED()!=null){
             primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
         }
-//        if(ctx.primaryExpression()!=null){
-//            return    visitPrimaryExpression(ctx.primaryExpression());
-//        }
         if(ctx.expression()!=null){
             return    visitExpression(ctx.expression());
         }
@@ -585,6 +596,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
         if(ctx.arrayDeclaration()!=null){
             return  visitArrayDeclaration(ctx.arrayDeclaration());
+        }
+        //function call
+        if(ctx.primaryExpression(primaryExpressionTempCount)!=null&&ctx.argumentList()!=null){
+        System.out.println("function call");
+        FunctionCall functionCall=new FunctionCall();
+        functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
+        functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
+        primaryExpression.setFunctionCall(functionCall);
         }
         return  primaryExpression;
     }

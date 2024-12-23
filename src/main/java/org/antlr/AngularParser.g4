@@ -216,9 +216,9 @@ primaryExpression
     | LPAREN expression RPAREN
     | objectDeclaration
     | arrayDeclaration
-    | primaryExpression LPAREN argumentList? RPAREN
-    | primaryExpression DOT primaryExpression
-    | NEW ID LPAREN argumentList? RPAREN;  // Handles 'new Greeter("John")'
+    | primaryExpression LPAREN argumentList? RPAREN //function call
+    | primaryExpression DOT primaryExpression //dot notation
+    | NEW ID LPAREN argumentList? RPAREN;  // object instantiation 'new Greeter("John")'
 
 argumentList
     : (expression (COMMA expression)* COMMA?)?

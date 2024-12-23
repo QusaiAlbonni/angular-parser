@@ -4,7 +4,6 @@ import java.util.List;
 
 public class FunctionDeclaration extends Statement{
     String id ;
-//    List<Parameter>parameters;
     ParameterList parameters;
     BlockStatement body;
 

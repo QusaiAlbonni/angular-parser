@@ -10,6 +10,7 @@ public class PrimaryExpression extends Expression {
     private String booleanValue; // Boolean literal
     private String nullValue; // Null literal
     private String undefinedValue; // Undefined literal
+    private FunctionCall functionCall;
 
     public String getId() {
         return id;
@@ -59,6 +60,14 @@ public class PrimaryExpression extends Expression {
         this.undefinedValue = undefinedValue;
     }
 
+    public FunctionCall getFunctionCall() {
+        return functionCall;
+    }
+
+    public void setFunctionCall(FunctionCall functionCall) {
+        this.functionCall = functionCall;
+    }
+
     @Override
     public String toString() {
         if(!Objects.equals(stringValue, null)){
@@ -94,6 +103,9 @@ public class PrimaryExpression extends Expression {
             return "\nPrimaryExpression{" +
                     "\nid='" + id + '\'' +
                     '}';
+        }
+        if(functionCall!=null){
+            return functionCall.toString();
         }
        return "error in primary expression";
 
