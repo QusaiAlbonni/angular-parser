@@ -4,6 +4,7 @@ public class ForStatement extends Statement{
 
     ForOf forOf;
     VariableDeclaration variableDeclaration;
+    Expression variableDeclarationAsExpression;
     Expression condition;
     Expression increment;
     Statement body;
@@ -32,6 +33,14 @@ public class ForStatement extends Statement{
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+    }
+
+    public Expression getVariableDeclarationAsExpression() {
+        return variableDeclarationAsExpression;
+    }
+
+    public void setVariableDeclarationAsExpression(Expression variableDeclarationAsExpression) {
+        this.variableDeclarationAsExpression = variableDeclarationAsExpression;
     }
 
     public Expression getIncrement() {

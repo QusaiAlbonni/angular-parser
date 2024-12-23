@@ -71,6 +71,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }else if(ctx.breakStatement()!=null){
             return visitBreakStatement(ctx.breakStatement());
         }
+        else if(ctx.decoratorApplication()!=null){
+            return visitDecoratorApplication(ctx.decoratorApplication());
+        }
         else{
             System.out.println("cannot handle this statement in visitStatement function in AngularBaseVisitor");
             return  null;
@@ -254,6 +257,76 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             objectMember.setExpression(visitExpression(ctx.expression()));
         }
         return objectMember;
+    }
+
+    @Override
+    public Object visitTemplate(AngularParser.TemplateContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlElements(AngularParser.HtmlElementsContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlElement(AngularParser.HtmlElementContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitAngularAttribute(AngularParser.AngularAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitBindingAttribute(AngularParser.BindingAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitEventBindingAttribute(AngularParser.EventBindingAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitForAttribute(AngularParser.ForAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitIfAttribute(AngularParser.IfAttributeContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlContent(AngularParser.HtmlContentContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlMisc(AngularParser.HtmlMiscContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlComment(AngularParser.HtmlCommentContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitAngularCharData(AngularParser.AngularCharDataContext ctx) {
+        return null;
     }
 
     //*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/Dont forget to check it again/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
@@ -483,7 +556,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         return objectDeclaration;
     }
 
-    //todo check it for arguments testCase
+    //todo fix last 3 rules
     @Override
     public Expression visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) {
         PrimaryExpression primaryExpression=new PrimaryExpression();
@@ -501,9 +574,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }if(ctx.UNDEFINED()!=null){
             primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
         }
-        if(ctx.primaryExpression()!=null){
-            return    visitPrimaryExpression(ctx.primaryExpression());
-        }
+//        if(ctx.primaryExpression()!=null){
+//            return    visitPrimaryExpression(ctx.primaryExpression());
+//        }
         if(ctx.expression()!=null){
             return    visitExpression(ctx.expression());
         }
@@ -528,7 +601,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Object visitAssignmentExpression(AngularParser.AssignmentExpressionContext ctx) {
+    public Expression visitAssignmentExpression(AngularParser.AssignmentExpressionContext ctx) {
         AssignmentExpression assignmentExpression=new AssignmentExpression();
         if(ctx.expression()!=null){
             assignmentExpression.setExpression(visitExpression(ctx.expression()));
@@ -564,23 +637,70 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
         return  ifStatement;
     }
+
     @Override
     public Statement visitForStatement(AngularParser.ForStatementContext ctx) {
-        ForStatement forStatement=new ForStatement();
-        if(ctx.variableDeclaration()!=null){
+        ForStatement forStatement = new ForStatement();
+        int expressionTempCount=0;
+        // Check for "for-of"
+        if (ctx.forOf() != null) {
+            forStatement.setForOf(visitForOf(ctx.forOf()));
+        }
+
+        // Handle variable declaration or assignment
+        if (ctx.variableDeclaration() != null) {
             forStatement.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
+            System.out.println("Variable Declaration: " + ctx.variableDeclaration().getText());
+        } else if (ctx.assignmentExpression(0) != null) {
+            forStatement.setVariableDeclarationAsExpression(visitAssignmentExpression(ctx.assignmentExpression(0)));
+            System.out.println("Assignment Expression: " + ctx.assignmentExpression(0).getText());
+        } else if (ctx.expression(expressionTempCount) != null) {
+            forStatement.setVariableDeclarationAsExpression(visitExpression(ctx.expression(expressionTempCount)));
+            System.out.println("Expression (Variable Declaration): " + ctx.expression(expressionTempCount).getText());
+            expressionTempCount++;
+        }
+
+        // Handle condition
+        if (ctx.expression(expressionTempCount) != null) {
+            forStatement.setCondition(visitExpression(ctx.expression(expressionTempCount)));
+            System.out.println("Condition: " + ctx.expression(expressionTempCount).getText());
+            expressionTempCount++;
+        }
+
+        // Handle increment
+        if (ctx.incrementExpression() != null) {
+            forStatement.setIncrement(visitIncrementExpression(ctx.incrementExpression()));
+            System.out.println("Increment: " + ctx.incrementExpression().getText());
+        } else if (ctx.assignmentExpression(1) != null) {
+            forStatement.setIncrement(visitAssignmentExpression(ctx.assignmentExpression(1)));
+            System.out.println("Increment (Assignment): " + ctx.assignmentExpression(1).getText());
+        } else if (ctx.expression(expressionTempCount) != null) {
+            forStatement.setIncrement(visitExpression(ctx.expression(expressionTempCount)));
+            System.out.println("Increment (Expression): " + ctx.expression(expressionTempCount).getText());
+            expressionTempCount++;
+        }
+
+        // Handle body
+        if (ctx.blockStatement() != null) {
+            forStatement.setBody(visitBlockStatement(ctx.blockStatement()));
+        } else if (ctx.expressionStatement() != null) {
+            forStatement.setBody(visitExpressionStatement(ctx.expressionStatement()));
+        }
+
+        return forStatement;
+    }
+
+
+    @Override
+    public ForOf visitForOf(AngularParser.ForOfContext ctx) {
+        ForOf forOf=new ForOf();
+        if(ctx.variableDeclaration()!=null){
+            forOf.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
         }
         if(ctx.expression()!=null){
-            forStatement.setCondition(visitExpression(ctx.expression(0)));
+            forOf.setExpression(visitExpression(ctx.expression()));
         }
-        if(ctx.incrementExpression()!=null){
-            forStatement.setIncrement(visitIncrementExpression(ctx.incrementExpression()));
-        }
-        if(ctx.statement()!=null){
-            forStatement.setBody(visitStatement(ctx.statement()));
-        }
-        return forStatement;
-
+        return forOf;
     }
 
     @Override
@@ -699,6 +819,12 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public Object visitReadError(AngularParser.ReadErrorContext ctx) {
         return null;
     }
+
+    @Override
+    public Statement visitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx) {
+        return null;
+    }
+
     @Override
     public Object visitErrorNode(ErrorNode errorNode) {
         return null;
