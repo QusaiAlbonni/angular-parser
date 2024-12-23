@@ -1,1 +1,4 @@
-greet('ammis')
+ammis.name
+test()
+ammis.name
+test()

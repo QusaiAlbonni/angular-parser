@@ -11,6 +11,7 @@ public class PrimaryExpression extends Expression {
     private String nullValue; // Null literal
     private String undefinedValue; // Undefined literal
     private FunctionCall functionCall;
+    private DotNotation dotNotation;
 
     public String getId() {
         return id;
@@ -68,6 +69,14 @@ public class PrimaryExpression extends Expression {
         this.functionCall = functionCall;
     }
 
+    public DotNotation getDotNotation() {
+        return dotNotation;
+    }
+
+    public void setDotNotation(DotNotation dotNotation) {
+        this.dotNotation = dotNotation;
+    }
+
     @Override
     public String toString() {
         if(!Objects.equals(stringValue, null)){
@@ -106,6 +115,8 @@ public class PrimaryExpression extends Expression {
         }
         if(functionCall!=null){
             return functionCall.toString();
+        }if(dotNotation!=null){
+            return dotNotation.toString();
         }
        return "error in primary expression";
 

@@ -597,7 +597,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.arrayDeclaration()!=null){
             return  visitArrayDeclaration(ctx.arrayDeclaration());
         }
-        //function call
+        //handle function call
         if(ctx.primaryExpression(primaryExpressionTempCount)!=null&&ctx.argumentList()!=null){
         System.out.println("function call");
         FunctionCall functionCall=new FunctionCall();
@@ -605,6 +605,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
         primaryExpression.setFunctionCall(functionCall);
         }
+        //handle dot notation
+        if(ctx.DOT()!=null && ctx.primaryExpression().size()>=2){
+            DotNotation dotNotation=new DotNotation();
+            dotNotation.setLeft(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
+            primaryExpressionTempCount++;
+            dotNotation.setRight(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
+            primaryExpressionTempCount++;
+            primaryExpression.setDotNotation(dotNotation);
+        }
+
+
         return  primaryExpression;
     }
     //todo
