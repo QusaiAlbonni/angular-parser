@@ -642,6 +642,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public Statement visitForStatement(AngularParser.ForStatementContext ctx) {
         ForStatement forStatement = new ForStatement();
         int expressionTempCount=0;
+        int assignmentExpressionTempCount=0;
         // Check for "for-of"
         if (ctx.forOf() != null) {
             forStatement.setForOf(visitForOf(ctx.forOf()));
@@ -651,9 +652,11 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if (ctx.variableDeclaration() != null) {
             forStatement.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
             System.out.println("Variable Declaration: " + ctx.variableDeclaration().getText());
-        } else if (ctx.assignmentExpression(0) != null) {
-            forStatement.setVariableDeclarationAsExpression(visitAssignmentExpression(ctx.assignmentExpression(0)));
-            System.out.println("Assignment Expression: " + ctx.assignmentExpression(0).getText());
+        } else if (ctx.assignmentExpression(assignmentExpressionTempCount) != null) {
+            forStatement.setVariableDeclarationAsExpression(visitAssignmentExpression(ctx.assignmentExpression(assignmentExpressionTempCount)));
+            System.out.println("Assignment Expression: " + ctx.assignmentExpression(assignmentExpressionTempCount).getText());
+            assignmentExpressionTempCount++;
+
         } else if (ctx.expression(expressionTempCount) != null) {
             forStatement.setVariableDeclarationAsExpression(visitExpression(ctx.expression(expressionTempCount)));
             System.out.println("Expression (Variable Declaration): " + ctx.expression(expressionTempCount).getText());
@@ -671,9 +674,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if (ctx.incrementExpression() != null) {
             forStatement.setIncrement(visitIncrementExpression(ctx.incrementExpression()));
             System.out.println("Increment: " + ctx.incrementExpression().getText());
-        } else if (ctx.assignmentExpression(1) != null) {
-            forStatement.setIncrement(visitAssignmentExpression(ctx.assignmentExpression(1)));
-            System.out.println("Increment (Assignment): " + ctx.assignmentExpression(1).getText());
+        } else if (ctx.assignmentExpression(assignmentExpressionTempCount) != null) {
+            forStatement.setIncrement(visitAssignmentExpression(ctx.assignmentExpression(assignmentExpressionTempCount)));
+            System.out.println("Increment (Assignment): " + ctx.assignmentExpression(assignmentExpressionTempCount).getText());
+            assignmentExpressionTempCount++;
         } else if (ctx.expression(expressionTempCount) != null) {
             forStatement.setIncrement(visitExpression(ctx.expression(expressionTempCount)));
             System.out.println("Increment (Expression): " + ctx.expression(expressionTempCount).getText());

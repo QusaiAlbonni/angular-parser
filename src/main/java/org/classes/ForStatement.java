@@ -69,12 +69,32 @@ public class ForStatement extends Statement{
 
     @Override
     public String toString() {
-        return "\nForStatement{" +
-                "\nvariableDeclaration=" + variableDeclaration +
-                "\ncondition=" + condition +
-                "\nincrement=" + increment +
-                "\nforOf" + forOf +
-                "\nbody=" + body +
-                '}';
+                if(forOf!=null){
+                    return "\nForStatement{" +
+                            "\nforOf" + forOf +
+                            "\nbody=" + body +
+                            '}';
+                }
+                else{
+                    if(variableDeclaration!=null){
+                        return  "\nForStatement{" +
+                                "\nvariableDeclaration=" + variableDeclaration +
+                                "\ncondition=" + condition +
+                                "\nincrement=" + increment +
+                                "\nforOf" + forOf +
+                                "\nbody=" + body +
+                                '}';
+                    }
+                    else{
+                   return         "\nForStatement{" +
+                                "\nvariableDeclaration=" + variableDeclarationAsExpression +
+                                "\ncondition=" + condition +
+                                "\nincrement=" + increment +
+                                "\nforOf" + forOf +
+                                "\nbody=" + body +
+                                '}';
+                    }
+                }
+
     }
 }
