@@ -1,10 +1,15 @@
 package org.classes;
 
-public class AngularCharData {
-    String textLeft;
-    String textRight;
+import java.util.ArrayList;
+import java.util.List;
 
+public class AngularCharData {
+   List<String>texts;
     ExpressionStatement expressionStatement;
+
+    public AngularCharData() {
+        this.texts = new ArrayList<>();
+    }
 
     public ExpressionStatement getExpressionStatement() {
         return expressionStatement;
@@ -14,28 +19,19 @@ public class AngularCharData {
         this.expressionStatement = expressionStatement;
     }
 
-    public String getTextRight() {
-        return textRight;
+    public List<String> getTexts() {
+        return texts;
     }
 
-    public void setTextRight(String textRight) {
-        this.textRight = textRight;
-    }
-
-    public String getTextLeft() {
-        return textLeft;
-    }
-
-    public void setTextLeft(String textLeft) {
-        this.textLeft = textLeft;
+    public void setTexts(List<String> texts) {
+        this.texts = texts;
     }
 
     @Override
     public String toString() {
         return "AngularCharData: {" +
-                "\ntext left: " + textLeft +
+                "\ntexts: " + texts+
                 "\nexpression: " + expressionStatement +
-                "\ntext right: " + textRight +
                 "\n";
     }
 }

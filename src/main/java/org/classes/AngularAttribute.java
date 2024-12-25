@@ -43,11 +43,27 @@ public class AngularAttribute {
 
     @Override
     public String toString() {
+        if(bindingAttribute!=null){
+            return "\nAngularAttribute{" +
+                    "\nbindingAttribute=" + bindingAttribute+"\n" ;
+        }
+        if(eventBindingAttribute!=null){
+            return "AngularAttribute{" +
+                    "\neventBindingAttribute=" + eventBindingAttribute +"\n";
+        }
+        if(forAttribute!=null){
+            return "AngularAttribute{" +
+                    "\nforAttribute=" + forAttribute +"\n";
+        }
+        if(ifAttribute!=null){
+            return "AngularAttribute{" +
+                    "\nifAttribute=" + ifAttribute+"\n" ;
+        }
         return "AngularAttribute{" +
                 "\nbindingAttribute=" + bindingAttribute +
                 "\neventBindingAttribute=" + eventBindingAttribute +
                 "\nforAttribute=" + forAttribute +
                 "\nifAttribute=" + ifAttribute +
-                '}';
+                '}'+"\n";
     }
 }
