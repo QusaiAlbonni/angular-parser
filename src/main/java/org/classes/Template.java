@@ -1,10 +1,13 @@
 package org.classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Template {
     private List<HtmlElement> htmlElements;
-
+    public Template(){
+        htmlElements=new ArrayList<>();
+    }
     public List<HtmlElement> getHtmlElements() {
         return htmlElements;
     }

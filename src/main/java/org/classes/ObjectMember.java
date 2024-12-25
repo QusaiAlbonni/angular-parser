@@ -3,6 +3,7 @@ package org.classes;
 public class ObjectMember {
 Expression expression;
 String ID;
+Template template;
 
     public String getID() {
         return ID;
@@ -23,8 +24,21 @@ String ID;
         this.expression = expression;
     }
 
+    public Template getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(Template template) {
+        this.template = template;
+    }
+
     @Override
     public String toString() {
+        if(template!=null){
+            return "\nObjectMember{" +
+                    "\ntemplate=" + template +
+                    '}';
+        }
         return "\nObjectMember{" +
                 "\nexpression=" + expression +
                 "\nID="+ ID+

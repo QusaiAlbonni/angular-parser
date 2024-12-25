@@ -9,9 +9,7 @@ import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
 import org.antlr.AngularParserVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
@@ -72,9 +70,16 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }else if(ctx.breakStatement()!=null){
             return visitBreakStatement(ctx.breakStatement());
         }
+        else if (ctx.componentDeclaration()!=null){
+            return  visitComponentDeclaration(ctx.componentDeclaration());
+        }
+        else if (ctx.serviceDeclaration()!=null){
+            return  visitServiceDeclaration(ctx.serviceDeclaration());
+        }
         else if(ctx.decoratorApplication()!=null){
             return visitDecoratorApplication(ctx.decoratorApplication());
         }
+
         else{
             System.out.println("cannot handle this statement in visitStatement function in AngularBaseVisitor");
             return  null;
@@ -98,7 +103,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Statement visitFunctionDeclaration(AngularParser.FunctionDeclarationContext ctx) {
+    public FunctionDeclaration visitFunctionDeclaration(AngularParser.FunctionDeclarationContext ctx) {
         FunctionDeclaration functionDeclaration=new FunctionDeclaration();
         functionDeclaration.setId(ctx.ID().getText());
         if(ctx.blockStatement()!=null){
@@ -113,7 +118,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public ParameterList visitParameterList(AngularParser.ParameterListContext ctx) {
         ParameterList parameterList=new ParameterList();
-        System.out.println("***********************");
         if(ctx.parameter()!=null){
             for (int i = 0; i < ctx.parameter().size(); i++) {
                 parameterList.getParameters().add(visitParameter(ctx.parameter(i)));
@@ -164,7 +168,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Statement visitClassDeclaration(AngularParser.ClassDeclarationContext ctx) {
+    public ClassDeclaration visitClassDeclaration(AngularParser.ClassDeclarationContext ctx) {
         ClassDeclaration classDeclaration=new ClassDeclaration();
         classDeclaration.setId(ctx.ID(0).getText());
         if(ctx.EXTENDS()!=null){
@@ -257,11 +261,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.expression()!=null){
             objectMember.setExpression(visitExpression(ctx.expression()));
         }
+        if(ctx.template()!=null){
+            objectMember.setTemplate(visitTemplate(ctx.template()));
+        }
         return objectMember;
     }
 
     @Override
-    public Object visitTemplate(AngularParser.TemplateContext ctx) {
+    public Template visitTemplate(AngularParser.TemplateContext ctx) {
         Template template=new Template();
         if(ctx.htmlElements()!=null){
             for (int i = 0; i < ctx.htmlElements().size(); i++) {
@@ -273,7 +280,11 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public HtmlElement visitHtmlElements(AngularParser.HtmlElementsContext ctx) {
-        return visitHtmlElement(ctx.htmlElement());
+        if(ctx.htmlElement()!=null) {
+            return visitHtmlElement(ctx.htmlElement());
+        }
+        System.out.println("error in visitHtmlElements visitor function ");
+        return null;
     }
     @Override
     public HtmlElement visitHtmlElement(AngularParser.HtmlElementContext ctx) {
@@ -282,6 +293,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
                 htmlElement.getHtmlAttributes().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
             }
+        }
+        if(ctx.htmlContent()!=null){
+            htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
         return htmlElement;
     }
@@ -319,8 +333,24 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Object visitHtmlContent(AngularParser.HtmlContentContext ctx) {
-        return null;
+    public HtmlContent visitHtmlContent(AngularParser.HtmlContentContext ctx) {
+        HtmlContent htmlContent=new HtmlContent();
+        if(ctx.htmlElement(0)!=null){
+            for (int i = 0; i < ctx.htmlElement().size(); i++) {
+            htmlContent.getHtmlElement().add(visitHtmlElement(ctx.htmlElement(i)));
+            }
+        }
+        if(ctx.htmlChardata()!=null){
+            if(ctx.htmlChardata(0)!=null){
+                htmlContent.setHtmlCharDataLeft(visitHtmlChardata(ctx.htmlChardata(0)));
+            }
+            if(ctx.htmlChardata(1)!=null){
+                htmlContent.setHtmlCharDataLeft(visitHtmlChardata(ctx.htmlChardata(1)));
+            }
+
+        }
+
+        return htmlContent;
     }
 
     @Override
@@ -334,13 +364,33 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Object visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
-        return null;
+    public HtmlCharData visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
+        HtmlCharData htmlCharData=new HtmlCharData();
+        System.out.println(ctx.getText());
+        if(ctx.angularCharData()!=null){
+            htmlCharData.setAngularCharData(visitAngularCharData(ctx.angularCharData()));
+        }
+        if(ctx.HTML_TEXT()!=null){
+
+            htmlCharData.setText(ctx.HTML_TEXT().getText());
+        }
+        return  htmlCharData;
     }
 
     @Override
-    public Object visitAngularCharData(AngularParser.AngularCharDataContext ctx) {
-        return null;
+    public AngularCharData visitAngularCharData(AngularParser.AngularCharDataContext ctx) {
+        AngularCharData angularCharData=new AngularCharData();
+
+        if(ctx.expressionStatement()!=null){
+            angularCharData.setExpressionStatement(visitExpressionStatement(ctx.expressionStatement()));
+        }
+        if(ctx.HTML_TEXT(0)!=null){
+            angularCharData.setTextLeft(ctx.HTML_TEXT(0).getText());
+        }
+        if(ctx.HTML_TEXT(1)!=null){
+            angularCharData.setTextRight(ctx.HTML_TEXT(1).getText());
+        }
+        return angularCharData;
     }
 
     //*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/Dont forget to check it again/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
@@ -397,17 +447,44 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Statement visitComponentDeclaration(AngularParser.ComponentDeclarationContext ctx) {
-        return null;
+        ComponentDeclaration componentDeclaration=new ComponentDeclaration();
+        if(ctx.ID()!=null){
+            componentDeclaration.setId(ctx.ID().getText());
+        }
+        if(ctx.propertyDeclaration()!=null){
+            for (int i = 0; i <ctx.propertyDeclaration().size() ; i++) {
+                componentDeclaration.getPropertyDeclarations().add(visitPropertyDeclaration(ctx.propertyDeclaration(i)));
+
+            }
+        }
+        return componentDeclaration;
+
     }
 
     @Override
     public Statement visitServiceDeclaration(AngularParser.ServiceDeclarationContext ctx) {
-        return null;
+        ServiceDeclaration serviceDeclaration=new ServiceDeclaration();
+        if(ctx.ID()!=null){
+            serviceDeclaration.setId(ctx.ID().getText());
+        }
+        if(ctx.methodDeclaration()!=null){
+            for (int i = 0; i <ctx.methodDeclaration().size() ; i++) {
+                serviceDeclaration.getMethodDeclarations().add(visitMethodDeclaration(ctx.methodDeclaration(i)));
+            }
+        }
+        return  serviceDeclaration;
     }
 
     @Override
-    public Object visitPropertyDeclaration(AngularParser.PropertyDeclarationContext ctx) {
-        return null;
+    public PropertyDeclaration visitPropertyDeclaration(AngularParser.PropertyDeclarationContext ctx) {
+        PropertyDeclaration propertyDeclaration=new PropertyDeclaration();
+        if(ctx.ID()!=null){
+            propertyDeclaration.setId(ctx.ID().getText());
+        }
+        if(ctx.typeAnnotation()!=null){
+            propertyDeclaration.setTypeAnnotation(visitTypeAnnotation(ctx.typeAnnotation()));
+        }
+        return propertyDeclaration;
     }
 
     @Override
@@ -430,14 +507,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
         if(ctx.variableDeclaration()!=null){
             exportStatement.setId(ctx.variableDeclaration().ID().getText());
+            exportStatement.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
             exportStatement.setExportType("variable");
         }
         if(ctx.classDeclaration()!=null){
             exportStatement.setId(ctx.classDeclaration().ID(0).getText());
+            exportStatement.setClassDeclaration(visitClassDeclaration(ctx.classDeclaration()));
             exportStatement.setExportType("class ");
         }
         if(ctx.functionDeclaration()!=null){
             exportStatement.setId(ctx.functionDeclaration().ID().getText());
+            exportStatement.setFunctionDeclaration(visitFunctionDeclaration(ctx.functionDeclaration()));
             exportStatement.setExportType("function");
 
         }
@@ -587,6 +667,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             primaryExpression.setNullValue(ctx.NULL().getText());
         }if(ctx.UNDEFINED()!=null){
             primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
+        }
+        if(ctx.THIS()!=null){
+            primaryExpression.setThisValue(ctx.THIS().getText());
         }
         if(ctx.expression()!=null){
             return    visitExpression(ctx.expression());
@@ -863,7 +946,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Statement visitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx) {
-        return null;
+        DecoratorApplication decoratorApplication=new DecoratorApplication();
+        if(ctx.ID()!=null){
+        decoratorApplication.setName(ctx.ID().getText());
+        }
+        if(ctx.parameterList()!=null){
+            decoratorApplication.setParameterList(visitParameterList(ctx.parameterList()));
+        }
+        return decoratorApplication;
     }
 
     @Override

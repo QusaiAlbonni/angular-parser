@@ -83,6 +83,7 @@ BINARY_NUMBER: '0b' [01]+;
 BOOLEAN: 'true' | 'false';
 NULL: 'null';
 UNDEFINED: 'undefined';
+
 ASSIGN: '=';
 PLUS: '+';
 MINUS: '-';

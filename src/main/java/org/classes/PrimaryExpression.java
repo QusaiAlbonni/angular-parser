@@ -10,6 +10,7 @@ public class PrimaryExpression extends Expression {
     private String booleanValue; // Boolean literal
     private String nullValue; // Null literal
     private String undefinedValue; // Undefined literal
+    private String thisValue; // this literal
     private FunctionCall functionCall;
     private DotNotation dotNotation;
     private ObjectInstantiation objectInstantiation;
@@ -86,6 +87,14 @@ public class PrimaryExpression extends Expression {
         this.objectInstantiation = objectInstantiation;
     }
 
+    public String getThisValue() {
+        return thisValue;
+    }
+
+    public void setThisValue(String thisValue) {
+        this.thisValue = thisValue;
+    }
+
     @Override
     public String toString() {
         if(functionCall!=null){
@@ -127,6 +136,11 @@ public class PrimaryExpression extends Expression {
         if(!Objects.equals(id,null)){
             return "\nPrimaryExpression{" +
                     "\nid='" + id + '\'' +
+                    '}';
+        }
+ if(!Objects.equals(this,null)){
+            return "\nPrimaryExpression{" +
+                    "\nthisValue='" + thisValue + '\'' +
                     '}';
         }
 

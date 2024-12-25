@@ -23,8 +23,8 @@ public class FunctionCall {
     @Override
     public String toString() {
         return "FunctionCall{" +
-                "expression=" + expression +
-                ", argumentList=" + argumentList +
+                "\nexpression=" + expression +
+                "\nargumentList=" + argumentList +
                 '}';
     }
 }

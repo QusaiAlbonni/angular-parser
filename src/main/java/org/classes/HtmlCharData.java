@@ -1,6 +1,6 @@
 package org.classes;
 
-public class HtmlCharData {
+public class HtmlCharData extends Html{
     String text;
     AngularCharData angularCharData;
 
@@ -22,9 +22,24 @@ public class HtmlCharData {
 
     @Override
     public String toString() {
+        if(text!=null&&angularCharData!=null){
         return "HtmlCharData{" +
                 "\ntext='" + text + '\'' +
-                "\n, angularCharData=" + angularCharData +
+                "\nangularCharData=" + angularCharData +
                 "}\n";
+
+        }else if(text!=null){
+        return "HtmlCharData{" +
+                "\ntext='" + text + '\'' +
+                "}\n";
+
+        }else if(angularCharData!=null){
+        return "HtmlCharData{" +
+                "\nangularCharData=" + angularCharData +
+                "}\n";
+
+        }
+        return"\nHtmlCharData\n";
+
     }
 }

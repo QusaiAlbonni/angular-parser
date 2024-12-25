@@ -3,6 +3,9 @@ package org.classes;
 public class PropertyDeclaration {
     String id ;
     TypeAnnotation typeAnnotation;
+    public  PropertyDeclaration(){
+
+    }
     public PropertyDeclaration(String id, TypeAnnotation typeAnnotation) {
         this.id = id;
         this.typeAnnotation = typeAnnotation;

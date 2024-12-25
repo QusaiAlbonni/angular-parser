@@ -213,6 +213,7 @@ primaryExpression
     | BOOLEAN
     | NULL
     | UNDEFINED
+    | THIS
     | LPAREN expression RPAREN
     | objectDeclaration
     | arrayDeclaration

@@ -1,15 +1,20 @@
 package org.classes;
 
-public class HtmlContent {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HtmlContent  extends Html {
     private HtmlCharData htmlCharDataLeft;
     private HtmlCharData htmlCharDataRight;
-    private HtmlElement htmlElement;
-
-    public HtmlElement getHtmlElement() {
+    private List<HtmlElement> htmlElement;
+    public  HtmlContent(){
+        htmlElement=new ArrayList<>();
+    }
+    public List<HtmlElement> getHtmlElement() {
         return htmlElement;
     }
 
-    public void setHtmlElement(HtmlElement htmlElement) {
+    public void setHtmlElement(List<HtmlElement> htmlElement) {
         this.htmlElement = htmlElement;
     }
 
@@ -33,8 +38,8 @@ public class HtmlContent {
     public String toString() {
         return "HtmlContent{" +
                 "htmlCharDataLeft=" + htmlCharDataLeft +
-                "\n, htmlCharDataRight=" + htmlCharDataRight +
-                "\n, htmlElement=" + htmlElement +
+                "\nhtmlCharDataRight=" + htmlCharDataRight +
+                "\nhtmlElement=" + htmlElement +
                 "}\n";
     }
 }

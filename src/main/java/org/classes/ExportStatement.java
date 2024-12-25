@@ -3,6 +3,9 @@ package org.classes;
 public class ExportStatement extends Statement{
     String id ;
     String exportType;
+    ClassDeclaration classDeclaration;
+    VariableDeclaration variableDeclaration;
+    FunctionDeclaration functionDeclaration;
     public  ExportStatement(){
 
     }
@@ -27,8 +30,51 @@ public class ExportStatement extends Statement{
         this.exportType = exportType;
     }
 
+    public ClassDeclaration getClassDeclaration() {
+        return classDeclaration;
+    }
+
+    public void setClassDeclaration(ClassDeclaration classDeclaration) {
+        this.classDeclaration = classDeclaration;
+    }
+
+    public VariableDeclaration getVariableDeclaration() {
+        return variableDeclaration;
+    }
+
+    public void setVariableDeclaration(VariableDeclaration variableDeclaration) {
+        this.variableDeclaration = variableDeclaration;
+    }
+
+    public FunctionDeclaration getFunctionDeclaration() {
+        return functionDeclaration;
+    }
+
+    public void setFunctionDeclaration(FunctionDeclaration functionDeclaration) {
+        this.functionDeclaration = functionDeclaration;
+    }
+
     @Override
     public String toString() {
+        if(classDeclaration!=null){
+            return "\nExportStatement{" +
+                    "\nid='" + id + '\'' +
+                    "\nexportType='" + exportType + '\'' +
+                    "\nclassDeclaration='" + classDeclaration + '\'' +
+                    '}';
+        }else if(functionDeclaration!=null){
+            return "\nExportStatement{" +
+                    "\nid='" + id + '\'' +
+                    "\nexportType='" + exportType + '\'' +
+                    "\nfunctionDeclaration='" + functionDeclaration + '\'' +
+                    '}';
+        } else if(variableDeclaration!=null){
+            return "\nExportStatement{" +
+                    "\nid='" + id + '\'' +
+                    "\nexportType='" + exportType + '\'' +
+                    "\nvariableDeclaration='" + variableDeclaration + '\'' +
+                    '}';
+        }
         return "\nExportStatement{" +
                 "\nid='" + id + '\'' +
                 "\nexportType='" + exportType + '\'' +
