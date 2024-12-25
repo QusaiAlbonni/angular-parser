@@ -297,6 +297,11 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.htmlContent()!=null){
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
+        if(ctx.angularAttribute()!=null){
+            for (int i = 0; i <ctx.angularAttribute().size() ; i++) {
+                htmlElement.getAngularAttributes().add(visitAngularAttribute(ctx.angularAttribute(i)));
+            }
+        }
         return htmlElement;
     }
 
@@ -308,28 +313,63 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     }
 
     @Override
-    public Object visitAngularAttribute(AngularParser.AngularAttributeContext ctx) {
-        return null;
+    public AngularAttribute visitAngularAttribute(AngularParser.AngularAttributeContext ctx) {
+        AngularAttribute angularAttribute=new AngularAttribute();
+        if(ctx.bindingAttribute()!=null){
+            angularAttribute.setBindingAttribute(visitBindingAttribute(ctx.bindingAttribute()));
+        }
+        if(ctx.eventBindingAttribute()!=null){
+            angularAttribute.setEventBindingAttribute(visitEventBindingAttribute(ctx.eventBindingAttribute()));
+        }
+        if(ctx.forAttribute()!=null){
+            angularAttribute.setForAttribute(visitForAttribute(ctx.forAttribute()));
+        }
+        if(ctx.ifAttribute()!=null){
+            angularAttribute.setIfAttribute(visitIfAttribute(ctx.ifAttribute()));
+        }
+        return angularAttribute;
     }
 
     @Override
-    public Object visitBindingAttribute(AngularParser.BindingAttributeContext ctx) {
-        return null;
+    public BindingAttribute visitBindingAttribute(AngularParser.BindingAttributeContext ctx) {
+        BindingAttribute bindingAttribute=new BindingAttribute();
+        if(ctx.TAG_NAME()!=null){
+            bindingAttribute.setTagName(ctx.TAG_NAME().getText());
+        }
+        if(ctx.ATTVALUE_VALUE()!=null){
+            bindingAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
+        }
+        return bindingAttribute;
     }
 
     @Override
-    public Object visitEventBindingAttribute(AngularParser.EventBindingAttributeContext ctx) {
-        return null;
+    public EventBindingAttribute visitEventBindingAttribute(AngularParser.EventBindingAttributeContext ctx) {
+        EventBindingAttribute eventBindingAttribute=new EventBindingAttribute();
+        if (ctx.TAG_NAME()!=null){
+            eventBindingAttribute.setTagName(ctx.TAG_NAME().getText());
+        }
+        if(ctx.ATTVALUE_VALUE()!=null){
+            eventBindingAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
+        }
+        return eventBindingAttribute;
     }
 
     @Override
-    public Object visitForAttribute(AngularParser.ForAttributeContext ctx) {
-        return null;
+    public ForAttribute visitForAttribute(AngularParser.ForAttributeContext ctx) {
+        ForAttribute forAttribute=new ForAttribute();
+        if(ctx.ATTVALUE_VALUE()!=null){
+            forAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
+        }
+        return forAttribute;
     }
 
     @Override
-    public Object visitIfAttribute(AngularParser.IfAttributeContext ctx) {
-        return null;
+    public IfAttribute visitIfAttribute(AngularParser.IfAttributeContext ctx) {
+        IfAttribute ifAttribute=new IfAttribute();
+        if(ctx.ATTVALUE_VALUE()!=null){
+            ifAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
+        }
+        return ifAttribute;
     }
 
     @Override
@@ -366,13 +406,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public HtmlCharData visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
         HtmlCharData htmlCharData=new HtmlCharData();
-        System.out.println(ctx.getText());
         if(ctx.angularCharData()!=null){
             htmlCharData.setAngularCharData(visitAngularCharData(ctx.angularCharData()));
         }
         if(ctx.HTML_TEXT()!=null){
-
             htmlCharData.setText(ctx.HTML_TEXT().getText());
+        }
+        if(ctx.SEA_WS()!=null){
+            htmlCharData.setText(ctx.SEA_WS().getText().trim());
+        }
+        if(ctx.getText()!=null){
+            htmlCharData.setText(ctx.getText().substring(2,ctx.getText().length()-2));
         }
         return  htmlCharData;
     }
@@ -380,15 +424,21 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public AngularCharData visitAngularCharData(AngularParser.AngularCharDataContext ctx) {
         AngularCharData angularCharData=new AngularCharData();
-
         if(ctx.expressionStatement()!=null){
             angularCharData.setExpressionStatement(visitExpressionStatement(ctx.expressionStatement()));
         }
-        if(ctx.HTML_TEXT(0)!=null){
-            angularCharData.setTextLeft(ctx.HTML_TEXT(0).getText());
+        if (ctx.HTML_TEXT()!=null){
+            for (int i = 0; i <ctx.HTML_TEXT().size() ; i++) {
+            angularCharData.getTexts().add(ctx.HTML_TEXT(i).getText());
+            }
         }
-        if(ctx.HTML_TEXT(1)!=null){
-            angularCharData.setTextRight(ctx.HTML_TEXT(1).getText());
+        if(ctx.getText()!=null){
+            angularCharData.getTexts().add(ctx.getText().substring(2,ctx.getText().length()-2));
+        }
+        if(ctx.SEA_WS()!=null){
+            for (int i = 0; i <ctx.SEA_WS().size() ; i++) {
+                angularCharData.getTexts().add(ctx.SEA_WS(i).getText().trim());
+            }
         }
         return angularCharData;
     }

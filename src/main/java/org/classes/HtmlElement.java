@@ -7,9 +7,10 @@ public class HtmlElement extends Html{
 
     private List<HtmlAttribute> htmlAttributes;
     private  HtmlContent htmlContent;
-    private AngularAttribute angularAttributel;
+    private List<AngularAttribute> angularAttributes;
     public HtmlElement(){
         htmlAttributes=new ArrayList<>();
+        angularAttributes=new ArrayList<>();
     }
     public List<HtmlAttribute> getHtmlAttributes() {
         return htmlAttributes;
@@ -27,26 +28,26 @@ public class HtmlElement extends Html{
         this.htmlContent = htmlContent;
     }
 
-    public AngularAttribute getAngularAttributel() {
-        return angularAttributel;
+    public List<AngularAttribute> getAngularAttributes() {
+        return angularAttributes;
     }
 
-    public void setAngularAttributel(AngularAttribute angularAttributel) {
-        this.angularAttributel = angularAttributel;
+    public void setAngularAttributes(List<AngularAttribute> angularAttributes) {
+        this.angularAttributes = angularAttributes;
     }
 
     @Override
     public String toString() {
-        if(angularAttributel!=null && htmlAttributes!=null){
+        if(angularAttributes!=null && htmlAttributes!=null){
         return "HtmlElement{" +
                 "\nhtmlAttributes=" + htmlAttributes +
-                "\nangularAttributes=" + angularAttributel +
+                "\nangularAttributes=" + angularAttributes +
                 "\nhtmlContent=" + htmlContent +
                 "}\n";
         }
-        if(angularAttributel!=null){
+        if(angularAttributes!=null){
             return "HtmlElement{" +
-                    "\nangularAttributes=" + angularAttributel +
+                    "\nangularAttributes=" + angularAttributes +
                     "\nhtmlContent=" + htmlContent +
                     "}\n";
         }
