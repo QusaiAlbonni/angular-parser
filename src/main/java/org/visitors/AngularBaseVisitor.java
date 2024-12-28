@@ -8,6 +8,9 @@ import org.classes.*;
 import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
 import org.antlr.AngularParserVisitor;
+import org.main.Main;
+import org.sympol_table.html_scope;
+import org.sympol_table.html_sympol;
 
 import java.util.*;
 
@@ -20,6 +23,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
                 program.addChild(visitStatement(ctx.statement(i)));
             }
         }
+        Main.htmlSympolTable.print();
         return  program;
     }
 
@@ -289,19 +293,54 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public HtmlElement visitHtmlElement(AngularParser.HtmlElementContext ctx) {
         HtmlElement htmlElement=new HtmlElement();
-        if(ctx.htmlAttribute()!=null){
-            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
-                htmlElement.getHtmlAttributes().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
-            }
-        }
+        html_sympol hsympol ;
+        boolean add = true ;
+        html_scope.create_scope();
         if(ctx.htmlContent()!=null){
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
+        if(!Main.htmlSympolTable.getSympols().isEmpty() && Main.htmlSympolTable.getSympols().get(Main.htmlSympolTable.getSympols().size()-1).getTag()=="null"){
+            hsympol = Main.htmlSympolTable.getSympols().get(Main.htmlSympolTable.getSympols().size()-1);
+            add = false ;
+        }else{
+            hsympol = new html_sympol();
+        }
+        hsympol.setTag(ctx.TAG_NAME().toString());
+        html_scope hscope = Main.htmlSympolTable.getStack().peek() ;
+        hsympol.setLevel(hscope.getId());
+        if(ctx.htmlAttribute()!=null){
+            String att ="" ;
+            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
+                htmlElement.getHtmlAttributes().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
+                att += ctx.htmlAttribute(i).TAG_NAME().getText()+ ctx.htmlAttribute(i).TAG_EQUALS().getText()+ctx.htmlAttribute(i).ATTVALUE_VALUE().getText() ;
+            }
+            if(att.isEmpty()) att="null";
+            hsympol.setAttributes(att);
+        }
+
         if(ctx.angularAttribute()!=null){
+            String att ="";
             for (int i = 0; i <ctx.angularAttribute().size() ; i++) {
                 htmlElement.getAngularAttributes().add(visitAngularAttribute(ctx.angularAttribute(i)));
+                if(ctx.angularAttribute(i).bindingAttribute()!= null){
+                    att+=ctx.angularAttribute(i).bindingAttribute().getText();
+                }
+                if(ctx.angularAttribute(i).eventBindingAttribute()!= null){
+                    att+=ctx.angularAttribute(i).eventBindingAttribute().getText();
+                }
+                if(ctx.angularAttribute(i).forAttribute()!= null){
+                    att+=ctx.angularAttribute(i).forAttribute().getText();
+                }
+                if(ctx.angularAttribute(i).ifAttribute()!=null){
+                    att+=ctx.angularAttribute(i).ifAttribute().getText();
+                }
+
             }
+            if(att.isEmpty()) att="null";
+            hsympol.setAngularAttributes(att);
         }
+        if(add) Main.htmlSympolTable.getSympols().add(hsympol);
+        html_scope.remove_scope();
         return htmlElement;
     }
 
@@ -406,11 +445,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public HtmlCharData visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
         HtmlCharData htmlCharData=new HtmlCharData();
+        html_sympol hsympol = new html_sympol();
         if(ctx.angularCharData()!=null){
             htmlCharData.setAngularCharData(visitAngularCharData(ctx.angularCharData()));
         }
         if(ctx.HTML_TEXT()!=null){
             htmlCharData.setText(ctx.HTML_TEXT().getText());
+            hsympol.setInner(ctx.HTML_TEXT().getText());
+            Main.htmlSympolTable.getSympols().add(hsympol);
         }
         if(ctx.SEA_WS()!=null){
             htmlCharData.setText(ctx.SEA_WS().getText().trim());
