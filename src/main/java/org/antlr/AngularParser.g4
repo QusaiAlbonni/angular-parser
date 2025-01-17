@@ -64,6 +64,7 @@ classMember
     | expressionStatement
     | methodDeclaration
     | enumDeclaration
+    |functionDeclaration
     ;
 
 objectBody
