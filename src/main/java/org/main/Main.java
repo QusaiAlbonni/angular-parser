@@ -1,5 +1,9 @@
 package org.main;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -16,8 +20,8 @@ import java.io.InputStream;
 
 
 public class Main {
-    public static html_sympol_table htmlSympolTable = new html_sympol_table();
     public static sympol_table sympolTable = new sympol_table();
+    public static html_sympol_table htmlSympolTable = new html_sympol_table();
     public static void main(String[] args) throws IOException {
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.txt");
@@ -33,12 +37,27 @@ public class Main {
             CommonTokenStream tokenStream = new CommonTokenStream(angularLexer);
             AngularParser angularParser = new AngularParser(tokenStream);
             AngularBaseVisitor visitor = new AngularBaseVisitor();
-            Object program = visitor.visitProgram(angularParser.program());
-            System.out.println(program);
+            Program program = (Program) visitor.visitProgram(angularParser.program());
+            printTreeWithJackson(program);
+
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());
         }
 
+    }
+    private static void printTreeWithJackson(Program program) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+            String jsonOutput = objectMapper.writeValueAsString(program);
+
+            System.out.println(jsonOutput);
+
+        } catch (JsonProcessingException e) {
+            System.out.println("Error while converting to JSON: " + e.getMessage());
+        }
     }
 }
