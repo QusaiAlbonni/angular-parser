@@ -34,9 +34,12 @@ public class ImportStatement extends Statement{
 
     @Override
     public String toString() {
+        if (source!=null&&imports!=null){
         return "\nImportStatement{" +
                 "\nsource='" + source + '\'' +
                 "\nimports=" + imports +
                 '}';
     }
+        return "";
+  }
 }

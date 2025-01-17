@@ -171,7 +171,7 @@ propertyDeclaration
     : PROPERTY ID COLON typeAnnotation SEMICOLON;
 
 importStatement
-    : IMPORT LBRACE? STAR? (AS)?|( STRING | ID (AS ID)? (COMMA ID)* (AS ID)? RBRACE? FROM STRING) SEMICOLON?;
+    : IMPORT LBRACE? STAR?(AS)?( STRING | ID (AS ID)? (COMMA ID)* (AS ID)? RBRACE? FROM STRING) SEMICOLON?;
 
 exportStatement
     : EXPORT variableDeclaration SEMICOLON?

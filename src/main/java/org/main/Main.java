@@ -8,6 +8,7 @@ import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
 import org.classes.Program;
 import org.sympol_table.html_sympol_table;
+import org.sympol_table.sympol_table;
 import org.visitors.AngularBaseVisitor;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 
 public class Main {
     public static html_sympol_table htmlSympolTable = new html_sympol_table();
+    public static sympol_table sympolTable = new sympol_table();
     public static void main(String[] args) throws IOException {
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.txt");
