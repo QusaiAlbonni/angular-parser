@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AngularCharData {
-   List<String>texts;
+    List<String>texts;
     ExpressionStatement expressionStatement;
 
     public AngularCharData() {

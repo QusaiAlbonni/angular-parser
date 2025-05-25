@@ -26,7 +26,7 @@ class="product"
 alt="Product Image"
 class="detail-image"
 />
-<p>{{ selectedProduct.details }}</p>
+<p>falafel {{ selectedProduct.details }} potato</p>
 </div>
 </div>
 `,
