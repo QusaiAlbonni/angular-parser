@@ -1,6 +1,7 @@
 // Generated from C:/Users/Lenovo/OneDrive/Desktop/proojactos/antlr/angular-project/src/main/java/org/antlr/AngularParser.g4 by ANTLR 4.13.2
 package org.antlr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.classes.*;
 
 /**
  * This class provides an empty implementation of {@link AngularParserVisitor},
@@ -11,7 +12,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 @SuppressWarnings("CheckReturnValue")
-public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements AngularParserVisitor<T> {
+public abstract class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements AngularParserVisitor<T> {
 	/**
 	 * {@inheritDoc}
 	 *
@@ -40,6 +41,11 @@ public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitFunctionDeclaration(AngularParser.FunctionDeclarationContext ctx) { return visitChildren(ctx); }
+
+    public abstract VariableDeclaration visitInitializedVariableDeclaration(AngularParser.VariableDeclarationContext ctx);
+
+	public abstract FunctionDeclaration visitFunctionDecl(AngularParser.FunctionDeclarationContext ctx);
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -68,6 +74,9 @@ public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitClassDeclaration(AngularParser.ClassDeclarationContext ctx) { return visitChildren(ctx); }
+
+	public abstract ClassDeclaration visitClassDecl(AngularParser.ClassDeclarationContext ctx);
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -208,6 +217,9 @@ public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitMethodDeclaration(AngularParser.MethodDeclarationContext ctx) { return visitChildren(ctx); }
+
+	public abstract MethodDeclaration visitMethodDecl(AngularParser.MethodDeclarationContext ctx);
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -271,6 +283,11 @@ public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpression(AngularParser.ExpressionContext ctx) { return visitChildren(ctx); }
+
+	public abstract ExpressionStatement visitExpressionLable(AngularParser.ExpressionStatementContext ctx);
+
+	public abstract Expression visitConditionalExprLabel(AngularParser.ExpressionContext ctx);
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -313,6 +330,9 @@ public class AngularParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imp
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) { return visitChildren(ctx); }
+
+	public abstract Expression visitIdentifier(AngularParser.PrimaryExpressionContext ctx);
+
 	/**
 	 * {@inheritDoc}
 	 *

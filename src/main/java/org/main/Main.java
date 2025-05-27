@@ -7,13 +7,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
 import org.classes.Program;
 import org.sympol_table.html_sympol_table;
 import org.sympol_table.sympol_table;
-import org.visitors.AngularBaseVisitor;
+//import org.visitors.AngularBaseVisitor;
+import org.visitors.AngularBaseVisitorr;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class Main {
             AngularLexer angularLexer = new AngularLexer(input);
             CommonTokenStream tokenStream = new CommonTokenStream(angularLexer);
             AngularParser angularParser = new AngularParser(tokenStream);
-            AngularBaseVisitor visitor = new AngularBaseVisitor();
+            AngularBaseVisitorr visitor = new AngularBaseVisitorr();
             Program program = (Program) visitor.visitProgram(angularParser.program());
             printTreeWithJackson(program);
 
