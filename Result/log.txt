@@ -1,5 +1,4 @@
 Semantic Error is:
- Error: UNDEFINED_FUNCTION
  Error Name: UNDEFINED_FUNCTION
  Line: 14
- Error Message: error c30032:undefined"selectProduct" function
+ Error Message: Error:undefined "selectProduct" function

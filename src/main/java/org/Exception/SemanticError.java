@@ -18,7 +18,7 @@ public class SemanticError {
 
     @Override
     public String toString() {
-        return "\n Error: "+this.kind + "\n Error Name: "+getKind()+"\n Line: "+getLine()+"\n Error Message: "+getMessage();
+        return "\n Error Name: "+getKind()+"\n Line: "+getLine()+"\n Error Message: "+getMessage();
     }
 
 }
