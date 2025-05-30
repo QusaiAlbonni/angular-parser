@@ -1,22 +1,19 @@
 package org.visitors;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.classes.*;
 import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
-import org.antlr.AngularParserVisitor;
 import org.main.Main;
 import org.sympol_table.html_scope;
 import org.sympol_table.html_sympol;
 import org.sympol_table.scope;
 import org.sympol_table.sympol;
-
-import java.util.*;
+import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
+import org.function_parameters_symbol_table.Symbol;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
+    FunctionParametersSymbolTabel functionParametersSymbolTabel = new FunctionParametersSymbolTabel();
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
         scope.create_scope("Program");
@@ -114,16 +111,36 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public FunctionDeclaration visitFunctionDeclaration(AngularParser.FunctionDeclarationContext ctx) {
-        FunctionDeclaration functionDeclaration=new FunctionDeclaration();
-        functionDeclaration.setId(ctx.ID().getText());
-        if(ctx.blockStatement()!=null){
+        FunctionDeclaration functionDeclaration = new FunctionDeclaration();
+        String functionName = ctx.ID().getText();
+        functionDeclaration.setId(functionName);
+
+        int paramCount = 0;
+
+        if (ctx.parameterList() != null) {
+            ParameterList parameters = visitParameterList(ctx.parameterList());
+            functionDeclaration.setParameters(parameters);
+            paramCount = parameters.getParameters().size();
+
+            for (Parameter p : parameters.getParameters()) {
+                if (p.getName() != null) {
+                    if (!functionParametersSymbolTabel.define(new Symbol(p.getName(), p.getType() != null ? p.getType().getType() : "any", paramCount))) {
+                        System.err.println("Error: parameter '" + p.getName() + "' already defined.");
+                    }
+                }
+            }
+        }
+        if (!functionParametersSymbolTabel.define(new Symbol(functionName, "function",  paramCount))) {
+          //  System.err.println("Error: function '" + functionName + "' already defined.");
+            return null;
+        }
+        if (ctx.blockStatement() != null) {
             functionDeclaration.setBody(visitBlockStatement(ctx.blockStatement()));
         }
-        if(ctx.parameterList()!=null){
-            functionDeclaration.setParameters(visitParameterList(ctx.parameterList()));
-        }
-        return  functionDeclaration;
+
+        return functionDeclaration;
     }
+
 
     @Override
     public ParameterList visitParameterList(AngularParser.ParameterListContext ctx) {
@@ -864,13 +881,35 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             return  visitArrayDeclaration(ctx.arrayDeclaration());
         }
         //handle function call
-        if(ctx.primaryExpression(primaryExpressionTempCount)!=null&&ctx.argumentList()!=null){
-        System.out.println("function call");
-        FunctionCall functionCall=new FunctionCall();
-        functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
-        functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
-        primaryExpression.setFunctionCall(functionCall);
+        if(ctx.primaryExpression(primaryExpressionTempCount)!=null && ctx.argumentList()!=null){
+            System.out.println("function call");
+
+            // اسم الدالة
+            String functionName = ctx.primaryExpression(primaryExpressionTempCount).getText();
+            Symbol functionSymbol = functionParametersSymbolTabel.resolve(functionName);
+
+            // تحقق إنو الدالة موجودة
+            if (functionSymbol == null) {
+                System.err.println("");
+            } else {
+                // عدد البارامترات المرسلة
+                int passedArgCount = ctx.argumentList().expression().size();
+                int expectedArgCount = functionSymbol.getParameterCount();
+
+                // تحقق من عدد البارامترات
+                if (passedArgCount != expectedArgCount) {
+                    System.err.println("Semantic Error: function '" + functionName + "' expects "
+                            + expectedArgCount + " arguments but got " + passedArgCount);
+                }
+            }
+
+            // إنشاء تمثيل للدالة
+            FunctionCall functionCall = new FunctionCall();
+            functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
+            functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
+            primaryExpression.setFunctionCall(functionCall);
         }
+
         //handle dot notation
         if(ctx.DOT()!=null && ctx.primaryExpression().size()>=2){
             DotNotation dotNotation=new DotNotation();
