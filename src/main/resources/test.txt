@@ -1,5 +1,6 @@
 
 function sayHell(int:i) {
-  console.log("Hi again");
+  console.log(this.x);
 }
+
 sayHell(1,2);
