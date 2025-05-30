@@ -8,12 +8,15 @@ import org.main.Main;
 
 import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
 import org.function_parameters_symbol_table.Symbol;
+import org.this_symbol_table.ThisSymbolTable;
 
 import java.util.Objects;
 import java.util.logging.Logger;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     FunctionParametersSymbolTabel functionParametersSymbolTabel = new FunctionParametersSymbolTabel();
+     ThisSymbolTable thisSymbolTable = new ThisSymbolTable();
+
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
         Program program=new Program();
@@ -124,7 +127,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             for (Parameter p : parameters.getParameters()) {
                 if (p.getName() != null) {
                     if (!functionParametersSymbolTabel.define(new Symbol(p.getName(), p.getType() != null ? p.getType().getType() : "any", paramCount))) {
-                        System.err.println("Error: parameter '" + p.getName() + "' already defined.");
+                        System.err.println("Error: parameter '" + p.getType().getType() + "' already defined.");
                     }
                 }
             }
@@ -195,6 +198,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public ClassDeclaration visitClassDeclaration(AngularParser.ClassDeclarationContext ctx) {
+        thisSymbolTable.enterClass();
         ClassDeclaration classDeclaration=new ClassDeclaration();
         classDeclaration.setId(ctx.ID(0).getText());
         Main.semanticCheck.getSe1().addSet();
@@ -210,7 +214,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
         classDeclaration.setClassMembers(visitClassBody(ctx.classBody()));
+        scope.remove_scope();
         Main.semanticCheck.getSe1().delSet();
+        thisSymbolTable.exitClass();
 
         return  classDeclaration;
     }
@@ -849,6 +855,11 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
         }
         if(ctx.THIS()!=null){
+            if (!thisSymbolTable.isThisAllowed()) {
+                int line = ctx.THIS().getSymbol().getLine();
+                System.err.println("Semantic Error (line " + line + "): 'this' used outside of class context.");
+            }
+
             primaryExpression.setThisValue(ctx.THIS().getText());
         }
         if(ctx.expression()!=null){
@@ -867,7 +878,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             // اسم الدالة
             String functionName = ctx.primaryExpression(primaryExpressionTempCount).getText();
             Symbol functionSymbol = functionParametersSymbolTabel.resolve(functionName);
-
+            int line = ctx.primaryExpression(primaryExpressionTempCount).getStart().getLine();
             // تحقق إنو الدالة موجودة
             if (functionSymbol == null) {
                 System.err.println("");
@@ -878,7 +889,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
                 // تحقق من عدد البارامترات
                 if (passedArgCount != expectedArgCount) {
-                    System.err.println("Semantic Error: function '" + functionName + "' expects "
+                    System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' expects "
                             + expectedArgCount + " arguments but got " + passedArgCount);
                 }
             }
