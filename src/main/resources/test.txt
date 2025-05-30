@@ -152,8 +152,6 @@ export class AppComponent {
       details: 'Theme: Electricity/PowerVisualsDepicts a glowing light bulb surrounded by electric currents or sparks of energy.The background is dark, enhancing the vibrant blue and white electric arcs.Symbolizes innovation, energy, or the concept of power and electricity.',
     },
   ];
-   fff = [0,1,8];
-   boolean j = true ;
   // Initialize selectedProduct with the first product
   selectedProduct = this.products[0];
 

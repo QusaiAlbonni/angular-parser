@@ -11,8 +11,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
 import org.classes.Program;
-import org.sympol_table.html_sympol_table;
-import org.sympol_table.sympol_table;
+import org.semmanticCheck.SemanticCheck;
+import org.symbolTable.ClassObject.E2_Object;
 import org.visitors.AngularBaseVisitor;
 
 import java.io.IOException;
@@ -20,8 +20,9 @@ import java.io.InputStream;
 
 
 public class Main {
-    public static sympol_table sympolTable = new sympol_table();
-    public static html_sympol_table htmlSympolTable = new html_sympol_table();
+    public static SemanticCheck semanticCheck=new SemanticCheck();
+    public static E2_Object e2=new E2_Object();
+
     public static void main(String[] args) throws IOException {
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.txt");
@@ -38,6 +39,11 @@ public class Main {
             AngularParser angularParser = new AngularParser(tokenStream);
             AngularBaseVisitor visitor = new AngularBaseVisitor();
             Program program = (Program) visitor.visitProgram(angularParser.program());
+            semanticCheck.checkErrors();
+            semanticCheck.getSe3().getCheckMap().forEach((key, value) -> {
+                System.out.println("Key: " + key + ", Value: " + value);
+            });;
+            semanticCheck.getSe3().printSet();
             printTreeWithJackson(program);
 
 

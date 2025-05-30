@@ -9,27 +9,24 @@ import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
 import org.antlr.AngularParserVisitor;
 import org.main.Main;
-import org.sympol_table.html_scope;
-import org.sympol_table.html_sympol;
-import org.sympol_table.scope;
-import org.sympol_table.sympol;
+
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
-        scope.create_scope("Program");
         Program program=new Program();
         for (int i = 0; i <ctx.statement().size(); i++) {
             if(ctx.statement(i)!=null){
                 program.addChild(visitStatement(ctx.statement(i)));
             }
         }
-        Main.htmlSympolTable.print();
+
         System.out.println("\n\n\n______________________________________________________________________________________________\n\n\n\n");
-        Main.sympolTable.print();
-        scope.remove_scope();
+
+
         return  program;
     }
 
@@ -181,7 +178,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public ClassDeclaration visitClassDeclaration(AngularParser.ClassDeclarationContext ctx) {
         ClassDeclaration classDeclaration=new ClassDeclaration();
         classDeclaration.setId(ctx.ID(0).getText());
-        scope.create_scope(ctx.ID(0).getText());
+        Main.semanticCheck.getSe1().addSet();
         if(ctx.EXTENDS()!=null){
             classDeclaration.setExtendsClass(ctx.ID(1).getText());
         }
@@ -194,7 +191,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
         classDeclaration.setClassMembers(visitClassBody(ctx.classBody()));
-        scope.remove_scope();
+        Main.semanticCheck.getSe1().delSet();
+
         return  classDeclaration;
     }
 
@@ -213,6 +211,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public ClassMember visitClassMember(AngularParser.ClassMemberContext ctx) {
         ClassMember classMember=new ClassMember();
+        Main.semanticCheck.getSe2().setIsE2(true);
+
+
         if(ctx.PRIVATE()!=null){
             classMember.setVisibility(ctx.PRIVATE().getText());
         }
@@ -248,7 +249,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if (ctx.expressionStatement()!=null){
             classMember.setExpressionStatement(visitExpressionStatement(ctx.expressionStatement()));
             classMember.setIsExpression(true);
+
         }
+
         return classMember;
 
     }
@@ -270,24 +273,15 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.expression()!=null){
             objectMember.setExpression(visitExpression(ctx.expression()));
         }
-        sympol sympol ;
-        boolean add = true ;
-        if(Main.sympolTable.getSympols().get(Main.sympolTable.getSympols().size()-1).getName()==null){
-            sympol =Main.sympolTable.getSympols().get(Main.sympolTable.getSympols().size()-1);
-            add = false ;
-        }else{
-             sympol = new sympol();
-        }
+
         if(ctx.ID()!=null){
             objectMember.setID(ctx.ID().getText());
-            sympol.setName(ctx.ID().getText());
+            Main.e2.addAtt(ctx.ID().getText());
+            Main.e2.print();
         }
-        if(ctx.template()!=null){
+        if(ctx.template()!=null) {
             objectMember.setTemplate(visitTemplate(ctx.template()));
         }
-       if(add) {
-           sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-           Main.sympolTable.getSympols().add(sympol);}
         return objectMember;
     }
 
@@ -313,22 +307,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public HtmlElement visitHtmlElement(AngularParser.HtmlElementContext ctx) {
         HtmlElement htmlElement=new HtmlElement();
-        html_sympol hsympol ;
+
         boolean add = true ;
-        html_scope.create_scope();
-        scope.create_scope("["+Main.htmlSympolTable.getStack().peek().getId()+"]"+ctx.TAG_NAME().toString());
+
+
         if(ctx.htmlContent()!=null){
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
-        if(!Main.htmlSympolTable.getSympols().isEmpty() && Main.htmlSympolTable.getSympols().get(Main.htmlSympolTable.getSympols().size()-1).getTag()==null){
-            hsympol = Main.htmlSympolTable.getSympols().get(Main.htmlSympolTable.getSympols().size()-1);
-            add = false ;
-        }else{
-            hsympol = new html_sympol();
-        }
-        hsympol.setTag(ctx.TAG_NAME().toString());
-        html_scope hscope = Main.htmlSympolTable.getStack().peek() ;
-        hsympol.setLevel(hscope.getId());
+
+
+        Main.semanticCheck.getSe4().add(ctx.TAG_NAME(0).getText());
+
         if(ctx.htmlAttribute()!=null){
             String att ="" ;
             for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
@@ -336,7 +325,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
                 att += ctx.htmlAttribute(i).TAG_NAME().getText()+ ctx.htmlAttribute(i).TAG_EQUALS().getText()+ctx.htmlAttribute(i).ATTVALUE_VALUE().getText() ;
             }
             if(att.isEmpty()) att=null;
-            hsympol.setAttributes(att);
+
         }
 
         if(ctx.angularAttribute()!=null){
@@ -358,11 +347,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
             }
             if(att.isEmpty()) att=null;
-            hsympol.setAngularAttributes(att);
+
         }
-        if(add) Main.htmlSympolTable.getSympols().add(hsympol);
-        scope.remove_scope();
-        html_scope.remove_scope();
+        if(ctx.TAG_NAME(1)==null){
+            Main.semanticCheck.getSe4().pop();
+        }
+        else {
+            Main.semanticCheck.checkE4(ctx.TAG_NAME(1).getText(), ctx.getStart().getLine());
+        }
         return htmlElement;
     }
 
@@ -370,12 +362,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public HtmlAttribute visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
         HtmlAttribute htmlAttribute=new HtmlAttribute();
         htmlAttribute.setValue(ctx.TAG_EQUALS().getText()+" "+ctx.TAG_NAME().getText()+" "+ctx.ATTVALUE_VALUE().getText());
-        sympol sympol = new sympol();
-        sympol.setName(ctx.TAG_NAME().getText());
-        sympol.setValue(ctx.ATTVALUE_VALUE().getText());
-        sympol.setType("Html Attribute");
-        sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-        Main.sympolTable.getSympols().add(sympol);
         return htmlAttribute;
     }
 
@@ -400,72 +386,65 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public BindingAttribute visitBindingAttribute(AngularParser.BindingAttributeContext ctx) {
         BindingAttribute bindingAttribute=new BindingAttribute();
-        sympol sympol = new sympol();
+
         if(ctx.TAG_NAME()!=null){
             bindingAttribute.setTagName(ctx.TAG_NAME().getText());
-            sympol.setName(ctx.TAG_NAME().getText());
+
         }
-        sympol.setType("BindingAttribute");
+
         if(ctx.ATTVALUE_VALUE()!=null){
             bindingAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
-            sympol.setValue(ctx.ATTVALUE_VALUE().getText());
+
         }
-        sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-        Main.sympolTable.getSympols().add(sympol);
+
+
         return bindingAttribute;
     }
 
     @Override
     public EventBindingAttribute visitEventBindingAttribute(AngularParser.EventBindingAttributeContext ctx) {
         EventBindingAttribute eventBindingAttribute=new EventBindingAttribute();
-        sympol sympol = new sympol() ;
+
         if (ctx.TAG_NAME()!=null){
             eventBindingAttribute.setTagName(ctx.TAG_NAME().getText());
-            sympol.setName(ctx.TAG_NAME().getText());
-            sympol.setType("EventBindingAttribute");
+
         }
-        if(ctx.ATTVALUE_VALUE()!=null){
+        if(ctx.ATTVALUE_VALUE()!=null) {
             eventBindingAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
-            sympol.setValue(ctx.ATTVALUE_VALUE().getText());
-        }
-        if(ctx.ATTVALUE_VALUE()!=null){
-            sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-            Main.sympolTable.getSympols().add(sympol);
+            if(Objects.equals(ctx.TAG_NAME().getText(), "click")){
+                Main.semanticCheck.getSe3().addVal(ctx.ATTVALUE_VALUE().getText() , ctx.getStart().getLine());
+            }
         }
         return eventBindingAttribute;
     }
 
     @Override
     public ForAttribute visitForAttribute(AngularParser.ForAttributeContext ctx) {
-        scope.create_scope("ngfor");
+
         ForAttribute forAttribute=new ForAttribute();
-        sympol sympol = new sympol();
-        sympol.setName(ctx.ANG_FOR().getText());
-        sympol.setType("AngularAttribute");
+
+
         if(ctx.ATTVALUE_VALUE()!=null){
             forAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
-            sympol.setValue(ctx.ATTVALUE_VALUE().getText());
+
         }
-        sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-        Main.sympolTable.getSympols().add(sympol);
-        scope.remove_scope();
+
+
+
         return forAttribute;
     }
 
     @Override
     public IfAttribute visitIfAttribute(AngularParser.IfAttributeContext ctx) {
         IfAttribute ifAttribute=new IfAttribute();
-        sympol sympol = new sympol();
-        scope.create_scope(ctx.ANG_IF().getText());
-        sympol.setName(ctx.ANG_IF().getText());
-        sympol.setType("AngularAttribute");
+
+
+
         if(ctx.ATTVALUE_VALUE()!=null){
             ifAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
-            sympol.setValue(ctx.ATTVALUE_VALUE().getText());
+
         }
-        sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-        Main.sympolTable.getSympols().add(sympol);
-        scope.remove_scope();
+
         return ifAttribute;
     }
 
@@ -503,14 +482,14 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public HtmlCharData visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
         HtmlCharData htmlCharData=new HtmlCharData();
-        html_sympol hsympol = new html_sympol();
+
         if(ctx.angularCharData()!=null){
             htmlCharData.setAngularCharData(visitAngularCharData(ctx.angularCharData()));
         }
         if(ctx.HTML_TEXT()!=null){
             htmlCharData.setText(ctx.HTML_TEXT().getText());
-            hsympol.setInner(ctx.HTML_TEXT().getText());
-            Main.htmlSympolTable.getSympols().add(hsympol);
+
+
         }
         if(ctx.SEA_WS()!=null){
             htmlCharData.setText(ctx.SEA_WS().getText().trim());
@@ -560,22 +539,23 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public MethodDeclaration visitMethodDeclaration(AngularParser.MethodDeclarationContext ctx) {
         MethodDeclaration methodDeclaration=new MethodDeclaration();
         methodDeclaration.setName(ctx.ID().getText());
-        scope.create_scope("method("+ctx.ID().getText()+")");
-        sympol sympol = new sympol();
-        sympol.setName(ctx.ID().getText());
-        sympol.setType("method");
+        Main.semanticCheck.getSe3().getSaveSet().add(ctx.ID().getText());
+        Main.semanticCheck.checkE1(ctx.ID().getText(),ctx.getStart().getLine());
+
+
+
         if(ctx.typeAnnotation()!=null){
             methodDeclaration.setReturnType(visitTypeAnnotation(ctx.typeAnnotation()));
         }
         if(ctx.blockStatement()!=null){
             methodDeclaration.setBody(visitBlockStatement(ctx.blockStatement()));
-            sympol.setValue(ctx.blockStatement().getText());
+
         }
         if(ctx.parameterList()!=null){
             methodDeclaration.setParameters(visitParameterList(ctx.parameterList()));
         }
-        Main.sympolTable.getSympols().add(sympol);
-        scope.remove_scope();
+
+
         return methodDeclaration;
     }
 
@@ -646,22 +626,21 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Statement visitImportStatement(AngularParser.ImportStatementContext ctx) {
         ImportStatement importStatement=new ImportStatement();
-        scope.create_scope("IMPORT");
-        sympol sympol = new sympol();
+
+
         if (ctx.ID()!=null){
             for (int i = 0; i < ctx.ID().size(); i++) {
                 importStatement.setSource(ctx.ID().get(i).getText());
-                sympol.setName(ctx.ID().get(i).getText());
             }
 
         }
         if(ctx.STRING()!=null){
             importStatement.getImports().add(ctx.STRING().getText());
-            sympol.setValue(ctx.STRING().getText());
-            sympol.setType("STRING");
+
+
         }
-        scope.remove_scope();
-        Main.sympolTable.getSympols().add(sympol);
+
+
         return importStatement;
     }
 
@@ -693,6 +672,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public ExpressionStatement visitExpressionStatement(AngularParser.ExpressionStatementContext ctx) {
         ExpressionStatement expressionStatement=new ExpressionStatement();
+
         if(ctx.incrementExpression()!=null){
             expressionStatement.setExpression(visitIncrementExpression(ctx.incrementExpression()));
         }
@@ -706,9 +686,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public Expression visitExpression(AngularParser.ExpressionContext ctx) {
         if(ctx.conditionalExpression()!=null){
             return visitConditionalExpression(ctx.conditionalExpression());
+
         }
         System.out.println("error when handle conditional expression in visitor");
-        return  null;
+      throw new UnsupportedOperationException("Unhandled expression format");
     }
 
     @Override
@@ -754,9 +735,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Expression visitBinaryExpression(AngularParser.BinaryExpressionContext ctx) {
         BinaryExpression binaryExpression=new BinaryExpression();
-        if(ctx.primaryExpression(0)!=null){
+        if(ctx.primaryExpression(0)!=null) {
             binaryExpression.setLeft(visitPrimaryExpression(ctx.primaryExpression(0)));
-        }if(ctx.ASSIGN(0)!=null){
+        }
+         if(ctx.ASSIGN(0)!=null){
             binaryExpression.setOperator(ctx.ASSIGN(0).getText());
         }
         if(ctx.primaryExpression(1)!=null){
@@ -795,21 +777,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }if(ctx.DECRES(0)!=null){
             binaryExpression.setOperator(ctx.DECRES(0).getText());
         }
-
+//        Main.semanticCheck.getSe2().addSymbol(ctx.primaryExpression().get(0).ID().getText());
+        Main.semanticCheck.getSe2().addAtrr();
         return binaryExpression;
     }
     //todo
     @Override
     public Expression visitArrayDeclaration(AngularParser.ArrayDeclarationContext ctx) {
         ArrayDeclaration arrayDeclaration=new ArrayDeclaration();
-        sympol sympol ;
+
         if(ctx.argumentList()!=null){
-            if(Main.sympolTable.getSympols().get(Main.sympolTable.getSympols().size()-1).getName()==null){
-                sympol = Main.sympolTable.getSympols().get(Main.sympolTable.getSympols().size()-1);
-                sympol.setName(sympol.getValue());
-                sympol.setValue("List of object");
-//                Main.sympolTable.getSympols().add(sympol);
-            }
+
             arrayDeclaration.setArgumentList(visitArgumentList(ctx.argumentList()));
         }
         return arrayDeclaration;
@@ -827,25 +805,25 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Expression visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) {
         PrimaryExpression primaryExpression=new PrimaryExpression();
-        sympol sympol = new sympol();
+
+
         int primaryExpressionTempCount=0;
         if(ctx.ID()!=null){
             primaryExpression.setId(ctx.ID().getText());
-            sympol.setValue(ctx.ID().getText());
-            sympol.setType("var");
+            if(Main.semanticCheck.getSe2().getIsE2()){
+                Main.semanticCheck.getSe2().addSymbol(ctx.ID().getText());
+                Main.semanticCheck.getSe2().setIsE2(false);
+            }
         }
         if(ctx.STRING()!=null){
             primaryExpression.setStringValue(ctx.STRING().getText());
-            sympol.setValue(ctx.STRING().getText());
-            sympol.setType("String");
+
         }if(ctx.NUMBER()!=null){
             primaryExpression.setNumberValue(ctx.NUMBER().getText());
-            sympol.setValue(ctx.NUMBER().getText());
-            sympol.setType("Number");
+
         }if(ctx.BOOLEAN()!=null){
             primaryExpression.setBooleanValue(ctx.BOOLEAN().getText());
-            sympol.setValue(ctx.BOOLEAN().getText());
-            sympol.setType("boolean");
+
         }if(ctx.NULL()!=null){
             primaryExpression.setNullValue(ctx.NULL().getText());
         }if(ctx.UNDEFINED()!=null){
@@ -879,14 +857,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             dotNotation.setRight(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
             primaryExpressionTempCount++;
             primaryExpression.setDotNotation(dotNotation);
-            sympol.setName("HtmlContent");
-            sympol.setType("AngularChatData");
-            String s = "";
-            for (int i =2 ; i>=1 ; i--){
-               s += Main.sympolTable.getSympols().get( Main.sympolTable.getSympols().size()-i).getValue();
-               if(i==2){s+=".";}
-            }
-            sympol.setValue(s);
         }
         //handle object instantiation
         if(ctx.NEW()!=null){
@@ -895,10 +865,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             objectInstantiation.setArgumentList(visitArgumentList(ctx.argumentList()));
             primaryExpression.setObjectInstantiation(objectInstantiation);
         }
-        if(sympol.getValue()!=null){
-            sympol.setScope(Main.sympolTable.getStack().peek().getTitle());
-            Main.sympolTable.getSympols().add(sympol);
-        }
+
         return  primaryExpression;
     }
     //todo
@@ -963,8 +930,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
         // Handle variable declaration or assignment
         if (ctx.variableDeclaration() != null) {
+            Logger logger=Logger.getLogger(AngularBaseVisitor.class.getName());
             forStatement.setVariableDeclaration(visitVariableDeclaration(ctx.variableDeclaration()));
-            System.out.println("Variable Declaration: " + ctx.variableDeclaration().getText());
+            logger.info("Variable Declaration: " + ctx.variableDeclaration().getText());
         } else if (ctx.assignmentExpression(assignmentExpressionTempCount) != null) {
             forStatement.setVariableDeclarationAsExpression(visitAssignmentExpression(ctx.assignmentExpression(assignmentExpressionTempCount)));
             System.out.println("Assignment Expression: " + ctx.assignmentExpression(assignmentExpressionTempCount).getText());
@@ -1140,14 +1108,12 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Statement visitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx) {
         DecoratorApplication decoratorApplication=new DecoratorApplication();
-        scope.create_scope(ctx.ID().getText());
         if(ctx.ID()!=null){
         decoratorApplication.setName(ctx.ID().getText());
         }
         if(ctx.parameterList()!=null){
             decoratorApplication.setParameterList(visitParameterList(ctx.parameterList()));
         }
-        scope.remove_scope();
         return decoratorApplication;
     }
 
