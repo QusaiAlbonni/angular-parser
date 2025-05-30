@@ -8,14 +8,16 @@ import org.main.Main;
 
 import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
 import org.function_parameters_symbol_table.Symbol;
-import org.this_symbol_table.ThisSymbolTable;
+import org.symbolTable.E5_ThisSymbolTable;
 
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import static org.main.Main.semanticCheck;
+
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     FunctionParametersSymbolTabel functionParametersSymbolTabel = new FunctionParametersSymbolTabel();
-     ThisSymbolTable thisSymbolTable = new ThisSymbolTable();
+     E5_ThisSymbolTable thisSymbolTable = new E5_ThisSymbolTable();
 
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
@@ -124,18 +126,27 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             functionDeclaration.setParameters(parameters);
             paramCount = parameters.getParameters().size();
 
+            functionParametersSymbolTabel.clearParameters();
+
             for (Parameter p : parameters.getParameters()) {
                 if (p.getName() != null) {
-                    if (!functionParametersSymbolTabel.define(new Symbol(p.getName(), p.getType() != null ? p.getType().getType() : "any", paramCount))) {
-                        System.err.println("Error: parameter '" + p.getType().getType() + "' already defined.");
+                    Symbol paramSymbol = new Symbol(p.getName(), p.getType() != null ? p.getType().getType() : "any", -1);
+                    if (!functionParametersSymbolTabel.define(new Symbol(functionName, "function",  paramCount))) {
+                        // System.err.println("Error: function '" + functionName + "' already defined.");
+                        return null;
                     }
+
+                    semanticCheck.getSe6().define(functionName, paramCount);
+
                 }
             }
         }
-        if (!functionParametersSymbolTabel.define(new Symbol(functionName, "function",  paramCount))) {
-          //  System.err.println("Error: function '" + functionName + "' already defined.");
+
+        Symbol functionSymbol = new Symbol(functionName, "function", paramCount);
+        if (!functionParametersSymbolTabel.define(functionSymbol)) {
             return null;
         }
+
         if (ctx.blockStatement() != null) {
             functionDeclaration.setBody(visitBlockStatement(ctx.blockStatement()));
         }
@@ -201,7 +212,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         thisSymbolTable.enterClass();
         ClassDeclaration classDeclaration=new ClassDeclaration();
         classDeclaration.setId(ctx.ID(0).getText());
-        Main.semanticCheck.getSe1().addSet();
+        semanticCheck.getSe1().addSet();
         if(ctx.EXTENDS()!=null){
             classDeclaration.setExtendsClass(ctx.ID(1).getText());
         }
@@ -214,8 +225,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
         classDeclaration.setClassMembers(visitClassBody(ctx.classBody()));
-        scope.remove_scope();
-        Main.semanticCheck.getSe1().delSet();
+
+        semanticCheck.getSe1().delSet();
         thisSymbolTable.exitClass();
 
         return  classDeclaration;
@@ -236,7 +247,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public ClassMember visitClassMember(AngularParser.ClassMemberContext ctx) {
         ClassMember classMember=new ClassMember();
-        Main.semanticCheck.getSe2().setIsE2(true);
+        semanticCheck.getSe2().setIsE2(true);
 
 
         if(ctx.PRIVATE()!=null){
@@ -341,7 +352,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
 
 
-        Main.semanticCheck.getSe4().add(ctx.TAG_NAME(0).getText());
+        semanticCheck.getSe4().add(ctx.TAG_NAME(0).getText());
 
         if(ctx.htmlAttribute()!=null){
             String att ="" ;
@@ -375,10 +386,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
         }
         if(ctx.TAG_NAME(1)==null){
-            Main.semanticCheck.getSe4().pop();
+            semanticCheck.getSe4().pop();
         }
         else {
-            Main.semanticCheck.checkE4(ctx.TAG_NAME(1).getText(), ctx.getStart().getLine());
+            semanticCheck.checkE4(ctx.TAG_NAME(1).getText(), ctx.getStart().getLine());
         }
         return htmlElement;
     }
@@ -437,7 +448,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.ATTVALUE_VALUE()!=null) {
             eventBindingAttribute.setAttributeValue(ctx.ATTVALUE_VALUE().getText());
             if(Objects.equals(ctx.TAG_NAME().getText(), "click")){
-                Main.semanticCheck.getSe3().addVal(ctx.ATTVALUE_VALUE().getText() , ctx.getStart().getLine());
+                semanticCheck.getSe3().addVal(ctx.ATTVALUE_VALUE().getText() , ctx.getStart().getLine());
             }
         }
         return eventBindingAttribute;
@@ -564,8 +575,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     public MethodDeclaration visitMethodDeclaration(AngularParser.MethodDeclarationContext ctx) {
         MethodDeclaration methodDeclaration=new MethodDeclaration();
         methodDeclaration.setName(ctx.ID().getText());
-        Main.semanticCheck.getSe3().getSaveSet().add(ctx.ID().getText());
-        Main.semanticCheck.checkE1(ctx.ID().getText(),ctx.getStart().getLine());
+        semanticCheck.getSe3().getSaveSet().add(ctx.ID().getText());
+        semanticCheck.checkE1(ctx.ID().getText(),ctx.getStart().getLine());
 
 
 
@@ -803,7 +814,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             binaryExpression.setOperator(ctx.DECRES(0).getText());
         }
 //        Main.semanticCheck.getSe2().addSymbol(ctx.primaryExpression().get(0).ID().getText());
-        Main.semanticCheck.getSe2().addAtrr();
+        semanticCheck.getSe2().addAtrr();
         return binaryExpression;
     }
     //todo
@@ -835,9 +846,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         int primaryExpressionTempCount=0;
         if(ctx.ID()!=null){
             primaryExpression.setId(ctx.ID().getText());
-            if(Main.semanticCheck.getSe2().getIsE2()){
-                Main.semanticCheck.getSe2().addSymbol(ctx.ID().getText());
-                Main.semanticCheck.getSe2().setIsE2(false);
+            if(semanticCheck.getSe2().getIsE2()){
+                semanticCheck.getSe2().addSymbol(ctx.ID().getText());
+                semanticCheck.getSe2().setIsE2(false);
             }
         }
         if(ctx.STRING()!=null){
@@ -855,10 +866,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
         }
         if(ctx.THIS()!=null){
-            if (!thisSymbolTable.isThisAllowed()) {
                 int line = ctx.THIS().getSymbol().getLine();
-                System.err.println("Semantic Error (line " + line + "): 'this' used outside of class context.");
-            }
+            semanticCheck.checkE5(line);  // ✅ تحقق من السياق
+
 
             primaryExpression.setThisValue(ctx.THIS().getText());
         }
@@ -872,33 +882,25 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             return  visitArrayDeclaration(ctx.arrayDeclaration());
         }
         //handle function call
-        if(ctx.primaryExpression(primaryExpressionTempCount)!=null && ctx.argumentList()!=null){
-            System.out.println("function call");
-
-            // اسم الدالة
+        if (ctx.primaryExpression(primaryExpressionTempCount) != null && ctx.argumentList() != null) {
             String functionName = ctx.primaryExpression(primaryExpressionTempCount).getText();
             Symbol functionSymbol = functionParametersSymbolTabel.resolve(functionName);
             int line = ctx.primaryExpression(primaryExpressionTempCount).getStart().getLine();
-            // تحقق إنو الدالة موجودة
-            if (functionSymbol == null) {
-                System.err.println("");
+
+            if (functionSymbol == null || !"function".equals(functionSymbol.type)) {
+                System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' is not defined.");
             } else {
-                // عدد البارامترات المرسلة
                 int passedArgCount = ctx.argumentList().expression().size();
                 int expectedArgCount = functionSymbol.getParameterCount();
+                semanticCheck.checkE6(functionName, passedArgCount, line);
 
-                // تحقق من عدد البارامترات
-                if (passedArgCount != expectedArgCount) {
-                    System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' expects "
-                            + expectedArgCount + " arguments but got " + passedArgCount);
-                }
             }
 
-            // إنشاء تمثيل للدالة
             FunctionCall functionCall = new FunctionCall();
             functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
             functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
             primaryExpression.setFunctionCall(functionCall);
+
         }
 
         //handle dot notation

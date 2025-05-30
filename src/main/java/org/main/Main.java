@@ -25,7 +25,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.txt");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("this_outside_scope_test.txt");
 
             if (inputStream == null) {
                 System.out.println("File not found!");

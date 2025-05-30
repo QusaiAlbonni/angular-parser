@@ -2,10 +2,8 @@ package org.semmanticCheck;
 
 import org.Exception.ErrorKind;
 import org.Exception.SemanticError;
-import org.symbolTable.E1_DuplicateFunctionNameSymbolTable;
-import org.symbolTable.E2_UndefinedVariableSymbolTable;
-import org.symbolTable.E3_UndefinedFunctionSymbolTable;
-import org.symbolTable.E4_TagMismatchSymbolTable;
+import org.symbolTable.*;
+import org.symbolTable.E5_ThisSymbolTable;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,6 +62,34 @@ public class SemanticCheck {
             }
 
     }
+
+    E5_ThisSymbolTable se5 = new E5_ThisSymbolTable();
+
+    public E5_ThisSymbolTable getSe5() {
+        return se5;
+    }
+
+    public void checkE5(int line) {
+        if (!se5.isThisAllowed()) {
+            SemanticError e5 = new SemanticError(ErrorKind.THIS_OUTSIDE_CLASS, line, "Error: 'this' used outside of a class.");
+            semanticErrors.add(e5);
+        }
+    }
+    E6_FunctionParameterCountSymbolTable se6 = new E6_FunctionParameterCountSymbolTable();
+
+    public E6_FunctionParameterCountSymbolTable getSe6() {
+        return se6;
+    }
+
+    public void checkE6(String functionName, int passedArgsCount, int line) {
+        Integer expected = se6.getParameterCount(functionName);
+        if (expected != null && expected != passedArgsCount) {
+            SemanticError e6 = new SemanticError(ErrorKind.ARGUMENT_COUNT_MISMATCH, line,
+                    "Error: function '" + functionName + "' expects " + expected + " arguments but got " + passedArgsCount);
+            semanticErrors.add(e6);
+        }
+    }
+
     public void checkErrors(){
         try {
             checkE3();

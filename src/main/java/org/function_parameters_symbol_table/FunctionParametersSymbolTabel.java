@@ -8,7 +8,7 @@ public class FunctionParametersSymbolTabel {
 
     public boolean define(Symbol symbol) {
         if (symbols.containsKey(symbol.name)) {
-            return false; // خطأ: تم تعريفه مسبقاً
+            return false; // ⚠️ موجود مسبقاً
         }
         symbols.put(symbol.name, symbol);
         return true;
@@ -17,5 +17,9 @@ public class FunctionParametersSymbolTabel {
     public Symbol resolve(String name) {
         return symbols.get(name); // null إذا غير معرف
     }
-}
 
+    public void clearParameters() {
+        // مسح بارامترات الدالة السابقة بعد الانتهاء منها
+        symbols.entrySet().removeIf(entry -> !"function".equals(entry.getValue().type));
+    }
+}
