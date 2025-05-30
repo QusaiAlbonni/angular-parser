@@ -12,7 +12,7 @@ public class E3_UndefinedFunctionSymbolTable {
         return  checkMap;
     };
     public void addVal(String name,int line){
-        String funName =name.replaceAll("\\(.*\\)", "");
+        String funName =name.replaceAll("\"", "").replaceAll("\\(.*\\)", "");
         this.checkMap.put(funName,String.valueOf(line));
     }
     public void print(){

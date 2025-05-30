@@ -8,6 +8,8 @@ import org.main.Main;
 
 import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
 import org.function_parameters_symbol_table.Symbol;
+
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
