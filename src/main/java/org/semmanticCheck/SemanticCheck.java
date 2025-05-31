@@ -13,16 +13,21 @@ import java.util.Objects;
 
 public class SemanticCheck {
     E1_DuplicateFunctionNameSymbolTable se1=new E1_DuplicateFunctionNameSymbolTable();
-    E2_UndefinedVariableSymbolTable  se2=new E2_UndefinedVariableSymbolTable();
+    E2_MissingUnSubScribeSymbolTable se2=new E2_MissingUnSubScribeSymbolTable();
     E3_UndefinedFunctionSymbolTable se3=new E3_UndefinedFunctionSymbolTable();
     E4_TagMismatchSymbolTable se4=new E4_TagMismatchSymbolTable();
+    E5_ThisSymbolTable se5 = new E5_ThisSymbolTable();
+    E6_FunctionParameterCountSymbolTable se6 = new E6_FunctionParameterCountSymbolTable();
+
+
     List<SemanticError>semanticErrors=new ArrayList<>();
+
 
     public E1_DuplicateFunctionNameSymbolTable getSe1() {
         return se1;
     }
 
-    public E2_UndefinedVariableSymbolTable getSe2(){
+    public E2_MissingUnSubScribeSymbolTable getSe2(){
         return  se2;
     }
     public  E3_UndefinedFunctionSymbolTable getSe3(){
@@ -31,7 +36,12 @@ public class SemanticCheck {
     public  E4_TagMismatchSymbolTable getSe4(){
         return  se4;
     }
-
+    public E5_ThisSymbolTable getSe5() {
+        return se5;
+    }
+    public E6_FunctionParameterCountSymbolTable getSe6() {
+        return se6;
+    }
     public void checkE1(String name,int line){
         if(
         se1.getSet().addVal(name)){
@@ -63,11 +73,8 @@ public class SemanticCheck {
 
     }
 
-    E5_ThisSymbolTable se5 = new E5_ThisSymbolTable();
 
-    public E5_ThisSymbolTable getSe5() {
-        return se5;
-    }
+
 
     public void checkE5(int line) {
         if (!se5.isThisAllowed()) {
@@ -75,11 +82,7 @@ public class SemanticCheck {
             semanticErrors.add(e5);
         }
     }
-    E6_FunctionParameterCountSymbolTable se6 = new E6_FunctionParameterCountSymbolTable();
 
-    public E6_FunctionParameterCountSymbolTable getSe6() {
-        return se6;
-    }
 
     public void checkE6(String functionName, int passedArgsCount, int line) {
         Integer expected = se6.getParameterCount(functionName);

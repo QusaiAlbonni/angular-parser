@@ -247,7 +247,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public ClassMember visitClassMember(AngularParser.ClassMemberContext ctx) {
         ClassMember classMember=new ClassMember();
-        semanticCheck.getSe2().setIsE2(true);
+
 
 
         if(ctx.PRIVATE()!=null){
@@ -312,8 +312,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
         if(ctx.ID()!=null){
             objectMember.setID(ctx.ID().getText());
-            Main.e2.addAtt(ctx.ID().getText());
-            Main.e2.print();
         }
         if(ctx.template()!=null) {
             objectMember.setTemplate(visitTemplate(ctx.template()));
@@ -576,6 +574,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         MethodDeclaration methodDeclaration=new MethodDeclaration();
         methodDeclaration.setName(ctx.ID().getText());
         semanticCheck.getSe3().getSaveSet().add(ctx.ID().getText());
+        semanticCheck.getSe2().getSubscriptions().add(ctx.ID().getText());
         semanticCheck.checkE1(ctx.ID().getText(),ctx.getStart().getLine());
 
 
@@ -814,7 +813,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             binaryExpression.setOperator(ctx.DECRES(0).getText());
         }
 //        Main.semanticCheck.getSe2().addSymbol(ctx.primaryExpression().get(0).ID().getText());
-        semanticCheck.getSe2().addAtrr();
         return binaryExpression;
     }
     //todo
@@ -846,10 +844,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         int primaryExpressionTempCount=0;
         if(ctx.ID()!=null){
             primaryExpression.setId(ctx.ID().getText());
-            if(semanticCheck.getSe2().getIsE2()){
-                semanticCheck.getSe2().addSymbol(ctx.ID().getText());
-                semanticCheck.getSe2().setIsE2(false);
-            }
         }
         if(ctx.STRING()!=null){
             primaryExpression.setStringValue(ctx.STRING().getText());
@@ -888,7 +882,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             int line = ctx.primaryExpression(primaryExpressionTempCount).getStart().getLine();
 
             if (functionSymbol == null || !"function".equals(functionSymbol.type)) {
-                System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' is not defined.");
+//                System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' is not defined.");
             } else {
                 int passedArgCount = ctx.argumentList().expression().size();
                 int expectedArgCount = functionSymbol.getParameterCount();
@@ -940,8 +934,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.expression()!=null){
             assignmentExpression.setExpression(visitExpression(ctx.expression()));
         }
+
         if(ctx.ID()!=null){
             assignmentExpression.setId(ctx.ID().getText());
+//            System.out.println(ctx.ID().getText());
         }
         return  assignmentExpression;
     }

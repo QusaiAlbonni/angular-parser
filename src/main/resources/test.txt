@@ -1,4 +1,0 @@
-
-function sayHell(int:i) {
-}
-sayHell(1,2);

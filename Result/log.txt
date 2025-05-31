@@ -1,4 +1,1 @@
-Semantic Error is:
- Error Name: THIS_OUTSIDE_CLASS
- Line: 1
- Error Message: Error: 'this' used outside of a class.
+No Semantic Error Found

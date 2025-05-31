@@ -21,7 +21,7 @@ public class E1_DuplicateFunctionNameSymbolTable {
        return duplicateFunction.add(funcSet);
     }
     public void delSet(){
-        getSet().print();
+//        getSet().print();
         duplicateFunction.pop();
 
     }

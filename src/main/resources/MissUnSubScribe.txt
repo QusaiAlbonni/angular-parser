@@ -1,0 +1,13 @@
+@Component({
+  selector: 'app-root',
+  template: '<p>Example works</p>'
+})
+export class AppComponent {
+  private sub: Subscription;
+
+  ngOnInit() {
+    this.sub = someObs.subscribe();
+  }
+
+
+}

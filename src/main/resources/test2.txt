@@ -1,5 +1,0 @@
-class Person {
-    greet() {
-        console.log(this.name);
-    }
-}

@@ -1,4 +1,0 @@
-
-function sayHell(int:i) {
-  console.log("Hi again");
-}

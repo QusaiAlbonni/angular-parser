@@ -1,0 +1,57 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule , aaa],
+  template: `
+    <div class="container">
+      <div class="product-list">
+        <div
+          class="product"
+          *ngFor="let product of products"
+          [class.selected]="product === selectedProduct"
+          (click)="selectProduct(product)"
+        >
+          <h4>{{ product.name }}</h4>
+          <img [src]="product.image" alt="Product Image" class="product-image" />
+        </div>
+      </div>
+      <div class="product-detail" *ngIf="selectedProduct">
+        <h3>{{ selectedProduct.name }}</h3>
+        <img
+          [src]="selectedProduct.image"
+          alt="Product Image"
+          class="detail-image"
+        />
+        <p>{{ selectedProduct.details }}</p>
+      </div>
+    </div>
+  `,
+})
+export class AppComponent {
+  products = [
+    {
+      name: 'Product 1',
+      image: 'https://media.istockphoto.com/id/2174290339/nl/foto/neural-network-nodes-deep-learning-artificial-intelligence-machine-learning-model.jpg?s=1024x1024&w=is&k=20&c=54EHvVjklD4CTzZKb9XXSw4-28sxuqlexAjr_eTts_o=',
+      details: 'Visual Elements:A large web of interconnected nodes, possibly symbolizing data points or user connections.A glowing, tech-inspired color palette, featuring blues and purples.Icons or symbols of cloud computing, AI, or IoT.Layers of abstract design to convey depth and complexity in data or technology.Potential Use Cases:Technology presentations or discussions about cloud computing, AI, or IoT.Marketing material for software, IT services, or tech solutions.',
+    },
+    {
+      name: 'Product 2',
+      image: 'https://media.istockphoto.com/id/1132150631/nl/foto/social-media-platform-informatietechnologie-big-data-cloud-computing-ai-iot.jpg?s=1024x1024&w=is&k=20&c=sOhZ_4hJpdx9FxuEqEp5R-D43aX22-1cJ5TZqrgw31g=',
+      details: 'Theme: Online Dating and Social Media NetworkingVisuals:Displays a conceptual design of connected icons forming a network.Includes symbols representing relationships, social interaction, and messaging (e.g., hearts, people, chat bubbles).',
+    },
+    {
+      name: 'Product 3',
+      image: 'https://media.istockphoto.com/id/1894107670/nl/foto/electricity.jpg?s=612x612&w=0&k=20&c=R_9ENN2UEe8bqUgAiHfgynoAhO1jBEk9Kgc9J_WKwhQ=',
+      details: 'Theme: Electricity/PowerVisualsDepicts a glowing light bulb surrounded by electric currents or sparks of energy.The background is dark, enhancing the vibrant blue and white electric arcs.Symbolizes innovation, energy, or the concept of power and electricity.',
+    },
+  ];
+  // Initialize selectedProduct with the first product
+  selectedProduct: any;
+
+  selectProduct(product: any) {
+    selectedProduct = product;
+  }
+
+}
