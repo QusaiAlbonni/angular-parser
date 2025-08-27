@@ -85,13 +85,35 @@ template
 htmlElements:
     htmlMisc* htmlElement htmlMisc* # HtmlElementGroup;
 
-// HTML elements
 htmlElement
-    : TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
+    : TAG_OPEN knownHtmlTag (htmlAttribute | angularAttribute)*
+        (
+            (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH knownHtmlTag TAG_CLOSE)
+            | TAG_SLASH_CLOSE
+        ) # HtmlElementKnown
+    | TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
         (
             (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH TAG_NAME TAG_CLOSE)
             | TAG_SLASH_CLOSE
-        ) # HtmlElementLabel;
+        ) # HtmlElementGeneric
+    ;
+
+knownHtmlTag
+    : A_TAG
+    | BUTTON_TAG
+    | DIV_TAG
+    | FORM_TAG
+    | H1_TAG
+    | H2_TAG
+    | H3_TAG
+    | IMG_TAG
+    | INPUT_TAG
+    | NAV_TAG
+    | P_TAG
+    | STRONG_TAG
+    | TEMPLATE_TAG
+    | ROUTER_OUTLET_TAGE
+    ;
 
 htmlAttribute
     : (TAG_NAME) (TAG_EQUALS ATTVALUE_VALUE)? # HtmlAttrLabel;
@@ -102,7 +124,9 @@ angularAttribute
     : bindingAttribute # BindingAttrLabel
     | eventBindingAttribute # EventBindingAttrLabel
     | forAttribute # ForDirectiveLabel
-    | ifAttribute # IfDirectiveLabel;
+    | ifAttribute # IfDirectiveLabel
+    | twoWayBindingAttribute      # TwoWayBindingAttrLabel
+    ;
 
 
 bindingAttribute
@@ -271,3 +295,7 @@ readError
 
 decoratorApplication
     : DECORATOR ID (LPAREN parameterList? RPAREN)? # Decorator;
+
+twoWayBindingAttribute
+    : ANG_NGMODEL_TWOWAY (TAG_EQUALS ATTVALUE_VALUE)?    # TwoWayBinding
+    ;
