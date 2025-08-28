@@ -197,6 +197,18 @@ public class AngularParserBaseListener implements AngularParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterHtmlAttribute(AngularParser.HtmlAttributeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -744,6 +756,18 @@ public class AngularParserBaseListener implements AngularParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTwoWayBindingAttribute(AngularParser.TwoWayBindingAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTwoWayBindingAttribute(AngularParser.TwoWayBindingAttributeContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

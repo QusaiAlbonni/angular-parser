@@ -200,9 +200,26 @@ ANG_FOR: '*ngFor';
 
 ANG_IF: '*ngIf';
 
+ANG_NGMODEL_TWOWAY: '[(ngModel)]';
+
 // lexing mode for attribute values
 
 TAG_EQUALS: '=' -> pushMode(ATTVALUE);
+
+A_TAG: 'a';
+BUTTON_TAG: 'button';
+DIV_TAG: 'div';
+FORM_TAG: 'form';
+H1_TAG: 'h1';
+H2_TAG: 'h2';
+H3_TAG: 'h3';
+IMG_TAG: 'img';
+INPUT_TAG: 'input';
+NAV_TAG: 'nav';
+P_TAG: 'p';
+STRONG_TAG: 'strong';
+TEMPLATE_TAG: 'ng-template';
+ROUTER_OUTLET_TAGE: 'router-outlet';
 
 TAG_NAME: TAG_NameStartChar TAG_NameChar*;
 

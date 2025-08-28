@@ -158,6 +158,16 @@ public interface AngularParserListener extends ParseTreeListener {
 	 */
 	void exitHtmlElement(AngularParser.HtmlElementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AngularParser#knownHtmlTag}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#knownHtmlTag}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AngularParser#htmlAttribute}.
 	 * @param ctx the parse tree
 	 */
@@ -617,4 +627,14 @@ public interface AngularParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDecoratorApplication(AngularParser.DecoratorApplicationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AngularParser#twoWayBindingAttribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterTwoWayBindingAttribute(AngularParser.TwoWayBindingAttributeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AngularParser#twoWayBindingAttribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitTwoWayBindingAttribute(AngularParser.TwoWayBindingAttributeContext ctx);
 }
