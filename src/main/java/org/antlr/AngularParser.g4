@@ -7,6 +7,7 @@ program: statement*;
 // Statement labels
 statement
     : variableDeclaration
+    | returnStatement
     | functionDeclaration
     | classDeclaration
     | enumDeclaration
@@ -14,7 +15,6 @@ statement
     | serviceDeclaration
     | importStatement
     | exportStatement
-    | returnStatement
     | expressionStatement
     | blockStatement
     | ifStatement

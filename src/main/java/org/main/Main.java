@@ -38,23 +38,18 @@ public class Main {
             CommonTokenStream tokenStream = new CommonTokenStream(angularLexer);
             AngularParser angularParser = new AngularParser(tokenStream);
             AngularBaseVisitor visitor = new AngularBaseVisitor();
-            System.out.println("before program");
             Program program = (Program) visitor.visitProgram(angularParser.program());
-            System.out.println("after program");
             semanticCheck.checkErrors();
-            System.out.println("check errors");
             semanticCheck.getSe3().getCheckMap().forEach((key, value) -> {
                 System.out.println("Key: " + key + ", Value: " + value);
             });;
-            System.out.println("after semanticCheck");
             semanticCheck.getSe3().printSet();
-            System.out.println("after semanticCheck printSet");
             printTreeWithJackson(program);
 
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());
-            e.printStackTrace(); // ✅ تطبع كل التفاصيل للخطأ
+            e.printStackTrace();
         }
 
 

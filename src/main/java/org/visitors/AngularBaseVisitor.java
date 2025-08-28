@@ -40,6 +40,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.variableDeclaration()!=null){
             return  visitVariableDeclaration(ctx.variableDeclaration());
         }
+        else if(ctx.returnStatement()!=null){
+
+            return visitReturnStatement(ctx.returnStatement());
+        }
         else if(ctx.functionDeclaration()!=null){
             return visitFunctionDeclaration(ctx.functionDeclaration());
         }   else if(ctx.classDeclaration()!=null){
@@ -56,6 +60,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }else if(ctx.exportStatement()!=null){
             return visitExportStatement(ctx.exportStatement());
         }
+
         else if(ctx.expressionStatement()!=null){
             return visitExpressionStatement(ctx.expressionStatement());
         }else if(ctx.blockStatement()!=null){
@@ -73,8 +78,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             return visitSwitchStatement(ctx.switchStatement());
         }else if(ctx.tryCatchStatement()!=null){
             return visitTryCatchStatement(ctx.tryCatchStatement());
-        }else if(ctx.returnStatement()!=null){
-            return visitReturnStatement(ctx.returnStatement());
         }else if(ctx.continueStatement()!=null){
             return visitContinueStatement(ctx.continueStatement());
         }else if(ctx.throwStatement()!=null){
