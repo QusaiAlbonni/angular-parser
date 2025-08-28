@@ -1,0 +1,3 @@
+getAll(){
+    return this.getProducts()
+  }

@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("base.txt");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.ts");
 
             if (inputStream == null) {
                 System.out.println("File not found!");
@@ -47,7 +47,9 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());
+            e.printStackTrace();
         }
+
 
     }
     private static void printTreeWithJackson(Program program) {
@@ -61,7 +63,7 @@ public class Main {
             System.out.println(jsonOutput);
 
         } catch (JsonProcessingException e) {
-            System.out.println("Error while converting to JSON: " + e.getMessage());
+            System.out.println("Error while converting to JSON: " + e.toString());
         }
     }
 }

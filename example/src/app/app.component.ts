@@ -22,25 +22,68 @@ class Product {
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private products: Product[] = [];
+  private storageKey: string;
+  private counterKey: string;
 
-  getAll() {
-    return this.products;
+  constructor() {
+    this.storageKey = 'products'
+    this.counterKey = 'productCounter'
+    if (localStorage.getItem(this.storageKey) === null) {
+      localStorage.setItem(this.storageKey, JSON.stringify([]))
+    }
+    if (localStorage.getItem(this.counterKey) === null) {
+      localStorage.setItem(this.counterKey, '0')
+    }
   }
 
-  getById(id: number) {
-    for (let product of this.products){
-      if (product.id === id){
-        return product;
+  getProducts(){
+    const data = localStorage.getItem(this.storageKey)
+    if (data === null) {
+      return []
+    }
+    return JSON.parse(data)
+  }
+
+  saveProducts(products){
+    localStorage.setItem(this.storageKey, JSON.stringify(products))
+  }
+
+  getCounter(){
+    const value = localStorage.getItem(this.counterKey)
+    if (value === null) {
+      return 0
+    }
+    return parseInt(value, 10)
+  }
+
+  incrementCounter(){
+    let counter = this.getCounter()
+    counter = counter + 1
+    localStorage.setItem(this.counterKey, counter.toString())
+    return counter
+  }
+
+  getAll(){
+    return this.getProducts()
+  }
+
+  getById(id: number){
+    const products = this.getProducts()
+    for (let p of products) {
+      if (p.id === id) {
+        return p
       }
     }
-    return null;
+    return null
   }
 
-  add(p: any) {
-    const id = Date.now()
+  add(p: any){
+    const products = this.getProducts()
+    const id = this.getCounter()
     const product = new Product(id, p.name, p.description, p.imageUrl, p.price)
-    this.products.push(product)
+    products.push(product)
+    this.saveProducts(products)
+    this.incrementCounter()
   }
 }
 
@@ -56,11 +99,6 @@ export class ProductService {
       <input [(ngModel)]="description" name="description" placeholder="الوصف" required />
       <input [(ngModel)]="price" name="price" type="number" placeholder="السعر" required />
       <input [(ngModel)]="imageUrl" name="imageUrl" placeholder="رابط الصورة" />
-
-      <div *ngIf="imageUrl">
-        <p><strong>معاينة:</strong></p>
-        <img [src]="imageUrl" alt="صورة المنتج" />
-      </div>
 
       <button type="submit">حفظ</button>
     </form>
@@ -142,10 +180,6 @@ export class ListPage {
       <p><strong>السعر:</strong> {{ product.price }}</p>
       <button (click)="back()">عودة</button>
     </div>
-
-    <ng-template>
-      <p>المنتج غير موجود.</p>
-    </ng-template>
   `
 })
 export class DetailsPage {

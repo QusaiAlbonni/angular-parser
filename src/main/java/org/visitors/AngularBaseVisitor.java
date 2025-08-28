@@ -1,5 +1,6 @@
 package org.visitors;
 
+import org.antlr.AngularParserVisitor;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.classes.*;
 import org.antlr.AngularParser;
@@ -39,6 +40,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.variableDeclaration()!=null){
             return  visitVariableDeclaration(ctx.variableDeclaration());
         }
+        else if(ctx.returnStatement()!=null){
+
+            return visitReturnStatement(ctx.returnStatement());
+        }
         else if(ctx.functionDeclaration()!=null){
             return visitFunctionDeclaration(ctx.functionDeclaration());
         }   else if(ctx.classDeclaration()!=null){
@@ -55,6 +60,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }else if(ctx.exportStatement()!=null){
             return visitExportStatement(ctx.exportStatement());
         }
+
         else if(ctx.expressionStatement()!=null){
             return visitExpressionStatement(ctx.expressionStatement());
         }else if(ctx.blockStatement()!=null){
@@ -72,8 +78,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             return visitSwitchStatement(ctx.switchStatement());
         }else if(ctx.tryCatchStatement()!=null){
             return visitTryCatchStatement(ctx.tryCatchStatement());
-        }else if(ctx.returnStatement()!=null){
-            return visitReturnStatement(ctx.returnStatement());
         }else if(ctx.continueStatement()!=null){
             return visitContinueStatement(ctx.continueStatement());
         }else if(ctx.throwStatement()!=null){
@@ -321,81 +325,117 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Template visitTemplate(AngularParser.TemplateContext ctx) {
-        Template template=new Template();
-        if(ctx.htmlElements()!=null){
-            for (int i = 0; i < ctx.htmlElements().size(); i++) {
-                template.getHtmlElements().add(visitHtmlElements(ctx.htmlElements(i)));
+        Template template = new Template();
+        if(ctx.htmlElements() != null){
+            for(AngularParser.HtmlElementsContext elCtx : ctx.htmlElements()){
+                HtmlElement element = visitHtmlElements(elCtx);
+                if(element != null){
+                    template.getHtmlElements().add(element);
+                }
             }
         }
-        return  template;
+        return template;
     }
-
     @Override
     public HtmlElement visitHtmlElements(AngularParser.HtmlElementsContext ctx) {
-        if(ctx.htmlElement()!=null) {
+        if (ctx.htmlElement() != null) {
             return visitHtmlElement(ctx.htmlElement());
         }
-        System.out.println("error in visitHtmlElements visitor function ");
+        System.out.println("error in visitHtmlElements visitor function");
         return null;
     }
+
     @Override
     public HtmlElement visitHtmlElement(AngularParser.HtmlElementContext ctx) {
-        HtmlElement htmlElement=new HtmlElement();
+        HtmlElement htmlElement = new HtmlElement();
 
-        boolean add = true ;
-
-
-        if(ctx.htmlContent()!=null){
+        if (ctx.htmlContent() != null) {
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
 
+        String openTag = null;
+        String closeTag = null;
 
-        semanticCheck.getSe4().add(ctx.TAG_NAME(0).getText());
-
-        if(ctx.htmlAttribute()!=null){
-            String att ="" ;
-            for (int i = 0; i <ctx.htmlAttribute().size() ; i++) {
-                htmlElement.getHtmlAttributes().add(visitHtmlAttribute(ctx.htmlAttribute(i)));
-                att += ctx.htmlAttribute(i).TAG_NAME().getText()+ ctx.htmlAttribute(i).TAG_EQUALS().getText()+ctx.htmlAttribute(i).ATTVALUE_VALUE().getText() ;
+        if (ctx.TAG_NAME() != null && !ctx.TAG_NAME().isEmpty()) {
+            openTag = ctx.TAG_NAME(0).getText();
+            if (ctx.TAG_NAME().size() > 1) {
+                closeTag = ctx.TAG_NAME(1).getText();
             }
-            if(att.isEmpty()) att=null;
-
-        }
-
-        if(ctx.angularAttribute()!=null){
-            String att ="";
-            for (int i = 0; i <ctx.angularAttribute().size() ; i++) {
-                htmlElement.getAngularAttributes().add(visitAngularAttribute(ctx.angularAttribute(i)));
-                if(ctx.angularAttribute(i).bindingAttribute()!= null){
-                    att+=ctx.angularAttribute(i).bindingAttribute().getText();
-                }
-                if(ctx.angularAttribute(i).eventBindingAttribute()!= null){
-                    att+=ctx.angularAttribute(i).eventBindingAttribute().getText();
-                }
-                if(ctx.angularAttribute(i).forAttribute()!= null){
-                    att+=ctx.angularAttribute(i).forAttribute().getText();
-                }
-                if(ctx.angularAttribute(i).ifAttribute()!=null){
-                    att+=ctx.angularAttribute(i).ifAttribute().getText();
-                }
-
+        } else if (ctx.knownHtmlTag() != null && !ctx.knownHtmlTag().isEmpty()) {
+            openTag = ctx.knownHtmlTag(0).getText();
+            if (ctx.knownHtmlTag().size() > 1) {
+                closeTag = ctx.knownHtmlTag(1).getText();
             }
-            if(att.isEmpty()) att=null;
+        }
 
+        if (openTag != null) {
+            semanticCheck.getSe4().add(openTag);
         }
-        if(ctx.TAG_NAME(1)==null){
-            semanticCheck.getSe4().pop();
+
+        if (ctx.htmlAttribute() != null) {
+            for (AngularParser.HtmlAttributeContext attrCtx : ctx.htmlAttribute()) {
+                if (attrCtx != null) {
+                    htmlElement.getHtmlAttributes().add(visitHtmlAttribute(attrCtx));
+                }
+            }
         }
-        else {
-            semanticCheck.checkE4(ctx.TAG_NAME(1).getText(), ctx.getStart().getLine());
+
+        if (ctx.angularAttribute() != null) {
+            for (AngularParser.AngularAttributeContext attrCtx : ctx.angularAttribute()) {
+                if (attrCtx != null) {
+                    htmlElement.getAngularAttributes().add(visitAngularAttribute(attrCtx));
+                }
+            }
         }
+
+        if (closeTag == null) {
+            //TODO:KARAM
+//            if (!semanticCheck.getSe4().isEmpty()) {
+//                semanticCheck.getSe4().pop();
+//            }
+        } else {
+            semanticCheck.checkE4(closeTag, ctx.getStart().getLine());
+        }
+
         return htmlElement;
+    }
+
+
+    @Override
+    public Object visitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) {
+        KnownHtmlTag knownHtmlTag = new KnownHtmlTag();
+
+        if (ctx.A_TAG() != null) knownHtmlTag.setTagName(ctx.A_TAG().getText());
+        else if (ctx.BUTTON_TAG() != null) knownHtmlTag.setTagName(ctx.BUTTON_TAG().getText());
+        else if (ctx.DIV_TAG() != null) knownHtmlTag.setTagName(ctx.DIV_TAG().getText());
+        else if (ctx.FORM_TAG() != null) knownHtmlTag.setTagName(ctx.FORM_TAG().getText());
+        else if (ctx.H1_TAG() != null) knownHtmlTag.setTagName(ctx.H1_TAG().getText());
+        else if (ctx.H2_TAG() != null) knownHtmlTag.setTagName(ctx.H2_TAG().getText());
+        else if (ctx.H3_TAG() != null) knownHtmlTag.setTagName(ctx.H3_TAG().getText());
+        else if (ctx.IMG_TAG() != null) knownHtmlTag.setTagName(ctx.IMG_TAG().getText());
+        else if (ctx.INPUT_TAG() != null) knownHtmlTag.setTagName(ctx.INPUT_TAG().getText());
+        else if (ctx.NAV_TAG() != null) knownHtmlTag.setTagName(ctx.NAV_TAG().getText());
+        else if (ctx.P_TAG() != null) knownHtmlTag.setTagName(ctx.P_TAG().getText());
+        else if (ctx.STRONG_TAG() != null) knownHtmlTag.setTagName(ctx.STRONG_TAG().getText());
+        else if (ctx.TEMPLATE_TAG() != null) knownHtmlTag.setTagName(ctx.TEMPLATE_TAG().getText());
+        else if (ctx.ROUTER_OUTLET_TAGE() != null) knownHtmlTag.setTagName(ctx.ROUTER_OUTLET_TAGE().getText());
+
+        return knownHtmlTag;
     }
 
     @Override
     public HtmlAttribute visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
-        HtmlAttribute htmlAttribute=new HtmlAttribute();
-        htmlAttribute.setValue(ctx.TAG_EQUALS().getText()+" "+ctx.TAG_NAME().getText()+" "+ctx.ATTVALUE_VALUE().getText());
+        HtmlAttribute htmlAttribute = new HtmlAttribute();
+
+        StringBuilder value = new StringBuilder();
+        value.append(ctx.TAG_NAME().getText());
+
+        if (ctx.TAG_EQUALS() != null && ctx.ATTVALUE_VALUE() != null) {
+            value.append(ctx.TAG_EQUALS().getText())
+                    .append(ctx.ATTVALUE_VALUE().getText());
+        }
+
+        htmlAttribute.setValue(value.toString());
         return htmlAttribute;
     }
 
@@ -515,24 +555,27 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public HtmlCharData visitHtmlChardata(AngularParser.HtmlChardataContext ctx) {
-        HtmlCharData htmlCharData=new HtmlCharData();
+        HtmlCharData htmlCharData = new HtmlCharData();
 
-        if(ctx.angularCharData()!=null){
+        if(ctx.angularCharData() != null){
             htmlCharData.setAngularCharData(visitAngularCharData(ctx.angularCharData()));
         }
-        if(ctx.HTML_TEXT()!=null){
+        if(ctx.HTML_TEXT() != null){
             htmlCharData.setText(ctx.HTML_TEXT().getText());
-
-
         }
-        if(ctx.SEA_WS()!=null){
+        if(ctx.SEA_WS() != null){
             htmlCharData.setText(ctx.SEA_WS().getText().trim());
         }
-        if(ctx.getText()!=null){
-            htmlCharData.setText(ctx.getText().substring(2,ctx.getText().length()-2));
+
+        if(ctx.getText() != null && ctx.getText().length() > 4){
+            htmlCharData.setText(ctx.getText().substring(2, ctx.getText().length() - 2));
+        } else if(ctx.getText() != null) {
+            htmlCharData.setText(ctx.getText());
         }
-        return  htmlCharData;
+
+        return htmlCharData;
     }
+
 
     @Override
     public AngularCharData visitAngularCharData(AngularParser.AngularCharDataContext ctx) {
@@ -769,52 +812,33 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Expression visitBinaryExpression(AngularParser.BinaryExpressionContext ctx) {
-        BinaryExpression binaryExpression=new BinaryExpression();
-        if(ctx.primaryExpression(0)!=null) {
-            binaryExpression.setLeft(visitPrimaryExpression(ctx.primaryExpression(0)));
-        }
-         if(ctx.ASSIGN(0)!=null){
-            binaryExpression.setOperator(ctx.ASSIGN(0).getText());
-        }
-        if(ctx.primaryExpression(1)!=null){
-            binaryExpression.setRight(visitPrimaryExpression(ctx.primaryExpression(1)));
-        }
-        if(ctx.PLUS(0)!=null){
-            binaryExpression.setOperator(ctx.PLUS(0).getText());
-        }if(ctx.MINUS(0)!=null){
-            binaryExpression.setOperator(ctx.MINUS(0).getText());
-        }if(ctx.MULTIPLY(0)!=null){
-            binaryExpression.setOperator(ctx.MULTIPLY(0).getText());
-        }if(ctx.DIVIDE(0)!=null){
-            binaryExpression.setOperator(ctx.DIVIDE(0).getText());
-        }if(ctx.MODULO(0)!=null){
-            binaryExpression.setOperator(ctx.MODULO(0).getText());
-        }if(ctx.POWER(0)!=null){
-            binaryExpression.setOperator(ctx.POWER(0).getText());
-        }if(ctx.NOT_EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.NOT_EQUAL(0).getText());
-        }if(ctx.LESS(0)!=null){
-            binaryExpression.setOperator(ctx.LESS(0).getText());
-        }if(ctx.GREATER(0)!=null){
-            binaryExpression.setOperator(ctx.GREATER(0).getText());
-        }if(ctx.LESS_EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.LESS_EQUAL(0).getText());
-        }if(ctx.GREATER_EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.GREATER_EQUAL(0).getText());
-        }if(ctx.STRICT_NOT_EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.STRICT_NOT_EQUAL(0).getText());
-        }if(ctx.STRICT_EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.STRICT_EQUAL(0).getText());
-        }if(ctx.EQUAL(0)!=null){
-            binaryExpression.setOperator(ctx.EQUAL(0).getText());
-        }if(ctx.INCRES(0)!=null){
-            binaryExpression.setOperator(ctx.INCRES(0).getText());
-        }if(ctx.DECRES(0)!=null){
-            binaryExpression.setOperator(ctx.DECRES(0).getText());
-        }
-//        Main.semanticCheck.getSe2().addSymbol(ctx.primaryExpression().get(0).ID().getText());
+        BinaryExpression binaryExpression = new BinaryExpression();
+
+        if(ctx.primaryExpression(0) != null) binaryExpression.setLeft(visitPrimaryExpression(ctx.primaryExpression(0)));
+        if(ctx.primaryExpression(1) != null) binaryExpression.setRight(visitPrimaryExpression(ctx.primaryExpression(1)));
+
+        if(ctx.ASSIGN(0) != null) binaryExpression.setOperator(ctx.ASSIGN(0).getText());
+        else if(ctx.PLUS(0) != null) binaryExpression.setOperator(ctx.PLUS(0).getText());
+        else if(ctx.MINUS(0) != null) binaryExpression.setOperator(ctx.MINUS(0).getText());
+        else if(ctx.MULTIPLY(0) != null) binaryExpression.setOperator(ctx.MULTIPLY(0).getText());
+        else if(ctx.DIVIDE(0) != null) binaryExpression.setOperator(ctx.DIVIDE(0).getText());
+        else if(ctx.MODULO(0) != null) binaryExpression.setOperator(ctx.MODULO(0).getText());
+        else if(ctx.POWER(0) != null) binaryExpression.setOperator(ctx.POWER(0).getText());
+        else if(ctx.NOT_EQUAL(0) != null) binaryExpression.setOperator(ctx.NOT_EQUAL(0).getText());
+        else if(ctx.LESS(0) != null) binaryExpression.setOperator(ctx.LESS(0).getText());
+        else if(ctx.GREATER(0) != null) binaryExpression.setOperator(ctx.GREATER(0).getText());
+        else if(ctx.LESS_EQUAL(0) != null) binaryExpression.setOperator(ctx.LESS_EQUAL(0).getText());
+        else if(ctx.GREATER_EQUAL(0) != null) binaryExpression.setOperator(ctx.GREATER_EQUAL(0).getText());
+        else if(ctx.STRICT_NOT_EQUAL(0) != null) binaryExpression.setOperator(ctx.STRICT_NOT_EQUAL(0).getText());
+        else if(ctx.STRICT_EQUAL(0) != null) binaryExpression.setOperator(ctx.STRICT_EQUAL(0).getText());
+        else if(ctx.EQUAL(0) != null) binaryExpression.setOperator(ctx.EQUAL(0).getText());
+        else if(ctx.INCRES(0) != null) binaryExpression.setOperator(ctx.INCRES(0).getText());
+        else if(ctx.DECRES(0) != null) binaryExpression.setOperator(ctx.DECRES(0).getText());
+
+        semanticCheck.getSe2().addAtrr();
         return binaryExpression;
     }
+
     //todo
     @Override
     public Expression visitArrayDeclaration(AngularParser.ArrayDeclarationContext ctx) {
@@ -838,91 +862,71 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
     @Override
     public Expression visitPrimaryExpression(AngularParser.PrimaryExpressionContext ctx) {
-        PrimaryExpression primaryExpression=new PrimaryExpression();
+        PrimaryExpression primaryExpression = new PrimaryExpression();
 
-
-        int primaryExpressionTempCount=0;
-        if(ctx.ID()!=null){
+        if(ctx.ID() != null) {
             primaryExpression.setId(ctx.ID().getText());
         }
-        if(ctx.STRING()!=null){
-            primaryExpression.setStringValue(ctx.STRING().getText());
-
-        }if(ctx.NUMBER()!=null){
-            primaryExpression.setNumberValue(ctx.NUMBER().getText());
-
-        }if(ctx.BOOLEAN()!=null){
-            primaryExpression.setBooleanValue(ctx.BOOLEAN().getText());
-
-        }if(ctx.NULL()!=null){
-            primaryExpression.setNullValue(ctx.NULL().getText());
-        }if(ctx.UNDEFINED()!=null){
-            primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
-        }
-        if(ctx.THIS()!=null){
-                int line = ctx.THIS().getSymbol().getLine();
-            semanticCheck.checkE5(line);  // ✅ تحقق من السياق
-
-
+        if(ctx.STRING() != null) primaryExpression.setStringValue(ctx.STRING().getText());
+        if(ctx.NUMBER() != null) primaryExpression.setNumberValue(ctx.NUMBER().getText());
+        if(ctx.BOOLEAN() != null) primaryExpression.setBooleanValue(ctx.BOOLEAN().getText());
+        if(ctx.NULL() != null) primaryExpression.setNullValue(ctx.NULL().getText());
+        if(ctx.UNDEFINED() != null) primaryExpression.setUndefinedValue(ctx.UNDEFINED().getText());
+        if(ctx.THIS() != null) {
+            int line = ctx.THIS().getSymbol().getLine();
+            semanticCheck.checkE5(line);
             primaryExpression.setThisValue(ctx.THIS().getText());
         }
-        if(ctx.expression()!=null){
-            return    visitExpression(ctx.expression());
-        }
-        if(ctx.objectDeclaration()!=null){
-            return visitObjectDeclaration(ctx.objectDeclaration());
-        }
-        if(ctx.arrayDeclaration()!=null){
-            return  visitArrayDeclaration(ctx.arrayDeclaration());
-        }
-        //handle function call
-        if (ctx.primaryExpression(primaryExpressionTempCount) != null && ctx.argumentList() != null) {
-            String functionName = ctx.primaryExpression(primaryExpressionTempCount).getText();
-            Symbol functionSymbol = functionParametersSymbolTabel.resolve(functionName);
-            int line = ctx.primaryExpression(primaryExpressionTempCount).getStart().getLine();
 
-            if (functionSymbol == null || !"function".equals(functionSymbol.type)) {
-//                System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' is not defined.");
+        if(ctx.expression() != null) return visitExpression(ctx.expression());
+        if(ctx.objectDeclaration() != null) return visitObjectDeclaration(ctx.objectDeclaration());
+        if(ctx.arrayDeclaration() != null) return visitArrayDeclaration(ctx.arrayDeclaration());
+
+        // Function call
+        if(ctx.argumentList() != null && !ctx.primaryExpression().isEmpty()) {
+            FunctionCall functionCall = new FunctionCall();
+            functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(0)));
+            functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
+
+            String functionName = ctx.primaryExpression(0).getText();
+            Symbol functionSymbol = functionParametersSymbolTabel.resolve(functionName);
+            int line = ctx.primaryExpression(0).getStart().getLine();
+            if(functionSymbol == null || !"function".equals(functionSymbol.type)){
+                System.err.println("Semantic Error (line " + line + "): function '" + functionName + "' is not defined.");
             } else {
                 int passedArgCount = ctx.argumentList().expression().size();
-                int expectedArgCount = functionSymbol.getParameterCount();
                 semanticCheck.checkE6(functionName, passedArgCount, line);
-
             }
 
-            FunctionCall functionCall = new FunctionCall();
-            functionCall.setExpression(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
-            functionCall.setArgumentList(visitArgumentList(ctx.argumentList()));
             primaryExpression.setFunctionCall(functionCall);
-
         }
 
-        //handle dot notation
-        if(ctx.DOT()!=null && ctx.primaryExpression().size()>=2){
-            DotNotation dotNotation=new DotNotation();
-            dotNotation.setLeft(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
-            primaryExpressionTempCount++;
-            dotNotation.setRight(visitPrimaryExpression(ctx.primaryExpression(primaryExpressionTempCount)));
-            primaryExpressionTempCount++;
+        // Dot notation
+        if(ctx.DOT() != null && ctx.primaryExpression().size() >= 2) {
+            DotNotation dotNotation = new DotNotation();
+            dotNotation.setLeft(visitPrimaryExpression(ctx.primaryExpression(0)));
+            dotNotation.setRight(visitPrimaryExpression(ctx.primaryExpression(1)));
             primaryExpression.setDotNotation(dotNotation);
         }
-        //handle object instantiation
-        if(ctx.NEW()!=null){
-            ObjectInstantiation objectInstantiation=new ObjectInstantiation();
-            objectInstantiation.setId(ctx.ID().getText());
-            objectInstantiation.setArgumentList(visitArgumentList(ctx.argumentList()));
-            primaryExpression.setObjectInstantiation(objectInstantiation);
+
+        // Object instantiation
+        if(ctx.NEW() != null && ctx.ID() != null) {
+            ObjectInstantiation objInst = new ObjectInstantiation();
+            objInst.setId(ctx.ID().getText());
+            if(ctx.argumentList() != null) objInst.setArgumentList(visitArgumentList(ctx.argumentList()));
+            primaryExpression.setObjectInstantiation(objInst);
         }
 
-        return  primaryExpression;
+        return primaryExpression;
     }
+
     //todo
     @Override
     public ArgumentList visitArgumentList(AngularParser.ArgumentListContext ctx) {
-        ArgumentList argumentList=new ArgumentList();
-        if(ctx.expression()!=null){
-            for (int i = 0; i <ctx.expression().size() ; i++) {
-                argumentList.getExpressionList().add(visitExpression(ctx.expression(i)));
+        ArgumentList argumentList = new ArgumentList();
+        if(ctx.expression() != null) {
+            for(AngularParser.ExpressionContext exprCtx : ctx.expression()) {
+                argumentList.getExpressionList().add(visitExpression(exprCtx));
             }
         }
         return argumentList;
@@ -1166,6 +1170,24 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
         return decoratorApplication;
     }
+
+    @Override
+    public TwoWayBinding visitTwoWayBindingAttribute(AngularParser.TwoWayBindingAttributeContext ctx) {
+        String varName = null;
+        String value = "";
+
+        if (ctx.ATTVALUE_VALUE() != null) {
+            value = ctx.ATTVALUE_VALUE().getText();
+        }
+
+        String text = ctx.getText();
+        if (text.startsWith("[(") && text.endsWith(")]")) {
+            varName = text.substring(5, text.length() - 2);
+        }
+
+        return new TwoWayBinding(varName, value);
+    }
+
 
     @Override
     public Object visitErrorNode(ErrorNode errorNode) {

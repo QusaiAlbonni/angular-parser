@@ -7,6 +7,7 @@ program: statement*;
 // Statement labels
 statement
     : variableDeclaration
+    | returnStatement
     | functionDeclaration
     | classDeclaration
     | enumDeclaration
@@ -22,7 +23,6 @@ statement
     | doWhileStatement
     | switchStatement
     | tryCatchStatement
-    | returnStatement
     | breakStatement
     | continueStatement
     | throwStatement
