@@ -25,7 +25,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("this_outside_scope_test.txt");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.ts");
 
             if (inputStream == null) {
                 System.out.println("File not found!");
@@ -38,18 +38,25 @@ public class Main {
             CommonTokenStream tokenStream = new CommonTokenStream(angularLexer);
             AngularParser angularParser = new AngularParser(tokenStream);
             AngularBaseVisitor visitor = new AngularBaseVisitor();
+            System.out.println("before program");
             Program program = (Program) visitor.visitProgram(angularParser.program());
+            System.out.println("after program");
             semanticCheck.checkErrors();
+            System.out.println("check errors");
             semanticCheck.getSe3().getCheckMap().forEach((key, value) -> {
                 System.out.println("Key: " + key + ", Value: " + value);
             });;
+            System.out.println("after semanticCheck");
             semanticCheck.getSe3().printSet();
+            System.out.println("after semanticCheck printSet");
             printTreeWithJackson(program);
 
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());
+            e.printStackTrace(); // ✅ تطبع كل التفاصيل للخطأ
         }
+
 
     }
     private static void printTreeWithJackson(Program program) {
@@ -63,7 +70,7 @@ public class Main {
             System.out.println(jsonOutput);
 
         } catch (JsonProcessingException e) {
-            System.out.println("Error while converting to JSON: " + e.getMessage());
+            System.out.println("Error while converting to JSON: " + e.toString());
         }
     }
 }

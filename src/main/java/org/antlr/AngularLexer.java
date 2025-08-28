@@ -230,7 +230,7 @@ public class AngularLexer extends Lexer {
 	private void HANDLEBAR_OPEN_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 0:
-			 setContext(1) 
+			 setContext(1);
 			break;
 		}
 	}

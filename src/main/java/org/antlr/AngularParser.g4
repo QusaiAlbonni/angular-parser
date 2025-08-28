@@ -14,6 +14,7 @@ statement
     | serviceDeclaration
     | importStatement
     | exportStatement
+    | returnStatement
     | expressionStatement
     | blockStatement
     | ifStatement
@@ -22,7 +23,6 @@ statement
     | doWhileStatement
     | switchStatement
     | tryCatchStatement
-    | returnStatement
     | breakStatement
     | continueStatement
     | throwStatement
