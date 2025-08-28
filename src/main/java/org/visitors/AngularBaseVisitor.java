@@ -352,7 +352,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
 
-        // حدد اسم التاغ (من TAG_NAME أو من knownHtmlTag)
         String openTag = null;
         String closeTag = null;
 
@@ -368,12 +367,10 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
 
-        // push للتاغ المفتوح
         if (openTag != null) {
             semanticCheck.getSe4().add(openTag);
         }
 
-        // attributes العادية
         if (ctx.htmlAttribute() != null) {
             for (AngularParser.HtmlAttributeContext attrCtx : ctx.htmlAttribute()) {
                 if (attrCtx != null) {
@@ -382,7 +379,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
 
-        // angular attributes
         if (ctx.angularAttribute() != null) {
             for (AngularParser.AngularAttributeContext attrCtx : ctx.angularAttribute()) {
                 if (attrCtx != null) {
@@ -391,8 +387,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
 
-        // check للتاغ المسكّر
         if (closeTag == null) {
+            //TODO:KARAM
 //            if (!semanticCheck.getSe4().isEmpty()) {
 //                semanticCheck.getSe4().pop();
 //            }
@@ -431,10 +427,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         HtmlAttribute htmlAttribute = new HtmlAttribute();
 
         StringBuilder value = new StringBuilder();
-        // الاسم دائمًا موجود
         value.append(ctx.TAG_NAME().getText());
 
-        // تحقق من وجود = والقيمة
         if (ctx.TAG_EQUALS() != null && ctx.ATTVALUE_VALUE() != null) {
             value.append(ctx.TAG_EQUALS().getText())
                     .append(ctx.ATTVALUE_VALUE().getText());
@@ -572,7 +566,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             htmlCharData.setText(ctx.SEA_WS().getText().trim());
         }
 
-        // ✅ تحقق من الطول قبل القص
         if(ctx.getText() != null && ctx.getText().length() > 4){
             htmlCharData.setText(ctx.getText().substring(2, ctx.getText().length() - 2));
         } else if(ctx.getText() != null) {
@@ -1183,16 +1176,13 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         String varName = null;
         String value = "";
 
-        // ctx.TAG_EQUALS ATTVALUE_VALUE?
         if (ctx.ATTVALUE_VALUE() != null) {
             value = ctx.ATTVALUE_VALUE().getText();
         }
 
-        // استخراج اسم المتغير من النص [(ngModel)]
-        // نحذف الأقواس والمحتوى عشان نترك اسم المتغير فقط
-        String text = ctx.getText(); // مثلا: [(ngModel)]="productName"
+        String text = ctx.getText();
         if (text.startsWith("[(") && text.endsWith(")]")) {
-            varName = text.substring(5, text.length() - 2); // استخرج اسم المتغير
+            varName = text.substring(5, text.length() - 2);
         }
 
         return new TwoWayBinding(varName, value);
