@@ -2,100 +2,98 @@ parser grammar AngularParser;
 
 options { tokenVocab = AngularLexer; }
 
-program: statement* # ProgramLable;
+program: statement*;
 
 // Statement labels
 statement
-    : variableDeclaration # VariableDeclarationLabel
-    | functionDeclaration # FunctionDeclarationLabel
-    | classDeclaration # ClassDeclarationLabel
-    | enumDeclaration # EnumDeclarationLabel
-    | componentDeclaration # ComponentDeclarationLabel
-    | serviceDeclaration # ServiceDeclarationLabel
-    | importStatement # ImportStmtLabel
-    | exportStatement # ExportStmtLabel
-    | expressionStatement # ExpressionStmtLabel
-    | blockStatement # BlockStmtLabel
-    | ifStatement # IfStmtLabel
-    | forStatement # ForStmtLabel
-    | whileStatement # WhileStmtLabel
-    | doWhileStatement # DoWhileStmtLabel
-    | switchStatement # SwitchStmtLabel
-    | tryCatchStatement # TryCatchStmtLabel
-    | returnStatement # ReturnStmtLabel
-    | breakStatement # BreakStmtLabel
-    | continueStatement # ContinueStmtLabel
-    | throwStatement # ThrowStmtLabel
-    | decoratorApplication # DecoratorApplicationLabel;
+    : variableDeclaration
+    | functionDeclaration
+    | classDeclaration
+    | enumDeclaration
+    | componentDeclaration
+    | serviceDeclaration
+    | importStatement
+    | exportStatement
+    | expressionStatement
+    | blockStatement
+    | ifStatement
+    | forStatement
+    | whileStatement
+    | doWhileStatement
+    | switchStatement
+    | tryCatchStatement
+    | returnStatement
+    | breakStatement
+    | continueStatement
+    | throwStatement
+    | decoratorApplication;
 
 variableDeclaration
-    : (LET | CONST) ID ASSIGN expression # InitializedVariableDeclaration
-    | (LET | CONST) ID # UninitializedVariableDeclaration;
+    : (LET | CONST) ID ASSIGN expression
+    | (LET | CONST) ID;
 
 functionDeclaration
-    : FUNCTION ID LPAREN parameterList? RPAREN blockStatement # FunctionDecl;
+    : FUNCTION ID LPAREN parameterList? RPAREN blockStatement;
 
 // Parameter list
 parameterList
-    : parameter (COMMA parameter)* # ParamListLabel;
+    : parameter (COMMA parameter)*;
 
 parameter
-    : expressionStatement # ExpressionParameter
-    | ID COLON typeAnnotation # TypedParameter;
+    : expressionStatement
+    | ID COLON typeAnnotation;
 
 typeAnnotation
-    : ANY # AnyType
-    | NUMBER_TYPE # NumberType
-    | STRING_TYPE # StringType
-    | BOOLEAN_TYPE # BooleanType
-    | VOID_TYPE # VoidType
-    | UNKNOWN # UnknownType
-    | NEVER # NeverType
-    | ID # CustomType;
+    : ANY
+    | NUMBER_TYPE
+    | STRING_TYPE
+    | BOOLEAN_TYPE
+    | VOID_TYPE
+    | UNKNOWN
+    | NEVER
+    | ID;
 
 classDeclaration
-    : CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE classBody RBRACE # ClassDecl;
+    : CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE classBody RBRACE;
 
 // Class body
 classBody
-    : (classMember SEMICOLON?)* # ClassBodyLabel;
-
+    : (classMember SEMICOLON?)*;
 
 classMember
-    : PUBLIC? PRIVATE? PROTECTED? STATIC? ID COLON typeAnnotation # PropertyDeclarationLable
-    | constructorDeclaration # ConstructorDeclarationLable
-    | variableDeclaration # ClassVariableDeclaration
-    | expressionStatement # ClassExpressionStatement
-    | methodDeclaration # MethodDeclarationLable
-    | enumDeclaration # ClassEnumDeclaration
-    | functionDeclaration # ClassFunctionDeclaration;
+    : PUBLIC? PRIVATE? PROTECTED? STATIC? ID COLON typeAnnotation
+    | constructorDeclaration
+    | variableDeclaration
+    | expressionStatement
+    | methodDeclaration
+    | enumDeclaration
+    | functionDeclaration;
 
 // Object body
 objectBody
-    : (objectMember (COMMA objectMember)* COMMA?)? # ObjBodyLabel;
-
+    : (objectMember (COMMA objectMember)* COMMA?)?;
 
 objectMember
-    : template # TemplateMember
-    | ID COLON expression # PropertyMember;
+    : template
+    | ID COLON expression;
 
 template
-    : TEMPLATE SEA_WS* htmlElements* SEA_WS* ESCAPE # TemplateLiteral;
+    : TEMPLATE SEA_WS* htmlElements* SEA_WS* ESCAPE;
 
 htmlElements:
-    htmlMisc* htmlElement htmlMisc* # HtmlElementGroup;
+    htmlMisc* htmlElement htmlMisc*;
 
 htmlElement
     : TAG_OPEN knownHtmlTag (htmlAttribute | angularAttribute)*
         (
             (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH knownHtmlTag TAG_CLOSE)
             | TAG_SLASH_CLOSE
-        ) # HtmlElementKnown
+        )
     | TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
         (
             (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH TAG_NAME TAG_CLOSE)
             | TAG_SLASH_CLOSE
-        ) # HtmlElementGeneric
+        )
     ;
 
 knownHtmlTag
@@ -116,132 +114,129 @@ knownHtmlTag
     ;
 
 htmlAttribute
-    : (TAG_NAME) (TAG_EQUALS ATTVALUE_VALUE)? # HtmlAttrLabel;
-
+    : (TAG_NAME) (TAG_EQUALS ATTVALUE_VALUE)?;
 
 // Angular attributes
 angularAttribute
-    : bindingAttribute # BindingAttrLabel
-    | eventBindingAttribute # EventBindingAttrLabel
-    | forAttribute # ForDirectiveLabel
-    | ifAttribute # IfDirectiveLabel
-    | twoWayBindingAttribute      # TwoWayBindingAttrLabel
+    : bindingAttribute
+    | eventBindingAttribute
+    | forAttribute
+    | ifAttribute
+    | twoWayBindingAttribute
     ;
 
-
 bindingAttribute
-    : TAG_LBRACKET TAG_NAME TAG_RBRACKET (TAG_EQUALS ATTVALUE_VALUE)? # PropertyBinding;
+    : TAG_LBRACKET TAG_NAME TAG_RBRACKET (TAG_EQUALS ATTVALUE_VALUE)?;
 
 eventBindingAttribute
-    : TAG_LPAREN TAG_NAME TAG_RPAREN (TAG_EQUALS ATTVALUE_VALUE)? # EventBinding;
+    : TAG_LPAREN TAG_NAME TAG_RPAREN (TAG_EQUALS ATTVALUE_VALUE)?;
 
 forAttribute
-    : ANG_FOR (TAG_EQUALS ATTVALUE_VALUE)? # ForDirective;
+    : ANG_FOR (TAG_EQUALS ATTVALUE_VALUE)?;
 
 ifAttribute
-    : ANG_IF (TAG_EQUALS ATTVALUE_VALUE)? # IfDirective;
+    : ANG_IF (TAG_EQUALS ATTVALUE_VALUE)?;
 
 // Content handling
 htmlContent
-    : htmlChardata? ((htmlElement | CDATA | htmlComment) htmlChardata?)* # HtmlContentLabel;
+    : htmlChardata? ((htmlElement | CDATA | htmlComment) htmlChardata?)*;
 
 htmlMisc
-    : htmlComment # HtmlCommentMisc
-    | SEA_WS # HtmlWhitespaceMisc;
+    : htmlComment
+    | SEA_WS;
 
 htmlComment
-    : HTML_COMMENT # HtmlCommentLabel
-    | HTML_CONDITIONAL_COMMENT # HtmlConditionalCommentLabel;
+    : HTML_COMMENT
+    | HTML_CONDITIONAL_COMMENT;
 
 htmlChardata
-    : angularCharData # AngularChardata
-    | HTML_TEXT # HtmlTextChardata
-    | SEA_WS # HtmlWhitespaceChardata;
-
+    : angularCharData
+    | HTML_TEXT
+    | SEA_WS;
 
 angularCharData
-    : HTML_TEXT? SEA_WS? HANDLEBAR_OPEN expressionStatement? HANDLEBAR_CLOSE SEA_WS? HTML_TEXT? # Interpolation;
+    : HTML_TEXT? SEA_WS? HANDLEBAR_OPEN expressionStatement? HANDLEBAR_CLOSE SEA_WS? HTML_TEXT?;
 
 constructorDeclaration
-    : CONSTRUCTOR LPAREN parameterList? RPAREN blockStatement # ConstructorDecl;
+    : CONSTRUCTOR LPAREN parameterList? RPAREN blockStatement;
 
 methodDeclaration
-    : ID LPAREN parameterList? RPAREN typeAnnotation? blockStatement # MethodDecl;
+    : ID LPAREN parameterList? RPAREN typeAnnotation? blockStatement;
 
 enumDeclaration
-    : ENUM ID LBRACE enumMember (COMMA enumMember)* RBRACE # EnumDecl;
+    : ENUM ID LBRACE enumMember (COMMA enumMember)* RBRACE;
 
 enumMember
-    : ID (ASSIGN expression)? # EnumMemberDecl;
+    : ID (ASSIGN expression)?;
 
 componentDeclaration
-    : COMPONENT ID LBRACE propertyDeclaration* RBRACE # ComponentDecl;
+    : COMPONENT ID LBRACE propertyDeclaration* RBRACE;
 
 serviceDeclaration
-    : SERVICE ID LBRACE methodDeclaration* RBRACE # ServiceDecl;
+    : SERVICE ID LBRACE methodDeclaration* RBRACE;
 
 propertyDeclaration
-    : PROPERTY ID COLON typeAnnotation SEMICOLON # PropertyDecl;
+    : PROPERTY ID COLON typeAnnotation SEMICOLON;
 
 importStatement
-    : IMPORT LBRACE? STAR?(AS)?(STRING | ID (AS ID)? (COMMA ID)* (AS ID)? RBRACE? FROM STRING) SEMICOLON? # ImportDecl;
+    : IMPORT LBRACE? STAR?(AS)?(STRING | ID (AS ID)? (COMMA ID)* (AS ID)? RBRACE? FROM STRING) SEMICOLON?;
 
 exportStatement
-    : EXPORT variableDeclaration SEMICOLON? # ExportVariable
-    | EXPORT functionDeclaration SEMICOLON? # ExportFunction
-    | EXPORT classDeclaration SEMICOLON? # ExportClass
-    | EXPORT ID SEMICOLON? # ExportIdentifier;
+    : EXPORT variableDeclaration SEMICOLON?
+    | EXPORT functionDeclaration SEMICOLON?
+    | EXPORT classDeclaration SEMICOLON?
+    | EXPORT ID SEMICOLON?;
 
 expressionStatement
-    : expression # ExpressionLable
-    | incrementExpression # IncrementExpressionLable;
+    : expression
+    | incrementExpression;
 
 // Expressions
 expression
-    : conditionalExpression # ConditionalExprLabel;
+    : conditionalExpression;
 
 conditionalExpression
-    : logicalExpression (QUESTION expression COLON expression)? # TernaryExpression;
+    : logicalExpression (QUESTION expression COLON expression)?;
 
 logicalExpression
-    : binaryExpression ((AND | OR | BITWISE_AND | BITWISE_OR | BITWISE_XOR | BITWISE_NOT) binaryExpression)* # LogicalExpr;
+    : binaryExpression ((AND | OR | BITWISE_AND | BITWISE_OR | BITWISE_XOR | BITWISE_NOT) binaryExpression)*;
 
 binaryExpression
-    : primaryExpression ((PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | POWER | ASSIGN | NOT_EQUAL | LESS | GREATER | LESS_EQUAL | GREATER_EQUAL | STRICT_NOT_EQUAL | STRICT_EQUAL | EQUAL | INCRES | DECRES) primaryExpression)* # BinaryExpr;
+    : primaryExpression ((PLUS | MINUS | MULTIPLY | DIVIDE | MODULO | POWER | ASSIGN | NOT_EQUAL | LESS | GREATER | LESS_EQUAL | GREATER_EQUAL | STRICT_NOT_EQUAL | STRICT_EQUAL | EQUAL | INCRES | DECRES) primaryExpression)*;
 
 arrayDeclaration
-    : LBRACKET argumentList RBRACKET # ArrayLiteral;
+    : LBRACKET argumentList RBRACKET;
 
 objectDeclaration
-    : '{' objectBody '}' # ObjectLiteral;
+    : '{' objectBody '}';
 
 primaryExpression
-    : ID # Identifier
-    | STRING # StringLiteral
-    | THIS # ThisLiteral
-    | NUMBER # NumberLiteral
-    | BOOLEAN # BooleanLiteral
-    | NULL # NullLiteral
-    | UNDEFINED # UndefinedLiteral
-    | THIS # ThisReference
-    | LPAREN expression RPAREN # ParenthesizedExpression
-    | objectDeclaration # ObjectExpression
-    | arrayDeclaration # ArrayExpression
-    | primaryExpression LPAREN argumentList? RPAREN # FunctionCall
-    | primaryExpression DOT primaryExpression # MemberAccess
-    | NEW ID LPAREN argumentList? RPAREN # NewExpression;
+    : ID
+    | STRING
+    | THIS
+    | NUMBER
+    | BOOLEAN
+    | NULL
+    | UNDEFINED
+    | THIS
+    | LPAREN expression RPAREN
+    | objectDeclaration
+    | arrayDeclaration
+    | primaryExpression LPAREN argumentList? RPAREN
+    | primaryExpression DOT primaryExpression
+    | NEW ID LPAREN argumentList? RPAREN;
 
 argumentList
-    : (expression (COMMA expression)* COMMA?)? # Arguments;
+    : (expression (COMMA expression)* COMMA?)?;
 
 assignmentExpression
-    : ID ASSIGN expression # Assignment;
+    : ID ASSIGN expression;
 
 blockStatement
-    : LBRACE statement* SEMICOLON? RBRACE # Block;
+    : LBRACE statement* SEMICOLON? RBRACE;
 
 ifStatement
-    : IF LPAREN expression RPAREN statement (ELSE statement)? # IfElseStatement;
+    : IF LPAREN expression RPAREN statement (ELSE statement)?;
 
 forStatement
     : FOR LPAREN
@@ -253,49 +248,48 @@ forStatement
         (incrementExpression | assignmentExpression | expression)?))
       RPAREN
       (blockStatement
-      | expressionStatement) # ForLoop;
+      | expressionStatement);
 
 forOf
-    : variableDeclaration OF expression # ForOfLoop;
+    : variableDeclaration OF expression;
 
 incrementExpression
-    : ID (INCRES | DECRES) # IncrementDecrLabel;
+    : ID (INCRES | DECRES);
 
 whileStatement
-    : WHILE LPAREN expression RPAREN statement # WhileLoop;
+    : WHILE LPAREN expression RPAREN statement;
 
 doWhileStatement
-    : DO statement WHILE LPAREN expression RPAREN SEMICOLON? # DoWhileLoop;
+    : DO statement WHILE LPAREN expression RPAREN SEMICOLON?;
 
 switchStatement
-    : SWITCH LPAREN expression RPAREN LBRACE caseStatement* RBRACE # Switch;
+    : SWITCH LPAREN expression RPAREN LBRACE caseStatement* RBRACE;
 
 caseStatement
-    : CASE expression COLON statement* # Case
-    | DEFAULT COLON statement* # DefaultCase;
+    : CASE expression COLON statement*
+    | DEFAULT COLON statement*;
 
 tryCatchStatement
-    : TRY blockStatement CATCH LPAREN ID RPAREN blockStatement (FINALLY blockStatement)? # TryCatchFinally;
+    : TRY blockStatement CATCH LPAREN ID RPAREN blockStatement (FINALLY blockStatement)?;
 
 returnStatement
-    : RETURN expression? SEMICOLON? # Return;
+    : RETURN expression? SEMICOLON?;
 
 breakStatement
-    : BREAK SEMICOLON? # Break;
+    : BREAK SEMICOLON?;
 
 continueStatement
-    : CONTINUE SEMICOLON # Continue;
+    : CONTINUE SEMICOLON;
 
 throwStatement
-    : THROW expression SEMICOLON # Throw;
+    : THROW expression SEMICOLON;
 
 readError
-    : ID ASSIGN expression SEMICOLON # ReadErrorAssignment
-    | ID SEMICOLON # ReadErrorIdentifier;
+    : ID ASSIGN expression SEMICOLON
+    | ID SEMICOLON;
 
 decoratorApplication
-    : DECORATOR ID (LPAREN parameterList? RPAREN)? # Decorator;
+    : DECORATOR ID (LPAREN parameterList? RPAREN)?;
 
 twoWayBindingAttribute
-    : ANG_NGMODEL_TWOWAY (TAG_EQUALS ATTVALUE_VALUE)?    # TwoWayBinding
-    ;
+    : ANG_NGMODEL_TWOWAY (TAG_EQUALS ATTVALUE_VALUE)?;
