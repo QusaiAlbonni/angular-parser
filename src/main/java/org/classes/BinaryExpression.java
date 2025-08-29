@@ -9,9 +9,13 @@ public class BinaryExpression extends Expression {
     }
 
     public BinaryExpression(Expression left, String operator, Expression right) {
+        super();
+        this.setNodeType("BinaryExpression");
         this.left = left;
         this.operator = operator;
         this.right = right;
+        if (left != null) addChild(left);
+        if (right != null) addChild(right);
     }
 
     // Getters and setters
@@ -22,6 +26,7 @@ public class BinaryExpression extends Expression {
 
     public void setLeft(Expression left) {
         this.left = left;
+        if (left != null) addChild(left);
     }
 
     public String getOperator() {
@@ -38,7 +43,10 @@ public class BinaryExpression extends Expression {
 
     public void setRight(Expression right) {
         this.right = right;
+        if (right != null) addChild(right);
     }
+
+
 
     @Override
     public String toString() {
@@ -61,5 +69,14 @@ public class BinaryExpression extends Expression {
 
         }
         return  "ERROR IN BINARY EXPRESSION WHEN CALL TO STRING ";
+    }
+
+    @Override
+    public String generate() {
+        System.out.println("Generate called for ObjectMember with ID=");
+        String leftCode = left != null ? left.generate() : "";
+        String rightCode = right != null ? right.generate() : "";
+        String op = operator != null ? operator : "";
+        return leftCode + " " + op + " " + rightCode;
     }
 }

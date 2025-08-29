@@ -10,6 +10,8 @@ public class ForStatement extends Statement{
     Statement body;
 
     public ForStatement() {
+        super();
+        this.setNodeType("ForStatement");
     }
 
     public ForStatement(VariableDeclaration variableDeclaration, Expression condition, Expression increment, Statement body) {
@@ -25,6 +27,7 @@ public class ForStatement extends Statement{
 
     public void setVariableDeclaration(VariableDeclaration variableDeclaration) {
         this.variableDeclaration = variableDeclaration;
+        if(variableDeclaration != null) addChild(variableDeclaration);
     }
 
     public Expression getCondition() {
@@ -33,6 +36,7 @@ public class ForStatement extends Statement{
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+        if(condition != null) addChild(condition);
     }
 
     public Expression getVariableDeclarationAsExpression() {
@@ -41,6 +45,7 @@ public class ForStatement extends Statement{
 
     public void setVariableDeclarationAsExpression(Expression variableDeclarationAsExpression) {
         this.variableDeclarationAsExpression = variableDeclarationAsExpression;
+        if(variableDeclarationAsExpression != null) addChild(variableDeclarationAsExpression);
     }
 
     public Expression getIncrement() {
@@ -49,6 +54,7 @@ public class ForStatement extends Statement{
 
     public void setIncrement(Expression increment) {
         this.increment = increment;
+        if(increment != null) addChild(increment);
     }
 
     public Statement getBody() {
@@ -57,6 +63,7 @@ public class ForStatement extends Statement{
 
     public void setBody(Statement body) {
         this.body = body;
+        if(body != null) addChild(body);
     }
 
     public ForOf getForOf() {
@@ -65,6 +72,7 @@ public class ForStatement extends Statement{
 
     public void setForOf(ForOf forOf) {
         this.forOf = forOf;
+        if(forOf != null) addChild(forOf);
     }
 
     @Override
@@ -96,5 +104,27 @@ public class ForStatement extends Statement{
                     }
                 }
 
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if(forOf != null) {
+            sb.append("for (").append(forOf.generate()).append(") ");
+        } else if(variableDeclaration != null) {
+            sb.append("for (").append(variableDeclaration.generate()).append("; ");
+            sb.append(condition != null ? condition.generate() : "").append("; ");
+            sb.append(increment != null ? increment.generate() : "").append(") ");
+        } else if(variableDeclarationAsExpression != null) {
+            sb.append("for (").append(variableDeclarationAsExpression.generate()).append("; ");
+            sb.append(condition != null ? condition.generate() : "").append("; ");
+            sb.append(increment != null ? increment.generate() : "").append(") ");
+        }
+        if(body != null) {
+            sb.append(body.generate());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
     }
 }

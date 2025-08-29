@@ -4,6 +4,8 @@ public class ThrowStatement extends Statement{
     Expression expression;
 
     public ThrowStatement() {
+        super();
+        this.setNodeType("ThrowStatement");
     }
 
     public ThrowStatement(Expression expression) {
@@ -23,5 +25,13 @@ public class ThrowStatement extends Statement{
         return "\nThrowStatement{" +
                 "\nexpression=" + expression +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        if (expression != null) {
+            return "throw " + expression.generate() + ";";
+        }
+        return "throw;";
     }
 }

@@ -1,9 +1,12 @@
 package org.classes;
 
 public class IncreamentExpression extends Expression{
-String id;boolean isIncreament;
+        String id;
+        boolean isIncreament;
 
     public IncreamentExpression() {
+        super();
+        this.setNodeType("IncreamentExpression");
     }
 
     public String getId() {
@@ -35,5 +38,10 @@ String id;boolean isIncreament;
                 ", isDecreament=" + isIncreament +
                 '}';
 
+    }
+    @Override
+    public String generate() {
+        if (id == null) return "";
+        return isIncreament ? id + "++" : id + "--";
     }
 }

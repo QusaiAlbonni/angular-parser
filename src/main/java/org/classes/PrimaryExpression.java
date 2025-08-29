@@ -14,7 +14,10 @@ public class PrimaryExpression extends Expression {
     private FunctionCall functionCall;
     private DotNotation dotNotation;
     private ObjectInstantiation objectInstantiation;
-
+    public PrimaryExpression() {
+        super();
+        this.setNodeType("ObjectMember");
+    }
     public String getId() {
         return id;
     }
@@ -69,6 +72,7 @@ public class PrimaryExpression extends Expression {
 
     public void setFunctionCall(FunctionCall functionCall) {
         this.functionCall = functionCall;
+        if(functionCall!=null) addChild(functionCall);
     }
 
     public DotNotation getDotNotation() {
@@ -77,6 +81,7 @@ public class PrimaryExpression extends Expression {
 
     public void setDotNotation(DotNotation dotNotation) {
         this.dotNotation = dotNotation;
+        if (dotNotation!=null)addChild(dotNotation);
     }
 
     public ObjectInstantiation getObjectInstantiation() {
@@ -85,6 +90,7 @@ public class PrimaryExpression extends Expression {
 
     public void setObjectInstantiation(ObjectInstantiation objectInstantiation) {
         this.objectInstantiation = objectInstantiation;
+        if(objectInstantiation!=null)addChild(objectInstantiation);
     }
 
     public String getThisValue() {
@@ -146,5 +152,20 @@ public class PrimaryExpression extends Expression {
 
        return "error in primary expression";
 
+    }
+
+    @Override
+    public String generate() {
+        if (functionCall != null) return functionCall.generate();
+        if (dotNotation != null) return dotNotation.generate();
+        if (objectInstantiation != null) return objectInstantiation.generate();
+        if (stringValue != null) return "\"" + stringValue + "\"";
+        if (numberValue != null) return numberValue;
+        if (booleanValue != null) return booleanValue;
+        if (nullValue != null) return "null";
+        if (undefinedValue != null) return "undefined";
+        if (id != null) return id;
+        if (thisValue != null) return "this";
+        return "undefined"; // fallback
     }
 }

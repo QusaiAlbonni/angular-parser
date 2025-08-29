@@ -1,10 +1,12 @@
 package org.classes;
 
-public class BindingAttribute {
+public class BindingAttribute extends Node{
 String tagName;
 String attributeValue;
 
     public BindingAttribute() {
+        super();
+        this.setNodeType("BindingAttribute");
     }
 
     public String getTagName() {
@@ -23,11 +25,20 @@ String attributeValue;
         this.attributeValue = attributeValue;
     }
 
+
     @Override
     public String toString() {
         return "BindingAttribute{" +
                 "\ntagName='" + tagName + '\'' +
                 "\nattributeValue='" + attributeValue + '\'' +
                 '}';
+    }
+    @Override
+    public String generate() {
+
+        if (tagName != null && !tagName.isEmpty() && attributeValue != null && !attributeValue.isEmpty()) {
+            return "[" + tagName + "]=\"" + attributeValue + "\"";
+        }
+        return "";
     }
 }

@@ -1,11 +1,9 @@
 package org.visitors;
 
-import org.antlr.AngularParserVisitor;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.classes.*;
 import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
-import org.main.Main;
 
 import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
 import org.function_parameters_symbol_table.Symbol;
@@ -228,7 +226,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
                 classDeclaration.getImplementsInterfaces().add(ctx.ID().get(i).getText());
             }
         }
-        classDeclaration.setClassMembers(visitClassBody(ctx.classBody()));
+        classDeclaration.setClassBody(visitClassBody(ctx.classBody()));
 
         semanticCheck.getSe1().delSet();
         thisSymbolTable.exitClass();
@@ -835,7 +833,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         else if(ctx.INCRES(0) != null) binaryExpression.setOperator(ctx.INCRES(0).getText());
         else if(ctx.DECRES(0) != null) binaryExpression.setOperator(ctx.DECRES(0).getText());
 
-        semanticCheck.getSe2().addAtrr();
+//        semanticCheck.getSe2().addAtrr();
         return binaryExpression;
     }
 

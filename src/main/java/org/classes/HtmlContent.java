@@ -8,6 +8,8 @@ public class HtmlContent  extends Html {
     private HtmlCharData htmlCharDataRight;
     private List<HtmlElement> htmlElement;
     public  HtmlContent(){
+        super();
+        this.setNodeType("HtmlContent");
         htmlElement=new ArrayList<>();
     }
     public List<HtmlElement> getHtmlElement() {
@@ -24,6 +26,9 @@ public class HtmlContent  extends Html {
 
     public void setHtmlCharDataLeft(HtmlCharData htmlCharDataLeft) {
         this.htmlCharDataLeft = htmlCharDataLeft;
+        if(htmlCharDataLeft!=null){
+            addChild(htmlCharDataLeft);
+        }
     }
 
     public HtmlCharData getHtmlCharDataRight() {
@@ -41,5 +46,25 @@ public class HtmlContent  extends Html {
                 "\nhtmlCharDataRight=" + htmlCharDataRight +
                 "\nhtmlElement=" + htmlElement +
                 "}\n";
+    }
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+
+        if (htmlCharDataLeft != null) {
+            sb.append(htmlCharDataLeft.generate());
+        }
+
+        for (HtmlElement element : htmlElement) {
+            if (element != null) {
+                sb.append(element.generate());
+            }
+        }
+
+        if (htmlCharDataRight != null) {
+            sb.append(htmlCharDataRight.generate());
+        }
+
+        return sb.toString();
     }
 }

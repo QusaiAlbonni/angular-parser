@@ -9,6 +9,8 @@ public class ComponentDeclaration extends  Statement{
     List<PropertyDeclaration> propertyDeclarations;
 
     public ComponentDeclaration() {
+        super();
+        this.setNodeType("ComponentDeclaration");
         propertyDeclarations=new ArrayList<>();
     }
 
@@ -39,5 +41,18 @@ public class ComponentDeclaration extends  Statement{
                 "\nid='" + id + '\'' +
                 "\npropertyDeclarations=" + propertyDeclarations +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Mini.defineComponent('").append(id).append("', ").append(id).append(", `\n");
+
+        for (PropertyDeclaration prop : propertyDeclarations) {
+            sb.append(prop.generate()).append("\n");
+        }
+
+        sb.append("`);\n");
+        return sb.toString();
     }
 }

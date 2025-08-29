@@ -10,7 +10,10 @@ public class IfStatement extends Statement{
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
     }
-    public  IfStatement(){}
+    public IfStatement() {
+        super();
+        this.setNodeType("IfStatement");
+    }
 
     public Expression getCondition() {
         return condition;
@@ -18,6 +21,7 @@ public class IfStatement extends Statement{
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+        if (condition != null) addChild(condition);
     }
 
     public Statement getThenStatement() {
@@ -26,6 +30,7 @@ public class IfStatement extends Statement{
 
     public void setThenStatement(Statement thenStatement) {
         this.thenStatement = thenStatement;
+        if (thenStatement != null) addChild(thenStatement);
     }
 
     public Statement getElseStatement() {
@@ -34,6 +39,7 @@ public class IfStatement extends Statement{
 
     public void setElseStatement(Statement elseStatement) {
         this.elseStatement = elseStatement;
+        if (elseStatement != null) addChild(elseStatement);
     }
 
     @Override
@@ -43,5 +49,16 @@ public class IfStatement extends Statement{
                 "\nthenStatement=" + thenStatement +
                 "\nelseStatement=" + elseStatement +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("if (").append(condition != null ? condition.generate() : "").append(") ");
+        sb.append(thenStatement != null ? thenStatement.generate() : "{}");
+        if (elseStatement != null) {
+            sb.append(" else ").append(elseStatement.generate());
+        }
+        return sb.toString();
     }
 }

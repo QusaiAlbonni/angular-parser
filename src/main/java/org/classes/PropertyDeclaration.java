@@ -1,10 +1,11 @@
 package org.classes;
 
-public class PropertyDeclaration {
+public class PropertyDeclaration extends Node {
     String id ;
     TypeAnnotation typeAnnotation;
     public  PropertyDeclaration(){
-
+        super();
+        this.setNodeType("PropertyDeclaration");
     }
     public PropertyDeclaration(String id, TypeAnnotation typeAnnotation) {
         this.id = id;
@@ -33,5 +34,11 @@ public class PropertyDeclaration {
                 "\nid='" + id + '\'' +
                 "\ntypeAnnotation='" + typeAnnotation + '\'' +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+
+        return "PROPERTY " + id + " : " + (typeAnnotation != null ? typeAnnotation.getType() : "any") + ";";
     }
 }

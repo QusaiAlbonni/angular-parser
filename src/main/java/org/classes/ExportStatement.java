@@ -7,7 +7,8 @@ public class ExportStatement extends Statement{
     VariableDeclaration variableDeclaration;
     FunctionDeclaration functionDeclaration;
     public  ExportStatement(){
-
+        super();
+        this.setNodeType("ExportStatement");
     }
     public ExportStatement(String exportType, String id) {
         this.exportType = exportType;
@@ -36,6 +37,7 @@ public class ExportStatement extends Statement{
 
     public void setClassDeclaration(ClassDeclaration classDeclaration) {
         this.classDeclaration = classDeclaration;
+        if (classDeclaration != null) addChild(classDeclaration);
     }
 
     public VariableDeclaration getVariableDeclaration() {
@@ -44,6 +46,7 @@ public class ExportStatement extends Statement{
 
     public void setVariableDeclaration(VariableDeclaration variableDeclaration) {
         this.variableDeclaration = variableDeclaration;
+        if (variableDeclaration != null) addChild(variableDeclaration);
     }
 
     public FunctionDeclaration getFunctionDeclaration() {
@@ -52,6 +55,7 @@ public class ExportStatement extends Statement{
 
     public void setFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         this.functionDeclaration = functionDeclaration;
+        if (functionDeclaration != null) addChild(functionDeclaration);
     }
 
     @Override
@@ -79,5 +83,19 @@ public class ExportStatement extends Statement{
                 "\nid='" + id + '\'' +
                 "\nexportType='" + exportType + '\'' +
                 '}';
+    }
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder("export ");
+        if (classDeclaration != null) {
+            sb.append(classDeclaration.generate());
+        } else if (functionDeclaration != null) {
+            sb.append(functionDeclaration.generate());
+        } else if (variableDeclaration != null) {
+            sb.append(variableDeclaration.generate());
+        } else if (id != null) {
+            sb.append(id);
+        }
+        return sb.toString();
     }
 }

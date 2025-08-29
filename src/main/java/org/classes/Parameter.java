@@ -1,15 +1,26 @@
 package org.classes;
 //TODO
-public class Parameter {
+public class Parameter extends Node {
 
     TypeAnnotation type;
     String name;
     ExpressionStatement expressionStatement;
-    public  Parameter(){}
+    public  Parameter(){
+        super();
+        this.setNodeType("Parameter");
+    }
     public Parameter(TypeAnnotation type, String name, ExpressionStatement expression) {
+        super();
+        this.setNodeType("Parameter");
         this.type = type;
         this.name = name;
         this.expressionStatement = expression;
+        if (type != null) {
+            this.addChild(type);
+        }
+        if (expressionStatement != null) {
+            this.addChild(expressionStatement);
+        }
     }
 
     public TypeAnnotation getType() {
@@ -18,6 +29,9 @@ public class Parameter {
 
     public void setType(TypeAnnotation type) {
         this.type = type;
+        if (type != null) {
+            this.addChild((Node) type);
+        }
     }
 
     public String getName() {
@@ -34,6 +48,20 @@ public class Parameter {
 
     public void setExpressionStatement(ExpressionStatement expressionStatement) {
         this.expressionStatement = expressionStatement;
+        if (expressionStatement != null) {
+            this.addChild((Node) expressionStatement);
+        }
+    }
+
+    @Override
+    public String generate() {
+        if (expressionStatement != null) {
+            return expressionStatement.generate();
+        } else if (type != null) {
+            return name + ": " + type.generate();
+        } else {
+            return name != null ? name : "";
+        }
     }
 
     @Override

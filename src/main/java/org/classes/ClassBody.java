@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO
-public class ClassBody {
+public class ClassBody extends Node {
 List<ClassMember>members;
 //List<ConstructorDeclaration>constructorDeclarationList;
     public  ClassBody(){
+        super();
     members=new ArrayList<>();
+        this.setNodeType("ClassBody");
 //    constructorDeclarationList=new ArrayList<>();
     }
 
@@ -30,6 +32,18 @@ List<ClassMember>members;
 
     public void setMembers(List<ClassMember> members) {
         this.members = members;
+        for (ClassMember member : this.members) {
+            this.addChild(member);
+        }
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        for (ClassMember member : members) {
+            sb.append(member.generate()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override

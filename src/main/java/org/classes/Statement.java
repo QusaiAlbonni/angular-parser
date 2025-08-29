@@ -12,5 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
         @JsonSubTypes.Type(value = ReturnStatement.class, name = "return"),
         @JsonSubTypes.Type(value = ExpressionStatement.class, name = "expression"),
 })
-public abstract class Statement {
+public abstract class Statement extends Node{
+    public Statement() { super();this.setNodeType("Statement"); }
+    public Statement(Node parent, int lineNumber, String nodeType) {
+        super(parent, lineNumber, "Statement");
+    }
 }

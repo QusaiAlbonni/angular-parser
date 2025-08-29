@@ -3,9 +3,11 @@ package org.classes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Program {
+public class Program extends Node {
     List<Statement> statements;
     public  Program(){
+        super();
+        this.setNodeType("Program");
         statements=new ArrayList<>();
     }
     public List<Statement> getStatements() {
@@ -23,5 +25,17 @@ public class Program {
         return "\nProgram{" +
                 "\nstatements=" + statements +
                 '}';
+    }
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        for (Statement stmt : statements) {
+            if (stmt != null) {
+                sb.append(stmt.generate());
+
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
     }
 }

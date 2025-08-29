@@ -2,7 +2,7 @@ package org.classes;
 
 import org.antlr.AngularParser;
 
-public class ClassMember {
+public class ClassMember extends Node{
     private String visibility; // public, private, protected
     private boolean isStatic;
     private String name;
@@ -18,12 +18,18 @@ public class ClassMember {
     private EnumDeclaration enumDeclaration;
     private Statement expressionStatement;
 
+
+    public ClassMember() {
+        super();
+        this.setNodeType("ClassMember");
+    }
     public ConstructorDeclaration getConstructorDeclaration() {
         return constructorDeclaration;
     }
 
     public void setConstructorDeclaration(ConstructorDeclaration constructorDeclaration) {
         this.constructorDeclaration = constructorDeclaration;
+        if (constructorDeclaration != null) addChild(constructorDeclaration);
     }
 
     public String getVisibility() {
@@ -72,6 +78,7 @@ public class ClassMember {
 
     public void setMethod(MethodDeclaration method) {
         this.method = method;
+        if (method != null) addChild(method);
     }
 
 
@@ -81,6 +88,7 @@ public class ClassMember {
 
     public void setVariable(VariableDeclaration variable) {
         this.variable = variable;
+        if (variable != null) addChild(variable);
     }
     public EnumDeclaration getEnumDeclaration() {
         return enumDeclaration;
@@ -88,6 +96,7 @@ public class ClassMember {
 
     public void setEnumDeclaration(EnumDeclaration enumDeclaration) {
         this.enumDeclaration = enumDeclaration;
+        if (enumDeclaration != null) addChild(enumDeclaration);
     }
 
     public TypeAnnotation getTypeAnnotation() {
@@ -96,13 +105,15 @@ public class ClassMember {
 
     public void setTypeAnnotation(TypeAnnotation typeAnnotation) {
         this.typeAnnotation = typeAnnotation;
+        if (typeAnnotation != null) addChild(typeAnnotation);
     }
     public void setIsMethod(boolean isMethod){
         this.isMethod=isMethod;
     }
     public void setIsEnum(boolean isEnum){
         this.isEnum=isEnum;
-    }public void setIsExpression(boolean isExpression){
+    }
+    public void setIsExpression(boolean isExpression){
         this.isExpression=isExpression;
     }
 
@@ -112,8 +123,19 @@ public class ClassMember {
 
     public void setExpressionStatement(Statement expressionStatement) {
         this.expressionStatement = expressionStatement;
+        if (expressionStatement != null) addChild(expressionStatement);
     }
 
+
+    @Override
+    public String generate() {
+        if (isConstructor && constructorDeclaration != null) return constructorDeclaration.generate();
+        if (isProperty && variable != null) return variable.generate();
+        if (isMethod && method != null) return method.generate();
+        if (isEnum && enumDeclaration != null) return enumDeclaration.generate();
+        if (isExpression && expressionStatement != null) return expressionStatement.toString();
+        return "";
+    }
     @Override
     public String toString() {
         if (isConstructor) {

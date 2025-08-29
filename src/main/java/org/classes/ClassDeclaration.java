@@ -10,13 +10,16 @@ public class ClassDeclaration extends Statement{
 //    List<ClassMember> classMembers;
     ClassBody classBody;
     public  ClassDeclaration(){
+        super();
     implementsInterfaces=new ArrayList<>();
+        this.setNodeType("ClassDeclaration");
     }
     public ClassDeclaration(String id, String extendsClass, List<String> implementsInterfaces, ClassBody classBody) {
         this.id = id;
         this.extendsClass = extendsClass;
         this.implementsInterfaces = implementsInterfaces;
         this.classBody =classBody;
+
     }
 
     public String getId() {
@@ -43,12 +46,38 @@ public class ClassDeclaration extends Statement{
         this.implementsInterfaces = implementsInterfaces;
     }
 
-    public ClassBody getClassMembers() {
+    public ClassBody getClassBody() {
         return classBody;
     }
 
-    public void setClassMembers(ClassBody classBody) {
+    public void setClassBody(ClassBody classBody) {
         this.classBody = classBody;
+        if (classBody != null) {
+            for (ClassMember member : classBody.getMembers()) {
+                this.addChild(member);
+            }
+        }
+    }
+
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class ").append(id);
+        if (extendsClass != null && !extendsClass.isEmpty()) {
+            sb.append(" extends ").append(extendsClass);
+        }
+        if (!implementsInterfaces.isEmpty()) {
+            sb.append(" implements ").append(String.join(", ", implementsInterfaces));
+        }
+        sb.append(" {\n");
+        if (classBody != null) {
+            for (ClassMember member : classBody.getMembers()) {
+                sb.append(member.generate()).append("\n");
+            }
+        }
+        sb.append("}\n");
+        return sb.toString();
     }
 
     @Override

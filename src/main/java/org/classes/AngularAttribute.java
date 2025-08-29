@@ -1,12 +1,13 @@
 package org.classes;
 
-public class AngularAttribute {
+public class AngularAttribute extends Node {
     BindingAttribute bindingAttribute;
     EventBindingAttribute eventBindingAttribute;
     ForAttribute forAttribute;
     IfAttribute ifAttribute;
     public  AngularAttribute(){
-
+        super();
+        this.setNodeType("AngularAttribute");
     }
 
     public BindingAttribute getBindingAttribute() {
@@ -15,6 +16,7 @@ public class AngularAttribute {
 
     public void setBindingAttribute(BindingAttribute bindingAttribute) {
         this.bindingAttribute = bindingAttribute;
+        if (bindingAttribute != null) addChild(bindingAttribute);
     }
 
     public EventBindingAttribute getEventBindingAttribute() {
@@ -23,6 +25,7 @@ public class AngularAttribute {
 
     public void setEventBindingAttribute(EventBindingAttribute eventBindingAttribute) {
         this.eventBindingAttribute = eventBindingAttribute;
+        if (eventBindingAttribute != null) addChild(eventBindingAttribute);
     }
 
     public ForAttribute getForAttribute() {
@@ -31,6 +34,7 @@ public class AngularAttribute {
 
     public void setForAttribute(ForAttribute forAttribute) {
         this.forAttribute = forAttribute;
+        if (forAttribute != null) addChild(forAttribute);
     }
 
     public IfAttribute getIfAttribute() {
@@ -39,6 +43,16 @@ public class AngularAttribute {
 
     public void setIfAttribute(IfAttribute ifAttribute) {
         this.ifAttribute = ifAttribute;
+        if (ifAttribute != null) addChild(ifAttribute);
+    }
+
+    @Override
+    public String generate() {
+        if (bindingAttribute != null) return bindingAttribute.generate();
+        if (eventBindingAttribute != null) return eventBindingAttribute.generate();
+        if (forAttribute != null) return forAttribute.generate();
+        if (ifAttribute != null) return ifAttribute.generate();
+        return "";
     }
 
     @Override

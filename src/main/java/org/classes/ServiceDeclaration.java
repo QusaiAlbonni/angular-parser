@@ -8,7 +8,9 @@ public class ServiceDeclaration extends Statement{
     List<MethodDeclaration> methodDeclarations;
 
     public ServiceDeclaration() {
-        methodDeclarations=new ArrayList<>();
+        super();
+        this.setNodeType("ServiceDeclaration");
+        methodDeclarations = new ArrayList<>();
     }
 
     public ServiceDeclaration(String id, List<MethodDeclaration> methodDeclarations) {
@@ -30,6 +32,11 @@ public class ServiceDeclaration extends Statement{
 
     public void setMethodDeclarations(List<MethodDeclaration> methodDeclarations) {
         this.methodDeclarations = methodDeclarations;
+        if (methodDeclarations != null) {
+            for (MethodDeclaration method : methodDeclarations) {
+                addChild(method);
+            }
+        }
     }
 
     @Override
@@ -38,5 +45,16 @@ public class ServiceDeclaration extends Statement{
                 "\nid='" + id + '\'' +
                 "\nmethodDeclarations=" + methodDeclarations +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if (methodDeclarations != null && !methodDeclarations.isEmpty()) {
+            for (MethodDeclaration method : methodDeclarations) {
+                sb.append(method.generate()).append("\n");
+            }
+        }
+        return sb.toString();
     }
 }

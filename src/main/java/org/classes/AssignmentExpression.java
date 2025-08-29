@@ -6,10 +6,13 @@ public class AssignmentExpression extends Expression {
     private Expression expression;
 
     public AssignmentExpression() {
-
+        super();
+        this.setNodeType("AssignmentExpression");
     }
 
     public AssignmentExpression(String id, Expression expression) {
+        super();
+        this.setNodeType("AssignmentExpression");
         this.id = id;
         this.expression = expression;
     }
@@ -30,6 +33,15 @@ public class AssignmentExpression extends Expression {
 
     public void setExpression(Expression expression) {
         this.expression = expression;
+        if (expression != null) {
+            addChild(expression);
+        }
+    }
+
+    @Override
+    public String generate() {
+        String exprCode = expression != null ? expression.generate() : "";
+        return id + " = " + exprCode + ";";
     }
 
     @Override

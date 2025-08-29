@@ -4,7 +4,10 @@ public class WhileStatement extends Statement{
     Expression condition;
     Statement body;
 
-    public WhileStatement(){}
+    public WhileStatement() {
+        super();
+        this.setNodeType("WhileStatement");
+    }
     public WhileStatement(Expression condition, Statement body) {
         this.condition = condition;
         this.body = body;
@@ -16,6 +19,7 @@ public class WhileStatement extends Statement{
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+        if (condition != null) addChild(condition);
     }
 
     public Statement getBody() {
@@ -24,6 +28,7 @@ public class WhileStatement extends Statement{
 
     public void setBody(Statement body) {
         this.body = body;
+        if (body != null) addChild(body);
     }
 
     @Override
@@ -32,5 +37,21 @@ public class WhileStatement extends Statement{
                 "\ncondition=" + condition +
                 "\nbody=" + body +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("while (");
+        if (condition != null) {
+            sb.append(condition.generate());
+        }
+        sb.append(") ");
+        if (body != null) {
+            sb.append(body.generate());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
     }
 }

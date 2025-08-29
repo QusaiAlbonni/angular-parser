@@ -12,8 +12,9 @@ public class FunctionDeclaration extends Statement{
         this.parameters = parameters;
         this.body = body;
     }
-    public FunctionDeclaration(){
-
+    public FunctionDeclaration() {
+        super();
+        this.setNodeType("FunctionDeclaration");
     }
     public String getId() {
         return id;
@@ -29,6 +30,7 @@ public class FunctionDeclaration extends Statement{
 
     public void setParameters(ParameterList parameters) {
         this.parameters = parameters;
+        if (parameters != null) addChild(parameters);
     }
 
     public BlockStatement getBody() {
@@ -37,6 +39,7 @@ public class FunctionDeclaration extends Statement{
 
     public void setBody(BlockStatement body) {
         this.body = body;
+        if (body != null) addChild(body);
     }
 
     @Override
@@ -46,5 +49,26 @@ public class FunctionDeclaration extends Statement{
                 "\nparameters=" + parameters +
                 "\nbody=" + body +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("function ").append(id != null ? id : "").append("(");
+        if (parameters != null && parameters.getParameters() != null) {
+            for (int i = 0; i < parameters.getParameters().size(); i++) {
+                sb.append(parameters.getParameters().get(i).getName());
+                if (i < parameters.getParameters().size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+        sb.append(") ");
+        if (body != null) {
+            sb.append(body.generate());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
     }
 }

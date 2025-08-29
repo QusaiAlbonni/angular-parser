@@ -5,7 +5,10 @@ public class LogicalExpression extends Expression {
     private Expression left;
     private String operator; // e.g., "&&", "||"
     private Expression right;
-    public  LogicalExpression(){}
+    public LogicalExpression() {
+        super();
+        this.setNodeType("LogicalExpression");
+    }
     public LogicalExpression(Expression left, String operator, Expression right) {
         this.left = left;
         this.operator = operator;
@@ -20,6 +23,7 @@ public class LogicalExpression extends Expression {
 
     public void setLeft(Expression left) {
         this.left = left;
+        if (left != null) addChild(left);
     }
 
     public String getOperator() {
@@ -36,6 +40,7 @@ public class LogicalExpression extends Expression {
 
     public void setRight(Expression right) {
         this.right = right;
+        if (right != null) addChild(right);
     }
 
     @Override
@@ -57,5 +62,20 @@ public class LogicalExpression extends Expression {
                 "\nleft=" + left +
                 '}';
 
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        if (left != null) {
+            sb.append(left.generate());
+        }
+        if (operator != null) {
+            sb.append(" ").append(operator).append(" ");
+        }
+        if (right != null) {
+            sb.append(right.generate());
+        }
+        return sb.toString();
     }
 }

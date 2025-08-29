@@ -7,6 +7,8 @@ public class TryCatchStatement extends Statement{
     BlockStatement finallyBlock;
 
     public TryCatchStatement() {
+        super();
+        this.setNodeType("TryCatchStatement");
     }
 
     public TryCatchStatement(BlockStatement tryBlock, String catchVariable, BlockStatement catchBlock, BlockStatement finallyBlock) {
@@ -22,6 +24,7 @@ public class TryCatchStatement extends Statement{
 
     public void setTryBlock(BlockStatement tryBlock) {
         this.tryBlock = tryBlock;
+        if (tryBlock != null) addChild(tryBlock);
     }
 
     public String getCatchVariable() {
@@ -38,6 +41,7 @@ public class TryCatchStatement extends Statement{
 
     public void setCatchBlock(BlockStatement catchBlock) {
         this.catchBlock = catchBlock;
+        if (catchBlock != null) addChild(catchBlock);
     }
 
     public BlockStatement getFinallyBlock() {
@@ -46,6 +50,7 @@ public class TryCatchStatement extends Statement{
 
     public void setFinallyBlock(BlockStatement finallyBlock) {
         this.finallyBlock = finallyBlock;
+        if (finallyBlock != null) addChild(finallyBlock);
     }
 
     @Override
@@ -56,5 +61,19 @@ public class TryCatchStatement extends Statement{
                 "\ncatchBlock=" + catchBlock +
                 "\nfinallyBlock=" + finallyBlock +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("try ");
+        if (tryBlock != null) sb.append(tryBlock.generate());
+        sb.append(" catch(").append(catchVariable != null ? catchVariable : "e").append(") ");
+        if (catchBlock != null) sb.append(catchBlock.generate());
+        if (finallyBlock != null) {
+            sb.append(" finally ");
+            sb.append(finallyBlock.generate());
+        }
+        return sb.toString();
     }
 }

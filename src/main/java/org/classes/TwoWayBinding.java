@@ -1,6 +1,6 @@
 package org.classes;
 
-public class TwoWayBinding {
+public class TwoWayBinding extends Node {
     private String variableName;
     private String value; // ممكن تغير النوع حسب الحاجة، String مؤقت
 
@@ -10,6 +10,8 @@ public class TwoWayBinding {
     }
 
     public TwoWayBinding(String variableName, String value) {
+        super();
+        this.setNodeType("TwoWayBinding");
         this.variableName = variableName;
         this.value = value;
     }
@@ -37,5 +39,10 @@ public class TwoWayBinding {
                 "variableName='" + variableName + '\'' +
                 ", value='" + value + '\'' +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        return variableName;
     }
 }

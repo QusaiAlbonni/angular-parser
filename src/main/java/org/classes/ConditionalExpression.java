@@ -6,7 +6,8 @@ public class ConditionalExpression extends Expression {
     private Expression trueExpression;
     private Expression falseExpression;
     public ConditionalExpression(){
-
+        super();
+        this.setNodeType("ConditionalExpression");
     }
     public ConditionalExpression(Expression condition, Expression trueExpression, Expression falseExpression) {
         this.condition = condition;
@@ -20,6 +21,10 @@ public class ConditionalExpression extends Expression {
 
     public void setCondition(Expression condition) {
         this.condition = condition;
+        if(condition!=null){
+
+            this.addChild(condition);
+        }
     }
 
     public Expression getTrueExpression() {
@@ -28,6 +33,9 @@ public class ConditionalExpression extends Expression {
 
     public void setTrueExpression(Expression trueExpression) {
         this.trueExpression = trueExpression;
+        if(trueExpression!=null){
+            this.addChild(trueExpression);
+        }
     }
 
     public Expression getFalseExpression() {
@@ -63,5 +71,13 @@ public class ConditionalExpression extends Expression {
                 "\ntrueExpression=" + trueExpression +
                 "\nfalseExpression=" + falseExpression +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        String cond = condition != null ? condition.generate() : "undefined";
+        String trueExpr = trueExpression != null ? trueExpression.generate() : "undefined";
+        String falseExpr = falseExpression != null ? falseExpression.generate() : "undefined";
+        return "(" + cond + " ? " + trueExpr + " : " + falseExpr + ")";
     }
 }

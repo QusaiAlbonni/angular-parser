@@ -1,10 +1,12 @@
 package org.classes;
 
-public class EnumMember {
+public class EnumMember extends Statement {
     String id;
     Expression expression;
 
     public EnumMember() {
+        super();
+        this.setNodeType("EnumMember");
     }
 
     public EnumMember(String id, Expression expression) {
@@ -26,6 +28,9 @@ public class EnumMember {
 
     public void setExpression(Expression expression) {
         this.expression = expression;
+        if (expression != null) {
+            addChild(expression);
+        }
     }
 
     @Override
@@ -34,5 +39,14 @@ public class EnumMember {
                 "\nid='" + id + '\'' +
                 "\nexpression=" + expression +
                 '}';
+    }
+
+    @Override
+    public String generate() {
+        if (expression != null) {
+            return id + " = " + expression.generate();
+        } else {
+            return id;
+        }
     }
 }

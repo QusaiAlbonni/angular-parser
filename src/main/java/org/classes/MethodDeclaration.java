@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO
-public class MethodDeclaration {
+public class MethodDeclaration extends Node {
     String name ;
     TypeAnnotation returnType;
     ParameterList parameters;
     BlockStatement body;
 
     public MethodDeclaration() {
+        super();
+        this.setNodeType("MethodDeclaration");
     }
 
     public MethodDeclaration(TypeAnnotation returnType, String name, ParameterList parameters, BlockStatement body) {
@@ -34,6 +36,7 @@ public class MethodDeclaration {
 
     public void setReturnType(TypeAnnotation returnType) {
         this.returnType = returnType;
+        if (returnType != null) addChild(returnType);
     }
 
     public ParameterList getParameters() {
@@ -50,6 +53,18 @@ public class MethodDeclaration {
 
     public void setBody(BlockStatement body) {
         this.body = body;
+        if (body != null) addChild(body);
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("function ").append(name).append("(");
+        if (parameters != null) sb.append(parameters.generate());
+        sb.append(") ");
+        if (body != null) sb.append(body.generate());
+        else sb.append("{}");
+        return sb.toString();
     }
 
     @Override

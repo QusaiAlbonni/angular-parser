@@ -13,7 +13,9 @@ public class ImportStatement extends Statement{
     }
 
     public ImportStatement() {
-        imports=new ArrayList<>();
+        super();
+        this.setNodeType("ImportStatement");
+        this.imports = new ArrayList<>();
     }
 
     public String getSource() {
@@ -42,4 +44,17 @@ public class ImportStatement extends Statement{
     }
         return "";
   }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder("import ");
+        if (imports != null && !imports.isEmpty()) {
+            for (int i = 0; i < imports.size(); i++) {
+                sb.append(imports.get(i));
+                if (i < imports.size() - 1) sb.append(", ");
+            }
+        }
+        sb.append(" from '").append(source != null ? source : "").append("';");
+        return sb.toString();
+    }
 }

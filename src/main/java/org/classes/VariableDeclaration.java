@@ -10,7 +10,10 @@ public class VariableDeclaration extends Statement{
         this.id = id;
         this.expression = expression;
     }
-    public  VariableDeclaration(){}
+    public  VariableDeclaration(){
+        super();
+        this.setNodeType("VariableDeclaration");
+    }
     public String getType() {
         return type;
     }
@@ -33,8 +36,15 @@ public class VariableDeclaration extends Statement{
 
     public void setExpression(Expression expression) {
         this.expression = expression;
+        if (expression != null) {
+            this.addChild((Node) expression);
+        }
     }
-
+    @Override
+    public String generate() {
+        String exprCode = expression != null ? expression.generate() : "";
+        return type + " " + id + (expression != null ? " = " + exprCode : "") + ";";
+    }
     @Override
     public String toString() {
         return "\nVariableDeclaration{" +

@@ -10,9 +10,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
 import org.classes.Program;
+import org.classes.Statement;
+import org.codeGen.CodeGeneration;
 import org.semmanticCheck.SemanticCheck;
 import org.visitors.AngularBaseVisitor;
 
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,7 +25,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         try {
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("test.ts");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("app.txt");
 
             if (inputStream == null) {
                 System.out.println("File not found!");
@@ -41,9 +44,15 @@ public class Main {
 //                System.out.println("Key: " + key + ", Value: " + value);
 //            });;
 //            semanticCheck.getSe3().printSet();
-            System.out.println(semanticCheck.getSe2().getSubscriptions());
-            printTreeWithJackson(program);
+//            System.out.println(semanticCheck.getSe2().getSubscriptions());/
+//            printTreeWithJackson(program);
 
+
+            CodeGeneration codeGen=new CodeGeneration();
+            codeGen.generateProgram(program);
+            String bodyContent="<h1>welcome</h1>";
+            codeGen.createHTMLPage("index",bodyContent,"global.js");
+            System.out.println(program.generate());
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());

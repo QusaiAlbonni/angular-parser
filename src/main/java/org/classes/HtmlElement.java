@@ -9,6 +9,8 @@ public class HtmlElement extends Html{
     private  HtmlContent htmlContent;
     private List<AngularAttribute> angularAttributes;
     public HtmlElement(){
+        super();
+        this.setNodeType("HtmlElement");
         htmlAttributes=new ArrayList<>();
         angularAttributes=new ArrayList<>();
     }
@@ -26,6 +28,9 @@ public class HtmlElement extends Html{
 
     public void setHtmlContent(HtmlContent htmlContent) {
         this.htmlContent = htmlContent;
+        if(htmlContent!=null){
+            addChild(htmlContent);
+        }
     }
 
     public List<AngularAttribute> getAngularAttributes() {
@@ -55,5 +60,51 @@ public class HtmlElement extends Html{
                 "\nhtmlAttributes=" + htmlAttributes +
                 "\nhtmlContent=" + htmlContent +
                 "}\n";
+    }
+
+    @Override
+    public String generate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<");
+
+
+        sb.append("div");
+
+
+        if (htmlAttributes != null) {
+            for (HtmlAttribute attr : htmlAttributes) {
+                if (attr != null && attr.getValue() != null) {
+                    sb.append(" ").append(attr.getValue());
+                }
+            }
+        }
+
+
+        if (angularAttributes != null) {
+            for (AngularAttribute attr : angularAttributes) {
+                if (attr != null) {
+                    if (attr.getBindingAttribute() != null)
+                        sb.append(" [").append(attr.getBindingAttribute().getTagName())
+                                .append("]='").append(attr.getBindingAttribute().getAttributeValue()).append("'");
+                    if (attr.getEventBindingAttribute() != null)
+                        sb.append(" (").append(attr.getEventBindingAttribute().getTagName())
+                                .append(")='").append(attr.getEventBindingAttribute().getAttributeValue()).append("'");
+                    if (attr.getForAttribute() != null)
+                        sb.append(" *ngFor='").append(attr.getForAttribute().getAttributeValue()).append("'");
+                    if (attr.getIfAttribute() != null)
+                        sb.append(" *ngIf='").append(attr.getIfAttribute().getAttributeValue()).append("'");
+                }
+            }
+        }
+
+        sb.append(">");
+
+
+        if (htmlContent != null) {
+            sb.append(htmlContent.generate());
+        }
+
+        sb.append("</div>");
+        return sb.toString();
     }
 }
