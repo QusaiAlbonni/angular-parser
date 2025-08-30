@@ -158,16 +158,6 @@ public interface AngularParserListener extends ParseTreeListener {
 	 */
 	void exitHtmlElement(AngularParser.HtmlElementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AngularParser#knownHtmlTag}.
-	 * @param ctx the parse tree
-	 */
-	void enterKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AngularParser#knownHtmlTag}.
-	 * @param ctx the parse tree
-	 */
-	void exitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link AngularParser#htmlAttribute}.
 	 * @param ctx the parse tree
 	 */

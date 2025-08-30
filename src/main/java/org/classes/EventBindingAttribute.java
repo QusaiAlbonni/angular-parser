@@ -30,4 +30,13 @@ public class EventBindingAttribute {
                 "\nattributeValue='" + attributeValue + '\'' +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (tagName != null) {
+            sb.append("(").append(tagName).append(")");
+            sb.append("=").append(attributeValue != null ? attributeValue : "");
+        }
+        return sb.toString();
+    }
 }

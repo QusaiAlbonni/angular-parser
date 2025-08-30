@@ -1,4 +1,124 @@
 Semantic Error is:
  Error Name: THIS_OUTSIDE_CLASS
- Line: 2
+ Line: 31
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 32
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 33
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 34
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 35
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 45
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 46
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 47
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 48
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 50
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 51
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 56
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 64
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 68
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 76
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 77
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 82
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 86
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 96
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 97
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 100
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 101
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 132
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 133
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 137
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 138
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 139
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 140
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 141
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 143
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 173
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 174
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 178
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 178
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 205
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 206
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 207
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 211
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 212
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 212
+ Error Message: Error: 'this' used outside of a class.
+ Error Name: THIS_OUTSIDE_CLASS
+ Line: 216
  Error Message: Error: 'this' used outside of a class.

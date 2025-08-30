@@ -14,6 +14,24 @@ public class PrimaryExpression extends Expression {
     private FunctionCall functionCall;
     private DotNotation dotNotation;
     private ObjectInstantiation objectInstantiation;
+    private ArrayDeclaration arrayDeclaration;
+    private ObjectDeclaration objectDeclaration;
+
+    public ArrayDeclaration getArrayDeclaration() {
+        return arrayDeclaration;
+    }
+
+    public void setArrayDeclaration(ArrayDeclaration arrayDeclaration) {
+        this.arrayDeclaration = arrayDeclaration;
+    }
+
+    public ObjectDeclaration getObjectDeclaration() {
+        return objectDeclaration;
+    }
+
+    public void setObjectDeclaration(ObjectDeclaration objectDeclaration) {
+        this.objectDeclaration = objectDeclaration;
+    }
 
     public String getId() {
         return id;
@@ -95,6 +113,7 @@ public class PrimaryExpression extends Expression {
         this.thisValue = thisValue;
     }
 
+
     @Override
     public String toString() {
         if(functionCall!=null){
@@ -105,46 +124,87 @@ public class PrimaryExpression extends Expression {
             return objectInstantiation.toString();
         }
         if(!Objects.equals(stringValue, null)){
-        return "\nPrimaryExpression{" +
-                "\nid='" + id + '\'' +
-                "\nstringValue='" + stringValue + '\'' +
-                '}';
-    }
+            return "\nPrimaryExpression{" +
+                    "\nid='" + id + '\'' +
+                    "\nstringValue='" + stringValue + '\'' +
+                    '}';
+        }
         if(!Objects.equals(numberValue, null)){
-        return "\nPrimaryExpression{" +
-                "\nnumberValue='" + numberValue + '\'' +
-                '}';
-    }
+            return "\nPrimaryExpression{" +
+                    "\nnumberValue='" + numberValue + '\'' +
+                    '}';
+        }
         if(!Objects.equals(booleanValue, null)){
-        return "\nPrimaryExpression{" +
-                "\nid='" + id + '\'' +
-                "\nbooleanValue='" + booleanValue + '\'' +
-                '}';
-    }
+            return "\nPrimaryExpression{" +
+                    "\nid='" + id + '\'' +
+                    "\nbooleanValue='" + booleanValue + '\'' +
+                    '}';
+        }
         if(!Objects.equals(nullValue, null)){
-        return "\nPrimaryExpression{" +
-                "\nid='" + id + '\'' +
-                "\nnullValue='" + nullValue + '\'' +
-                '}';
-    }
+            return "\nPrimaryExpression{" +
+                    "\nid='" + id + '\'' +
+                    "\nnullValue='" + nullValue + '\'' +
+                    '}';
+        }
         if(!Objects.equals(undefinedValue, null)){
-        return "\nPrimaryExpression{" +
-                "\nid='" + id + '\'' +
-                "\nundefinedValue='" + undefinedValue + '\'' +
-                '}';
-    }
+            return "\nPrimaryExpression{" +
+                    "\nid='" + id + '\'' +
+                    "\nundefinedValue='" + undefinedValue + '\'' +
+                    '}';
+        }
         if(!Objects.equals(id,null)){
             return "\nPrimaryExpression{" +
                     "\nid='" + id + '\'' +
                     '}';
         }
- if(!Objects.equals(this,null)){
+        if(!Objects.equals(this,null)){
             return "\nPrimaryExpression{" +
                     "\nthisValue='" + thisValue + '\'' +
                     '}';
         }
 
-       return "error in primary expression";
+        return "error in primary expression";
 
+    }
+
+    @Override
+    public String toCode() {
+        if (functionCall != null) {
+            return functionCall.toCode();
+        }
+        if (dotNotation != null) {
+            return dotNotation.toCode();
+        }
+        if (objectInstantiation != null) {
+            return objectInstantiation.toCode();
+        }
+        if (arrayDeclaration != null) {
+            return arrayDeclaration.toCode();
+        }
+        if (objectDeclaration != null) {
+            return objectDeclaration.toCode();
+        }
+        if (stringValue != null) {
+            return stringValue;
+        }
+        if (numberValue != null) {
+            return numberValue;
+        }
+        if (booleanValue != null) {
+            return booleanValue;
+        }
+        if (nullValue != null) {
+            return "null";
+        }
+        if (undefinedValue != null) {
+            return "undefined";
+        }
+        if (thisValue != null) {
+            return "this";
+        }
+        if (id != null) {
+            return id;
+        }
+        return "";
     }
 }

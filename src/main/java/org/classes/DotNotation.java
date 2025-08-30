@@ -27,4 +27,16 @@ public class DotNotation {
                 ", right=" + right +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (left != null) {
+            sb.append(left.toCode());
+        }
+        sb.append(".");
+        if (right != null) {
+            sb.append(right.toCode());
+        }
+        return sb.toString();
+    }
 }

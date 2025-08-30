@@ -23,5 +23,12 @@ public class KnownHtmlTag {
                 "tagName='" + tagName + '\'' +
                 '}';
     }
+
+    public String toCode() {
+        if (tagName != null) {
+            return tagName;
+        }
+        return "";
+    }
 }
 

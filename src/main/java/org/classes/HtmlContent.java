@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HtmlContent  extends Html {
+    public String literalChars;
     private HtmlCharData htmlCharDataLeft;
     private HtmlCharData htmlCharDataRight;
     private List<HtmlElement> htmlElement;
@@ -41,5 +42,20 @@ public class HtmlContent  extends Html {
                 "\nhtmlCharDataRight=" + htmlCharDataRight +
                 "\nhtmlElement=" + htmlElement +
                 "}\n";
+    }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (literalChars != null) {
+            sb.append(literalChars);
+        }
+        if (htmlElement != null && !htmlElement.isEmpty()) {
+            for (HtmlElement element : htmlElement) {
+                sb.append("\n");
+                sb.append(element.toCode());
+            }
+        }
+        sb.append("\n");
+        return sb.toString();
     }
 }

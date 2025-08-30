@@ -61,4 +61,18 @@ public class MethodDeclaration {
                 "\nbody=" + body +
                 '}';
     }
+    String toCode(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name).append("(");
+        if (this.parameters != null) {
+            sb.append(this.parameters.toCode());
+        }
+        sb.append(")");
+        if (body != null) {
+            sb.append(body.toCode());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
+    }
 }

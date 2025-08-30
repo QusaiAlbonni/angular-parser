@@ -28,4 +28,15 @@ public class ForOf {
                 "\n}";
     }
 
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (variableDeclaration != null) {
+            sb.append(variableDeclaration.toCode());
+        }
+        sb.append(" of ");
+        if (expression != null) {
+            sb.append(expression.toCode());
+        }
+        return sb.toString();
+    }
 }

@@ -24,4 +24,14 @@ public class ReturnStatement extends Statement{
                 "\nexpression=" + expression +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("return");
+        if (expression != null) {
+            sb.append(" ").append(expression.toCode());
+        }
+        return sb.toString();
+    }
 }

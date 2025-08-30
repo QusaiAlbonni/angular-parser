@@ -39,4 +39,17 @@ public class AssignmentExpression extends Expression {
                 "\nexpression=" + expression +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (id != null) {
+            sb.append(id);
+        }
+        sb.append(" = ");
+        if (expression != null) {
+            sb.append(expression.toCode());
+        }
+        return sb.toString();
+    }
 }

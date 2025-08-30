@@ -60,4 +60,15 @@ public class ClassDeclaration extends Statement{
                 "\nclassBody=" + classBody +
                 '}';
     }
+
+    @Override
+    public String toCode(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("class " + this.getId());
+        if (this.extendsClass != null){
+            sb.append(" extends " + this.extendsClass);
+        }
+        sb.append(this.classBody.toCode());
+        return sb.toString();
+    }
 }

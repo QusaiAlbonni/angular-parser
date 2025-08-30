@@ -64,4 +64,21 @@ public class ConditionalExpression extends Expression {
                 "\nfalseExpression=" + falseExpression +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (condition != null) {
+            sb.append(condition.toCode());
+        }
+        if (trueExpression != null) {
+            sb.append(" ? ");
+            sb.append(trueExpression.toCode());
+        }
+        if (falseExpression != null) {
+            sb.append(" : ");
+            sb.append(falseExpression.toCode());
+        }
+        return sb.toString();
+    }
 }

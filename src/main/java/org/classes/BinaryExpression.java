@@ -62,4 +62,18 @@ public class BinaryExpression extends Expression {
         }
         return  "ERROR IN BINARY EXPRESSION WHEN CALL TO STRING ";
     }
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (left != null) {
+            sb.append(left.toCode());
+        }
+        if (operator != null) {
+            sb.append(" ").append(operator).append(" ");
+        }
+        if (right != null) {
+            sb.append(right.toCode());
+        }
+        return sb.toString();
+    }
 }

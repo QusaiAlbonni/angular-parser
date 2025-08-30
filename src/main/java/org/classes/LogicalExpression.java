@@ -58,4 +58,19 @@ public class LogicalExpression extends Expression {
                 '}';
 
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (left != null) {
+            sb.append(left.toCode());
+        }
+        if (operator != null) {
+            sb.append(" ").append(operator).append(" ");
+        }
+        if (right != null) {
+            sb.append(right.toCode());
+        }
+        return sb.toString();
+    }
 }

@@ -24,4 +24,14 @@ public class ThrowStatement extends Statement{
                 "\nexpression=" + expression +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("throw ");
+        if (expression != null) {
+            sb.append(expression.toCode());
+        }
+        return sb.toString();
+    }
 }

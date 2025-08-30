@@ -48,4 +48,8 @@ public class Parameter {
             return  expressionStatement.toString();
         }
     }
+
+    String toCode(){
+        return this.name;
+    }
 }

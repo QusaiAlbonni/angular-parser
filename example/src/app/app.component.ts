@@ -3,6 +3,22 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
 
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  template: `
+    <div>
+      <h1>نظام إدارة المنتجات</h1>
+      <nav>
+        <a routerLink="/add">إضافة</a>
+        <a routerLink="/list">عرض</a>
+      </nav>
+      <router-outlet></router-outlet>
+    </div>
+  `
+})
+export class AppComponent {}
 
 class Product {
   id: number;
@@ -44,7 +60,7 @@ export class ProductService {
     return JSON.parse(data)
   }
 
-  saveProducts(products){
+  saveProducts(products : any){
     localStorage.setItem(this.storageKey, JSON.stringify(products))
   }
 
@@ -57,8 +73,7 @@ export class ProductService {
   }
 
   incrementCounter(){
-    let counter = this.getCounter()
-    counter = counter + 1
+    let counter = this.getCounter() + 1
     localStorage.setItem(this.counterKey, counter.toString())
     return counter
   }
@@ -110,16 +125,20 @@ export class AddPage {
   price: number;
   imageUrl: string;
 
-  private svc: ProductService;
+  private productService: ProductService;
   private router: Router;
 
-  constructor(svc: ProductService, router: Router) {
-    this.svc = svc
+  constructor(productService: ProductService, router: Router) {
+    this.productService = productService
     this.router = router
+    this.name= '';
+    this.description= '';
+    this.price = 0;
+    this.imageUrl= '';
   }
 
   save(){
-    this.svc.add({
+    this.productService.add({
       name: this.name,
       description: this.description,
       price: Number(this.price),
@@ -147,23 +166,20 @@ export class AddPage {
       </div>
     </div>
 
-    <ng-template>
-      <p>لا توجد منتجات.</p>
-    </ng-template>
   `
 })
 export class ListPage {
   products: Product[];
 
-  private svc: ProductService;
+  private productService: ProductService;
 
-  constructor(svc: ProductService) {
-    this.svc = svc
+  constructor(productService: ProductService) {
+    this.productService = productService
     this.products = []
   }
 
   ngOnInit() {
-    this.products = this.svc.getAll();
+    this.products = this.productService.getAll();
   }
 }
 
@@ -185,43 +201,28 @@ export class ListPage {
 export class DetailsPage {
   product: Product;
 
-  private route: ActivatedRoute;
+  private ActivatedRoute: ActivatedRoute;
   private router: Router;
-  private svc: ProductService;
+  private productService: ProductService;
 
-  constructor(route: ActivatedRoute, router: Router, svc: ProductService) {
-    this.route = route
+  constructor(ActivatedRoute: ActivatedRoute, router: Router, productService: ProductService) {
+    this.ActivatedRoute = ActivatedRoute
     this.router = router
-    this.svc = svc;
+    this.productService = productService;
   }
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'))
-    this.product = this.svc.getById(id)
+    const id = Number(this.ActivatedRoute.snapshot.paramMap.get('id'))
+    this.product = this.productService.getById(id)
   }
 
   back() {
     this.router.navigate(['/list']);
   }
 }
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
-    <div>
-      <h1>نظام إدارة المنتجات</h1>
-      <nav>
-        <a routerLink="/add">إضافة</a>
-        <a routerLink="/list">عرض</a>
-      </nav>
-      <router-outlet></router-outlet>
-    </div>
-  `
-})
-export class AppComponent {}
 
-export const routes: Routes = [
+
+export const routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   { path: 'add', component: AddPage },
   { path: 'list', component: ListPage },

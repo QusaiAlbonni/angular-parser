@@ -38,4 +38,15 @@ List<ClassMember>members;
                 "\nmembers=" + members +
                 '}';
     }
+
+    String toCode(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n" );
+        for (ClassMember member : this.members){
+            sb.append(member.toCode());
+            sb.append("\n");
+        }
+        sb.append("}\n");
+        return sb.toString();
+    }
 }

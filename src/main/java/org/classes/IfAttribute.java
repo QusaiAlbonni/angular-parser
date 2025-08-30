@@ -20,4 +20,13 @@ public class IfAttribute {
                 "\nattributeValue='" + attributeValue + '\'' +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("*ngIf=");
+        if (attributeValue != null) {
+            sb.append(attributeValue);
+        }
+        return sb.toString();
+    }
 }

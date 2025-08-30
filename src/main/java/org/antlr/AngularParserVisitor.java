@@ -101,12 +101,6 @@ public interface AngularParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitHtmlElement(AngularParser.HtmlElementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AngularParser#knownHtmlTag}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link AngularParser#htmlAttribute}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

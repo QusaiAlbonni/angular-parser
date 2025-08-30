@@ -38,4 +38,13 @@ public class TwoWayBinding {
                 ", value='" + value + '\'' +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[(ngModel)]=");
+        if (value != null) {
+            sb.append(value);
+        }
+        return sb.toString();
+    }
 }

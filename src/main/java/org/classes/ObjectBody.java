@@ -23,4 +23,19 @@ List<ObjectMember> objectMemberList;
                 "\nobjectMemberList=" + objectMemberList +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (objectMemberList != null && !objectMemberList.isEmpty()) {
+            for (int i = 0; i < objectMemberList.size(); i++) {
+                if (objectMemberList.get(i) != null) {
+                    sb.append(objectMemberList.get(i).toCode());
+                    if (i < objectMemberList.size() - 1) {
+                        sb.append(", ");
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
 }

@@ -20,4 +20,13 @@ public class ForAttribute {
                 "\nattributeValue='" + attributeValue + '\'' +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("*ngFor=");
+        if (attributeValue != null) {
+            sb.append(attributeValue);
+        }
+        return sb.toString();
+    }
 }

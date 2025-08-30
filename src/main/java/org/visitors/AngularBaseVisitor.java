@@ -1,16 +1,19 @@
 package org.visitors;
 
 import org.antlr.AngularParserVisitor;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.classes.*;
 import org.antlr.AngularParser;
 import org.antlr.AngularParserBaseVisitor;
+import org.generator.AngularGenerator2;
 import org.main.Main;
 
 import org.function_parameters_symbol_table.FunctionParametersSymbolTabel;
 import org.function_parameters_symbol_table.Symbol;
 import org.symbolTable.E5_ThisSymbolTable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -19,6 +22,7 @@ import static org.main.Main.semanticCheck;
 public class AngularBaseVisitor extends AngularParserBaseVisitor {
     FunctionParametersSymbolTabel functionParametersSymbolTabel = new FunctionParametersSymbolTabel();
      E5_ThisSymbolTable thisSymbolTable = new E5_ThisSymbolTable();
+     public AngularGenerator2 generator = new AngularGenerator2();
 
     @Override
     public Object visitProgram(AngularParser.ProgramContext ctx) {
@@ -110,9 +114,16 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }else{
             variableDeclaration.setType(ctx.LET().getText());
         }
-        if(ctx.expression()!=null){
+        if(ctx.expression()!=null) {
             variableDeclaration.setExpression(visitExpression(ctx.expression()));
 
+        }
+
+        if (variableDeclaration.getId() != null) {
+            if (variableDeclaration.getId().equals("routes")){
+                System.out.println("ROUTES");
+                this.generator.addRoutes(variableDeclaration.toCode());
+            }
         }
         return  variableDeclaration;
     }
@@ -216,6 +227,8 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         thisSymbolTable.enterClass();
         ClassDeclaration classDeclaration=new ClassDeclaration();
         classDeclaration.setId(ctx.ID(0).getText());
+        this.generator.addComponentClass(classDeclaration.getId());
+        this.generator.addServiceClass(classDeclaration.getId());
         semanticCheck.getSe1().addSet();
         if(ctx.EXTENDS()!=null){
             classDeclaration.setExtendsClass(ctx.ID(1).getText());
@@ -233,6 +246,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         semanticCheck.getSe1().delSet();
         thisSymbolTable.exitClass();
 
+
+        String classCode = classDeclaration.toCode();
+        this.generator.addExtraClass(classCode);
         return  classDeclaration;
     }
 
@@ -328,13 +344,21 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
     @Override
     public Template visitTemplate(AngularParser.TemplateContext ctx) {
         Template template = new Template();
+
         if(ctx.htmlElements() != null){
+            StringBuilder sb = new StringBuilder();
             for(AngularParser.HtmlElementsContext elCtx : ctx.htmlElements()){
+                String textWithWhitespace = elCtx.getText();
+                sb.append(textWithWhitespace);
                 HtmlElement element = visitHtmlElements(elCtx);
                 if(element != null){
                     template.getHtmlElements().add(element);
                 }
             }
+
+            System.out.println("TEMPLATE++");
+            System.out.println(template.toCode());
+            template.setLiteral(sb.toString());
         }
         return template;
     }
@@ -355,18 +379,18 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             htmlElement.setHtmlContent(visitHtmlContent(ctx.htmlContent()));
         }
 
+        if (ctx.TAG_SLASH_CLOSE() != null){
+            htmlElement.earlyTermination = true;
+        }
+
         String openTag = null;
         String closeTag = null;
 
         if (ctx.TAG_NAME() != null && !ctx.TAG_NAME().isEmpty()) {
+            htmlElement.setTagName(ctx.TAG_NAME(0).getText());
             openTag = ctx.TAG_NAME(0).getText();
             if (ctx.TAG_NAME().size() > 1) {
                 closeTag = ctx.TAG_NAME(1).getText();
-            }
-        } else if (ctx.knownHtmlTag() != null && !ctx.knownHtmlTag().isEmpty()) {
-            openTag = ctx.knownHtmlTag(0).getText();
-            if (ctx.knownHtmlTag().size() > 1) {
-                closeTag = ctx.knownHtmlTag(1).getText();
             }
         }
 
@@ -404,28 +428,6 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
 
     @Override
-    public Object visitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) {
-        KnownHtmlTag knownHtmlTag = new KnownHtmlTag();
-
-        if (ctx.A_TAG() != null) knownHtmlTag.setTagName(ctx.A_TAG().getText());
-        else if (ctx.BUTTON_TAG() != null) knownHtmlTag.setTagName(ctx.BUTTON_TAG().getText());
-        else if (ctx.DIV_TAG() != null) knownHtmlTag.setTagName(ctx.DIV_TAG().getText());
-        else if (ctx.FORM_TAG() != null) knownHtmlTag.setTagName(ctx.FORM_TAG().getText());
-        else if (ctx.H1_TAG() != null) knownHtmlTag.setTagName(ctx.H1_TAG().getText());
-        else if (ctx.H2_TAG() != null) knownHtmlTag.setTagName(ctx.H2_TAG().getText());
-        else if (ctx.H3_TAG() != null) knownHtmlTag.setTagName(ctx.H3_TAG().getText());
-        else if (ctx.IMG_TAG() != null) knownHtmlTag.setTagName(ctx.IMG_TAG().getText());
-        else if (ctx.INPUT_TAG() != null) knownHtmlTag.setTagName(ctx.INPUT_TAG().getText());
-        else if (ctx.NAV_TAG() != null) knownHtmlTag.setTagName(ctx.NAV_TAG().getText());
-        else if (ctx.P_TAG() != null) knownHtmlTag.setTagName(ctx.P_TAG().getText());
-        else if (ctx.STRONG_TAG() != null) knownHtmlTag.setTagName(ctx.STRONG_TAG().getText());
-        else if (ctx.TEMPLATE_TAG() != null) knownHtmlTag.setTagName(ctx.TEMPLATE_TAG().getText());
-        else if (ctx.ROUTER_OUTLET_TAGE() != null) knownHtmlTag.setTagName(ctx.ROUTER_OUTLET_TAGE().getText());
-
-        return knownHtmlTag;
-    }
-
-    @Override
     public HtmlAttribute visitHtmlAttribute(AngularParser.HtmlAttributeContext ctx) {
         HtmlAttribute htmlAttribute = new HtmlAttribute();
 
@@ -438,6 +440,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
 
         htmlAttribute.setValue(value.toString());
+        htmlAttribute.setId(ctx.TAG_NAME().getText());
         return htmlAttribute;
     }
 
@@ -455,6 +458,9 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         }
         if(ctx.ifAttribute()!=null){
             angularAttribute.setIfAttribute(visitIfAttribute(ctx.ifAttribute()));
+        }
+        if (ctx.twoWayBindingAttribute() != null){
+            angularAttribute.twoWayBinding = visitTwoWayBindingAttribute(ctx.twoWayBindingAttribute());
         }
         return angularAttribute;
     }
@@ -533,6 +539,11 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
             }
         }
         if(ctx.htmlChardata()!=null){
+            StringBuilder sb = new StringBuilder();
+            for (AngularParser.HtmlChardataContext elctx : ctx.htmlChardata()){
+                sb.append(elctx.getText());
+            }
+            htmlContent.literalChars = sb.toString();
             if(ctx.htmlChardata(0)!=null){
                 htmlContent.setHtmlCharDataLeft(visitHtmlChardata(ctx.htmlChardata(0)));
             }
@@ -672,6 +683,7 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
 
             }
         }
+
         return componentDeclaration;
 
     }
@@ -1168,8 +1180,17 @@ public class AngularBaseVisitor extends AngularParserBaseVisitor {
         if(ctx.ID()!=null){
         decoratorApplication.setName(ctx.ID().getText());
         }
+
         if(ctx.parameterList()!=null){
             decoratorApplication.setParameterList(visitParameterList(ctx.parameterList()));
+        }
+
+        if (decoratorApplication.getName().equals("Component")){
+            this.generator.addNewComponent(decoratorApplication);
+        }
+
+        if (decoratorApplication.getName().equals("Injectable")){
+            this.generator.initNewService();
         }
         return decoratorApplication;
     }

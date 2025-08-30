@@ -27,4 +27,13 @@ public class ParameterList {
                 '}';
     }
 
+    String toCode(){
+        StringBuilder sb = new StringBuilder();
+        for (Parameter param : parameters){
+            sb.append(param.toCode());
+            sb.append(", ");
+        }
+        return sb.toString();
+    }
+
 }

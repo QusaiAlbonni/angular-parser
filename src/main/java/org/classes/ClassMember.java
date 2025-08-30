@@ -152,4 +152,12 @@ public class ClassMember {
 
         }
     }
+    String toCode(){
+        if (this.isMethod){
+            return this.method.toCode();
+        } else if (this.isConstructor) {
+            return this.constructorDeclaration.toCode();
+        }
+        return "";
+    }
 }

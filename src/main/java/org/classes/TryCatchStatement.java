@@ -57,4 +57,33 @@ public class TryCatchStatement extends Statement{
                 "\nfinallyBlock=" + finallyBlock +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("try ");
+        if (tryBlock != null) {
+            sb.append(tryBlock.toCode());
+        } else {
+            sb.append("{}");
+        }
+
+        if (catchBlock != null) {
+            sb.append(" catch (");
+            if (catchVariable != null) {
+                sb.append(catchVariable);
+            } else {
+                sb.append("e");
+            }
+            sb.append(") ");
+            sb.append(catchBlock.toCode());
+        }
+
+        if (finallyBlock != null) {
+            sb.append(" finally ");
+            sb.append(finallyBlock.toCode());
+        }
+
+        return sb.toString();
+    }
 }

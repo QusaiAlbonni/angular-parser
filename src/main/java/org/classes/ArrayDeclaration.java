@@ -21,4 +21,14 @@ public class ArrayDeclaration extends Expression{
                 "\nargumentList=" + argumentList +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        if (argumentList != null) {
+            sb.append(argumentList.toCode());
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }

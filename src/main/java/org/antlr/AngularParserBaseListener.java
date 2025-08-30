@@ -197,18 +197,6 @@ public class AngularParserBaseListener implements AngularParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitKnownHtmlTag(AngularParser.KnownHtmlTagContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterHtmlAttribute(AngularParser.HtmlAttributeContext ctx) { }
 	/**
 	 * {@inheritDoc}

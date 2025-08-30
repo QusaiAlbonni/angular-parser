@@ -5,6 +5,8 @@ import java.util.List;
 
 public class HtmlElement extends Html{
 
+    public boolean earlyTermination = false;
+    private String tagName;
     private List<HtmlAttribute> htmlAttributes;
     private  HtmlContent htmlContent;
     private List<AngularAttribute> angularAttributes;
@@ -32,6 +34,14 @@ public class HtmlElement extends Html{
         return angularAttributes;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
     public void setAngularAttributes(List<AngularAttribute> angularAttributes) {
         this.angularAttributes = angularAttributes;
     }
@@ -55,5 +65,47 @@ public class HtmlElement extends Html{
                 "\nhtmlAttributes=" + htmlAttributes +
                 "\nhtmlContent=" + htmlContent +
                 "}\n";
+    }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<");
+        sb.append(tagName);
+
+        if (htmlAttributes != null && !htmlAttributes.isEmpty()) {
+            for (HtmlAttribute attr : htmlAttributes) {
+                sb.append(" ").append(attr.toCode());
+            }
+        }
+
+        // Add Angular attributes
+        if (angularAttributes != null && !angularAttributes.isEmpty()) {
+            for (AngularAttribute attr : angularAttributes) {
+                String attrCode = attr.toCode();
+                if (!attrCode.isEmpty()) {
+                    sb.append(" ").append(attrCode);
+                }
+            }
+        }
+
+        if (earlyTermination){
+            sb.append("/>");
+            return sb.toString();
+        }
+
+        sb.append(">");
+
+        // Add content
+        if (htmlContent != null) {
+            sb.append(htmlContent.toCode());
+            sb.append("\n");
+        }
+
+        // Close tag
+        sb.append("</");
+        sb.append(tagName);
+        sb.append(">");
+
+        return sb.toString();
     }
 }

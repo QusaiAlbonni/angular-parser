@@ -47,4 +47,24 @@ public class FunctionDeclaration extends Statement{
                 "\nbody=" + body +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("function ");
+        if (id != null) {
+            sb.append(id);
+        }
+        sb.append("(");
+        if (parameters != null) {
+            sb.append(parameters.toCode());
+        }
+        sb.append(") ");
+        if (parameters != null) {
+            sb.append(parameters.toCode());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
+    }
 }

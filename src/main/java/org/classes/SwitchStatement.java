@@ -39,4 +39,23 @@ public class SwitchStatement extends Statement{
                 ", caseStatements=" + caseStatements +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("switch (");
+        if (expression != null) {
+            sb.append(expression.toCode());
+        }
+        sb.append(") {\n");
+        if (caseStatements != null) {
+            for (CaseStatement caseStmt : caseStatements) {
+                if (caseStmt != null) {
+                    sb.append(caseStmt.toCode());
+                }
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }

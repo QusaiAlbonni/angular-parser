@@ -27,4 +27,18 @@ public class ObjectInstantiation {
                 "\nargumentList=" + argumentList +
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("new ");
+        if (id != null) {
+            sb.append(id);
+        }
+        sb.append("(");
+        if (argumentList != null) {
+            sb.append(argumentList.toCode());
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 }

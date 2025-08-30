@@ -34,4 +34,19 @@ public class AngularCharData {
                 "\nexpression: " + expressionStatement +
                 "\n";
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (texts != null && !texts.isEmpty()) {
+            for (int i = 0; i < texts.size(); i++) {
+                sb.append(texts.get(i));
+                if (i < texts.size() - 1 && expressionStatement != null) {
+                    sb.append("{{").append(expressionStatement.toCode()).append("}}");
+                }
+            }
+        } else if (expressionStatement != null) {
+            sb.append("{{").append(expressionStatement.toCode()).append("}}");
+        }
+        return sb.toString();
+    }
 }

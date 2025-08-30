@@ -1,6 +1,6 @@
 package org.classes;
 
-public class FunctionCall {
+public class FunctionCall extends Expression{
     Expression expression;
     ArgumentList argumentList;
 
@@ -26,5 +26,19 @@ public class FunctionCall {
                 "\nexpression=" + expression +
                 "\nargumentList=" + argumentList +
                 '}';
+    }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (this.expression != null) {
+            sb.append(this.expression.toCode());
+        }
+        sb.append("(");
+        if (argumentList != null) {
+            sb.append(argumentList.toCode());
+        }
+        sb.append(")");
+        return sb.toString();
     }
 }

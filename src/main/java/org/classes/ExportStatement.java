@@ -80,4 +80,25 @@ public class ExportStatement extends Statement{
                 "\nexportType='" + exportType + '\'' +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("export ");
+        if ("default".equals(exportType)) {
+            sb.append("default ");
+        }
+
+        if (classDeclaration != null) {
+            sb.append(classDeclaration.toCode());
+        } else if (functionDeclaration != null) {
+            sb.append(functionDeclaration.toCode());
+        } else if (variableDeclaration != null) {
+            sb.append(variableDeclaration.toCode());
+        } else if (id != null) {
+            sb.append(id);
+        }
+
+        return sb.toString();
+    }
 }

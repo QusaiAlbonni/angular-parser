@@ -27,4 +27,20 @@ public class ConstructorDeclaration extends  Statement{
                 "\nblockStatement=" + blockStatement +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("constructor(");
+        if (parameterList != null && parameterList.getParameters() != null) {
+            sb.append(this.parameterList.toCode());
+        }
+        sb.append(") ");
+        if (blockStatement != null) {
+            sb.append(blockStatement.toCode());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
+    }
 }

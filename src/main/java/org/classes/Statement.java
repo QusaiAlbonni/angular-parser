@@ -13,4 +13,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
         @JsonSubTypes.Type(value = ExpressionStatement.class, name = "expression"),
 })
 public abstract class Statement {
+    public String literal;
+    String toCode(){ return literal; }
 }

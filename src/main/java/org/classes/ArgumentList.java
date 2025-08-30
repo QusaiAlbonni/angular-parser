@@ -24,4 +24,20 @@ List<Expression> expressionList;
                 "\nexpressionList=" + expressionList +
                 '}';
     }
+
+    public String toCode() {
+        if (expressionList == null || expressionList.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < expressionList.size(); i++) {
+            if (expressionList.get(i) != null) {
+                sb.append(expressionList.get(i).toCode());
+            }
+            if (i < expressionList.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
 }

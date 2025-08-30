@@ -33,4 +33,20 @@ public class WhileStatement extends Statement{
                 "\nbody=" + body +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("while (");
+        if (condition != null) {
+            sb.append(condition.toCode());
+        }
+        sb.append(") ");
+        if (body != null) {
+            sb.append(body.toCode());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
+    }
 }

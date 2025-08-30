@@ -44,4 +44,19 @@ Template template;
                 "\nID="+ ID+
                 '}';
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (template != null) {
+            return template.toCode();
+        }
+        if (ID != null) {
+            sb.append(ID);
+            sb.append(": ");
+        }
+        if (expression != null) {
+            sb.append(expression.toCode());
+        }
+        return sb.toString();
+    }
 }

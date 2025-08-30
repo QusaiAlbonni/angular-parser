@@ -5,4 +5,9 @@ public class ContinueStatement extends Statement{
     public String toString() {
         return "ContinueStatement{}";
     }
+
+    @Override
+    public String toCode() {
+        return "continue;";
+    }
 }

@@ -84,34 +84,14 @@ htmlElements:
     htmlMisc* htmlElement htmlMisc*;
 
 htmlElement
-    : TAG_OPEN knownHtmlTag (htmlAttribute | angularAttribute)*
-        (
-            (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH knownHtmlTag TAG_CLOSE)
-            | TAG_SLASH_CLOSE
-        )
-    | TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
+    :  TAG_OPEN TAG_NAME (htmlAttribute | angularAttribute)*
         (
             (TAG_CLOSE htmlContent TAG_OPEN TAG_SLASH TAG_NAME TAG_CLOSE)
             | TAG_SLASH_CLOSE
         )
     ;
 
-knownHtmlTag
-    : A_TAG
-    | BUTTON_TAG
-    | DIV_TAG
-    | FORM_TAG
-    | H1_TAG
-    | H2_TAG
-    | H3_TAG
-    | IMG_TAG
-    | INPUT_TAG
-    | NAV_TAG
-    | P_TAG
-    | STRONG_TAG
-    | TEMPLATE_TAG
-    | ROUTER_OUTLET_TAGE
-    ;
+
 
 htmlAttribute
     : (TAG_NAME) (TAG_EQUALS ATTVALUE_VALUE)?;

@@ -97,4 +97,39 @@ public class ForStatement extends Statement{
                 }
 
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("for (");
+
+        if (forOf != null) {
+            sb.append(forOf.toCode());
+        } else {
+            // Traditional for loop
+            if (variableDeclaration != null) {
+                sb.append(variableDeclaration.toCode());
+            } else if (variableDeclarationAsExpression != null) {
+                sb.append(variableDeclarationAsExpression.toCode());
+            }
+            sb.append("; ");
+
+            if (condition != null) {
+                sb.append(condition.toCode());
+            }
+            sb.append("; ");
+
+            if (increment != null) {
+                sb.append(increment.toCode());
+            }
+        }
+
+        sb.append(") ");
+        if (body != null) {
+            sb.append(body.toCode());
+        } else {
+            sb.append("{}");
+        }
+        return sb.toString();
+    }
 }

@@ -5,4 +5,9 @@ public class BreakStatement extends Statement{
     public String toString() {
         return "BreakStatement";
     }
+
+    @Override
+    public String toCode() {
+        return "break;";
+    }
 }

@@ -44,4 +44,23 @@ public class IfStatement extends Statement{
                 "\nelseStatement=" + elseStatement +
                 '}';
     }
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("if (");
+        if (condition != null) {
+            sb.append(condition.toCode());
+        }
+        sb.append(") ");
+        if (thenStatement != null) {
+            sb.append(thenStatement.toCode());
+        } else {
+            sb.append("{}");
+        }
+        if (elseStatement != null) {
+            sb.append(" else ");
+            sb.append(elseStatement.toCode());
+        }
+        return sb.toString();
+    }
 }

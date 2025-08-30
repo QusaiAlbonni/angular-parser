@@ -39,4 +39,26 @@ public class CaseStatement extends Statement{
                 "\n, statements=" + statements +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (caseExpression != null) {
+            sb.append("case ").append(caseExpression.toCode()).append(":\n");
+        } else {
+            sb.append("default:\n");
+        }
+        if (statements != null) {
+            for (Statement stmt : statements) {
+                if (stmt != null) {
+                    sb.append("  ").append(stmt.toCode());
+                    if (!stmt.toCode().endsWith(";")) {
+                        sb.append(";");
+                    }
+                    sb.append("\n");
+                }
+            }
+        }
+        return sb.toString();
+    }
 }

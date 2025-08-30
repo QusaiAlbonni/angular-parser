@@ -42,4 +42,15 @@ public class HtmlCharData extends Html{
         return"\nHtmlCharData\n";
 
     }
+
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (text != null) {
+            sb.append(text);
+        }
+        if (angularCharData != null) {
+            sb.append(angularCharData.toCode());
+        }
+        return sb.toString();
+    }
 }

@@ -11,10 +11,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.AngularLexer;
 import org.antlr.AngularParser;
 import org.classes.Program;
+import org.generator.AngularCodeGenerator;
 import org.semmanticCheck.SemanticCheck;
 import org.symbolTable.ClassObject.E2_Object;
 import org.visitors.AngularBaseVisitor;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,13 +41,21 @@ public class Main {
             AngularParser angularParser = new AngularParser(tokenStream);
             AngularBaseVisitor visitor = new AngularBaseVisitor();
             Program program = (Program) visitor.visitProgram(angularParser.program());
+            visitor.generator.print();
+            String app = visitor.generator.generate();
+
+            System.out.println("======================== APP =========================");
+            System.out.println(app);
+            FileWriter writer = new FileWriter("Result\\app.js");
+            writer.write(app);
+            writer.close();
+            System.out.println("======================== FINISH ======================");
+
             semanticCheck.checkErrors();
             semanticCheck.getSe3().getCheckMap().forEach((key, value) -> {
                 System.out.println("Key: " + key + ", Value: " + value);
             });;
             semanticCheck.getSe3().printSet();
-            printTreeWithJackson(program);
-
 
         } catch (Exception e) {
             System.out.println("Error using ANTLR: " + e.getMessage());

@@ -3,6 +3,7 @@ package org.classes;
 public class AngularAttribute {
     BindingAttribute bindingAttribute;
     EventBindingAttribute eventBindingAttribute;
+    public TwoWayBinding twoWayBinding;
     ForAttribute forAttribute;
     IfAttribute ifAttribute;
     public  AngularAttribute(){
@@ -65,5 +66,25 @@ public class AngularAttribute {
                 "\nforAttribute=" + forAttribute +
                 "\nifAttribute=" + ifAttribute +
                 '}'+"\n";
+    }
+
+    public String toCode() {
+        if (bindingAttribute != null) {
+            return bindingAttribute.toCode();
+        }
+        if (eventBindingAttribute != null) {
+            return eventBindingAttribute.toCode();
+        }
+        if (forAttribute != null) {
+            return forAttribute.toCode();
+        }
+        if (ifAttribute != null) {
+            return ifAttribute.toCode();
+        }
+        if (twoWayBinding != null){
+            System.out.println("TWO WAY");
+            return twoWayBinding.toCode();
+        }
+        return "";
     }
 }

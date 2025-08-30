@@ -36,4 +36,19 @@ String id;boolean isIncreament;
                 '}';
 
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (id != null) {
+            sb.append(id);
+        }
+        if (isIncreament) {
+            sb.append("++");
+        } else {
+            sb.append("--");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
 }

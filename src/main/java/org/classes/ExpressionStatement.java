@@ -21,4 +21,11 @@ public class ExpressionStatement extends Statement{
                 "\nexpression=" + expression +
                 '}';
     }
+    @Override
+    public String toCode() {
+        if (expression != null) {
+            return expression.toCode();
+        }
+        return "";
+    }
 }

@@ -43,4 +43,20 @@ public class VariableDeclaration extends Statement{
                 "\nexpression=" + expression +
                 '}';
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        if (type != null) {
+            sb.append(type).append(" ");
+        }
+        if (id != null) {
+            sb.append(id);
+        }
+        if (expression != null) {
+            sb.append(" = ").append(expression.toCode());
+        }
+        return sb.toString();
+    }
+
 }

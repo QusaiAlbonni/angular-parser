@@ -27,4 +27,14 @@ public class BlockStatement extends Statement{
                 "\nstatements=" + statements +
                 '}';
     }
+    @Override
+    public String toCode(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        for (Statement statement: this.statements){
+            sb.append(statement.toCode()).append("\n");
+        }
+        sb.append("}\n");
+        return sb.toString();
+    }
 }
